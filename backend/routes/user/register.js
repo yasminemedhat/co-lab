@@ -19,7 +19,7 @@ module.exports=async (req,res)=>{
 
     //pull from request
     const {email,password,username,
-           firstname,lastname,isSponsor}=req.body;
+           firstname,lastname,phone,isSponsor}=req.body;
     
     try {
         //see if email exists
@@ -39,6 +39,7 @@ module.exports=async (req,res)=>{
         username,
         firstName: firstname,
         lastName: lastname,
+        phone,
         isSponsor,
         isPremium:  false,
     });

@@ -12,7 +12,7 @@
     "Yasmine Medhat",
     "Dina ElBanna",
     "Nardine Mohamed"
-  ]
+  ],
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
