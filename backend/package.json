@@ -1,18 +1,36 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Web app for people to turn their hobbies into careers",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "server": "nodemon server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Loujaina Ragheb",
+  "contributors": [
+    "Yasmine Medhat",
+    "Dina ElBanna",
+    "Nardine Mohamed"
+  ]
+  "license": "MIT",
   "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^8.2.0",
+    "bcryptjs": "^2.4.3",
+    "config": "^3.2.4",
     "express": "^4.17.1",
-    "mongoose": "^5.7.7"
+    "express-validator": "^6.2.0",
+    "gravatar": "^1.8.0",
+    "is-empty": "^1.2.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.7.11",
+    "nodejs": "0.0.0",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "request": "^2.88.0",
+    "validator": "^12.1.0"
+  },
+  "devDependencies": {
+    "concurrently": "^5.0.0",
+    "nodemon": "^1.19.4"
   }
 }
