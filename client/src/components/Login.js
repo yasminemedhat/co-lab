@@ -18,7 +18,7 @@ class Login extends React.Component {
     this.routeChange = this.routeChange.bind(this);
   }
   routeChange = () => {
-    let path = "/RegisterationForm";
+    let path = "/RegistrationForm";
     this.props.history.push(path);
   };
 

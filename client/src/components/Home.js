@@ -17,8 +17,8 @@ class Home extends React.Component {
     return (
       <div>
      
-      <div class="Limiter">
-        <div class="main_container">
+      <div className="Limiter">
+        <div className="main_container">
             <h2>This is Home</h2>
          
           

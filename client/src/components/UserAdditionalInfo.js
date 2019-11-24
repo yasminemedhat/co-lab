@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import "../css/registeration.css";
+import "../css/registration.css";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
 

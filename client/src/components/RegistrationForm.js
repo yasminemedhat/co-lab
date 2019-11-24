@@ -83,7 +83,7 @@ class RegistrationForm extends Component {
 
                 );
             default:
-                return <h1> something went wrong {this.state.step}</h1>
+                return <h1> something went wrong</h1>
         }
         
     }
