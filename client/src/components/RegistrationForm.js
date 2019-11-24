@@ -6,8 +6,7 @@ import "../fonts/Linearicons-Free-v1.0.0/icon-font.min.css";
 import UserBasicForm from "./UserBasicForm.js";
 import UserAdditionalInformation from "./UserAdditionalInfo.js";
 import axios from "axios";
-
-
+import PropTypes from 'prop-types'
 
 class RegistrationForm extends Component {
     state = { 
@@ -22,6 +21,9 @@ class RegistrationForm extends Component {
         isSponsor: false,
      }
 
+     static contextTypes = {
+        router: PropTypes.object
+      }
      //proceed to next step of registration
      nextStep = () => {
          const {step} = this.state;
@@ -53,7 +55,14 @@ class RegistrationForm extends Component {
         const { email, username, firstname, lastname,phone, password, biography, isSponsor } = this.state;
         const user = { email, username, firstname, lastname, password, phone,biography, isSponsor };
         axios.post('http://localhost:5000/user/register', user)
-            .then(res => console.log(res.data));
+            .then((res) => {
+                window.location="/"})
+            .catch((e)=> {
+                if (e.response && e.response.data) {
+                    alert("Could not create Account: "+ e.response.data.message);
+                }
+            });
+            
     }
 
     render() { 
