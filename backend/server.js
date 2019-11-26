@@ -1,6 +1,6 @@
 const express=require('express');
 const connectDB=require('./config/db'); //Database
-
+const path = require('path');
 
 //init app
 const app=express();
@@ -17,7 +17,14 @@ connectDB();
 app.use('/',require('./routes'));
 
 
-
+// Serve static assets if in production
+if(process.env.NODE_ENV === 'production'){
+    // Set static folder
+    app.use(express.static('../client/build'));
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, '../client', 'build', 'index.html'));
+    });
+}
 
 
 //listen

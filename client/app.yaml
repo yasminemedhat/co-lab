@@ -1,5 +1,8 @@
+# node.js is the software stack responsible 
+# for installing the app code and its dependencies
+#  and running the app
 runtime: nodejs
-env: flex
+env: flex #automatically scaling your app up and down while balancing the load
 
 manual_scaling:
   instances: 1
@@ -8,3 +11,10 @@ resources:
   cpu: .5
   memory_gb: 0.5
   disk_size_gb: 10
+
+handlers:
+ - url: /
+   static_files: client/build/index.html
+   upload: client/build/index.html
+ - url: /
+   static_dir: client/build
