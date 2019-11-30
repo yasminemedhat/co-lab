@@ -131,6 +131,12 @@ class UserBasicForm extends Component {
             </div>
 
 
+            <div className="wrap-input100 validate-input m-b-16">
+              <select className ="browser-default custom-select">
+                {values.Interests.map((interest => <option key={interest.value} value={interest.value}>{interest.display}</option>))}
+              
+              </select>
+            </div>
 
             <div className="container-login100-form-btn p-t-25">
               <input type="submit" className="login100-form-btn" value="Save and continue" onClick={this.continue}/>
