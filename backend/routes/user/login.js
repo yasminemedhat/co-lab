@@ -22,11 +22,11 @@ module.exports=async (req,res)=>{
     try{
         let user=await Account.findOne({email});
         if(!user){
-            return res.status(400).json({errors:[{msg:'Invalid Credentials'}]});
+            return res.status(400).json({message:'Invalid Credentials'});
         }
         const isPasswordMatch=await bcrypt.compare(password,user.password);
         if(!isPasswordMatch){
-            return res.status(400).json({errors:[{msg:'Invalid Credentials'}]});
+            return res.status(400).json({message:'Invalid Credentials'});
         }
         //for correct credentials:
         //create a jwt token and define role as either admin or collaber

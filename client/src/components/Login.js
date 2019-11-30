@@ -5,14 +5,22 @@ import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css"
 import "../fonts/Linearicons-Free-v1.0.0/icon-font.min.css"
 
 import LoginForm from './LoginForm.js';
-
+import { Link }  from "react-router-dom";
+import axios from "axios";
 
 
 
 
 
 class Login extends React.Component {
-
+  state={
+    username: '',
+    password: ''
+  }
+  //Handle fields change
+  handleChange = input => e => {
+    this.setState({ [input]: e.target.value});
+}
   constuctor() {
     this.super();
     this.routeChange = this.routeChange.bind(this);
@@ -22,17 +30,38 @@ class Login extends React.Component {
     this.props.history.push(path);
   };
 
+  loginUser = () =>{
+    console.log("user is loogging");
+    const { email, password} = this.state;
+    const credentials = { email, password }
+    axios.post('http://localhost:5000/user/login', credentials)
+        .then((res) => {
+            window.location="/";
+            console.log("login success");
+          })
+        .catch((e)=> {
+            if (e.response && e.response.data) {
+                alert("Error: "+ e.response.data.message);
+            }
+        });
+        
+  }
+
   render() {
-
-
+    const {email, password} = this.state;
+    const values = {email, password};
     return (
       <div>
       
         <div className="Limiter">
           <div className="main_container">
            
-             <LoginForm></LoginForm>
+             <LoginForm
+              sumbit = {this.loginUser}
+              handleChange= {this.handleChange}
+              values = {values}></LoginForm>
              <div className="otherlogin">
+               <Link to='/'>Forgot password?</Link>
             <span className="txt1">Not a member?</span>
 
             <button onClick={this.routeChange}>sign up </button>
