@@ -9,10 +9,12 @@ const {validationResult } = require('express-validator');
 module.exports=async (req,res)=>{
 
     const errors=validationResult(req);
+    console.log(errors);
 
     //if there are missing fields
     if(!errors.isEmpty()){
-        return res.status(400).json({message: errors.array().toString});
+        console.log('errors');
+        return res.status(400).json({message: errors.array()});
     }
 
     console.log('new User attempt');
