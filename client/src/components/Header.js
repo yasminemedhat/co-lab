@@ -7,6 +7,7 @@ import Home from "./Home";
 import About from "./About";
 import RegistrationForm from "./RegistrationForm";
 import HomeNavbar from "./home-navbar";
+import Profile from "./Profile";
 
 
 class Header extends React.Component {
@@ -19,6 +20,7 @@ class Header extends React.Component {
           <Route path="/about" exact strict component = {About}></Route>
           <Route path="/login" exact strict  component = {Login}></Route>
           <Route path="/RegistrationForm" exact strict component ={RegistrationForm} />
+          <Route path="/profile" exact strict component ={Profile} />
 
         </Switch>
 

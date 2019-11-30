@@ -36,14 +36,19 @@ user.post('/register',[
 //              (customized discover)
 //@access        public-> no token needed 
 user.get('/interestsList', async (req, res) => {
-    list = await interestList.findOne({ id: 'list' }, 'interests -_id', function (err, listObject) {
+    var interests=[];
+    list = await interestList.find({}, '-__v -_id', function (err, listObject) {
         if (err) {
             console.log(err);
             res.status(400).send(err);
         }
         else if (listObject) {
-            console.log(listObject.interests);
-            res.send(listObject.interests);
+            listObject.forEach(element => {
+                interests.push(element.interest);
+                
+            });
+            console.log(interests);
+            res.send(interests);
         }
         else {
             console.status(500).send('Something went wrong.');

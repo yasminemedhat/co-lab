@@ -2,8 +2,8 @@ const mongoose=require('mongoose');
 const Schema=mongoose.Schema;
 
 const InterestsSchema=new Schema({
-    id: String,
-    interests:[String]
+    interest:{type: String ,unique:true},
+    
 });
 
 

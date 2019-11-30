@@ -1,0 +1,20 @@
+.profile_container{
+   
+        width: 100%;
+        min-height: 100vh;
+        display: flex;
+        
+        padding: 15px;
+        background: #0250c5;
+        background: linear-gradient(45deg, #912064, #0c28efb8);
+    
+}
+
+.profile{
+    width: 200px;
+    height:200px;
+}
+
+.profile_info{
+    padding: 5%;
+}
