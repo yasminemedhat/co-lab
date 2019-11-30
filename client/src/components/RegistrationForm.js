@@ -18,6 +18,9 @@ class RegistrationForm extends Component {
         password: '',
         phone: '',
         biography: '',
+        Interests:[],
+        selectedInterests:[],
+        selectedWorkingField:'',
         isSponsor: false,
      }
 
@@ -56,19 +59,39 @@ class RegistrationForm extends Component {
         const user = { email, username, firstname, lastname, password, phone,biography, isSponsor };
         axios.post('http://localhost:5000/user/register', user)
             .then((res) => {
-                window.location="/"})
+                window.location="/profile"})
             .catch((e)=> {
                 if (e.response && e.response.data) {
                     alert("Could not create Account: "+ e.response.data.message);
                 }
             });
-            
+          
+    }
+  // get interestsList
+    componentDidMount() {
+		fetch('http://localhost:5000/user/interestsList')
+		.then(res => res.json())
+		.then(data => {
+	
+			   
+               let  interestsList = data.map(Interests => { return {value: Interests, display: Interests, label: Interests} })
+               this.setState({ Interests: [{value: '', display: '(Select your working field)'}].concat(interestsList) });
+              
+
+
+			    
+			
+		})
+		.catch(err => {
+           console.log(err);
+           alert("Could not find interests");
+        })	
     }
 
     render() { 
         const { step } = this.state;
-        const { email, username, firstname, lastname,phone, password, biography, isSponsor } = this.state;
-        const values = { email, username, firstname, lastname, password, phone,biography, isSponsor };
+        const { email, username, firstname, lastname,phone, password, biography,Interests, isSponsor } = this.state;
+        const values = { email, username, firstname, lastname, password, phone,biography,Interests, isSponsor };
         
         switch(step){
             case 1:
@@ -77,6 +100,7 @@ class RegistrationForm extends Component {
                         nextStep = {this.nextStep}
                         handleChange= {this.handleChange}
                         values = {values}
+                        interests = {this.componentDidMount}
                     />
                  );
             case 2:

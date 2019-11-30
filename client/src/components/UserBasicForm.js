@@ -16,6 +16,8 @@ class UserBasicForm extends Component {
     }
     
   }
+
+
   
   render() {
     const { values } = this.props;
@@ -130,6 +132,13 @@ class UserBasicForm extends Component {
               </span>
             </div>
 
+
+            <div className="wrap-input100 validate-input m-b-16">
+              <select className ="browser-default custom-select">
+                {values.Interests.map((interest => <option key={interest.value} value={interest.value}>{interest.display}</option>))}
+              
+              </select>
+            </div>
 
 
             <div className="container-login100-form-btn p-t-25">

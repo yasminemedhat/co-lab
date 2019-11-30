@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import "../css/registration.css";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
+import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
 
 class UserAdditionalInformation extends Component {
 
@@ -21,6 +22,20 @@ class UserAdditionalInformation extends Component {
                 <form className="login100-form validate-form">
                 <span className="login100-form-title p-b-55">Additional Information</span>
 
+
+
+                <div className="wrap-input100 validate-input m-b-16">
+                <label> 
+                    <input
+                    type="checkbox"
+                    required
+                    name="isSponsor"
+                    placeholder=""
+                    onChange={this.props.handleSponsorship}
+                    defaultChecked={values.isSponsor}
+                    /> Do you want to sponsor projects?</label>
+                    
+                </div>
                 <div className="wrap-input100  m-b-16"
                     >
                     <input
@@ -37,21 +52,14 @@ class UserAdditionalInformation extends Component {
                     </span>
                 </div>
 
+  
 
-                <div
-                    className="wrap-input100 validate-input m-b-16"
-                >
-                <label> 
-                    <input
-                    type="checkbox"
-                    required
-                    name="isSponsor"
-                    placeholder=""
-                    onChange={this.props.handleSponsorship}
-                    defaultChecked={values.isSponsor}
-                    /> Do you want to sponsor projects?</label>
-                    
+                <div className="wrap-input100  m-b-16">
+                 <ReactMultiSelectCheckboxes options={values.Interests} placeholderButtonLabel="select your interests"/>
                 </div>
+
+
+               
 
                 
 
