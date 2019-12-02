@@ -3,10 +3,10 @@ const config=require('config');
 
 
 module.exports=function(req,res,next){
-    const token=req.header('x-auth-token');
+    const token=req.header('Authorization');
 
     if(!token){
-        return res.status(401).json({msg:"No token, autherization failed"});
+        return res.status(401).json({message:"No token, autherization failed"});
     }
     //verify token:
     try {
