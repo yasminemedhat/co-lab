@@ -78,6 +78,10 @@ user.post('/resetPassword', [
      require('./resetPassword'));
      
 
+//@route Get    user/profile
+//@description  get user's data to show their profile
+//@access       requires authentication
+user.get('/profile',auth,require('./profile'));
 
 
 
