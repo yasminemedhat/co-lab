@@ -1,10 +1,13 @@
 const jwt=require('jsonwebtoken');
 const config=require('config');
 
-
 module.exports=function(req,res,next){
+<<<<<<< HEAD
     const token=req.header('Authorization');
 
+=======
+    const token=req.header('Authorization').replace('Bearer ', '');
+>>>>>>> add authentication to login
     if(!token){
         return res.status(401).json({message:"No token, autherization failed"});
     }
