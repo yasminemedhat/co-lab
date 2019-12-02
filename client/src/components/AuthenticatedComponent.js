@@ -32,7 +32,6 @@ class AuthenticateComponent extends Component{
     }
 
     render(){
-        console.log('user' + this.state.user);
         if(this.state.user === undefined){
             return(
             <div><h1>loading...</h1></div>

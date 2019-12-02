@@ -48,7 +48,6 @@ class Profile extends Component {
     }
     else{
       image=  (<Img className="profile" src={require("../images/profile.png")}></Img> )
-      console.log("henaaaaa")
     }
     return (
       <div className = "  Container profile_container ">
