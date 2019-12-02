@@ -17,4 +17,37 @@
 
 .profile_info{
     padding: 5%;
+    margin-top: 15%;
 }
+
+.profile-btn {
+    font-family: Raleway-Bold;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #fff;
+    text-transform: uppercase;
+    margin: 1%;
+    margin-left: 7%;
+    width: 43%;
+    height: 30px;
+    border-radius: 3px;
+    background: #d33f8d;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 25px;
+  
+    -webkit-transition: all 0.4s;
+    -o-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    transition: all 0.4s;
+  }
+  
+  .profile-btn:hover {
+    background: #333333;
+  }
+  
