@@ -13,17 +13,20 @@ import axios from "axios";
 
 
 class Login extends React.Component {
+
   state={
     username: '',
-    password: ''
+    password: '',
+    toProfile: false,
   }
   //Handle fields change
   handleChange = input => e => {
     this.setState({ [input]: e.target.value});
 }
-  constuctor() {
-    this.super();
+  constuctor(props) {
     this.routeChange = this.routeChange.bind(this);
+    this.loginUser = this.loginUser.bind(this);
+    console.log(props)
   }
   routeChange = () => {
     let path = "/RegistrationForm";
@@ -34,10 +37,11 @@ class Login extends React.Component {
     console.log("user is loogging");
     const { email, password} = this.state;
     const credentials = { email, password }
+    let path = "/profile";
     axios.post('http://localhost:5000/user/login', credentials)
         .then((res) => {
-            window.location="/";
-            console.log("login success");
+            localStorage.setItem('token',res.data.token);
+            this.props.history.push(path);
           })
         .catch((e)=> {
             if (e.response && e.response.data) {
@@ -47,15 +51,16 @@ class Login extends React.Component {
         
   }
 
-  render() {
+  render(props) {
     const {email, password} = this.state;
     const values = {email, password};
+    
+
     return (
       <div>
       
         <div className="Limiter">
           <div className="main_container">
-           
              <LoginForm
               sumbit = {this.loginUser}
               handleChange= {this.handleChange}

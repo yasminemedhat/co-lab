@@ -44,7 +44,7 @@ module.exports=async (req,res)=>{
            (err,token) =>{
                if(err)throw err;
                console.log("JWT auth from login: ", token);
-               res.json({token});
+               res.json({token,user});
            }
         );//TEMPORARY 3600000
         
