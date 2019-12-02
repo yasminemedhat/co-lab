@@ -3,16 +3,8 @@ const user = require('express').Router();
 //checks req.body for missing fields
 const { check } = require('express-validator');
 
-<<<<<<< Updated upstream
-//database 
-const interestList = require('../../models/InterestList');
-
-//jwt authentication
-const auth = require("../../middleware/auth");
-=======
 //require authentication
 const auth=require('../../middleware/auth');
->>>>>>> Stashed changes
 
 
 //routes 
@@ -35,7 +27,6 @@ user.post('/register',[
     check('password', 'Please enter a password with 6 or more characters').isLength({ min: 6 })
 ],register);
 
-<<<<<<< Updated upstream
 //@route GET    user/interestsList
 //@description  get list of interests for user to choose theirs
 //              the chosen interests are the ones that would be shown in the discover feed
@@ -81,13 +72,11 @@ user.post('/resetPassword', [
 
 
 
-=======
 
 //@route Get    user/profile
 //@description  get user's data to show their profile
 //@access       requires authentication
 user.get('/profile',auth,require('./profile'));
->>>>>>> Stashed changes
 
 module.exports=user;
 
