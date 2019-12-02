@@ -54,13 +54,14 @@ class RegistrationForm extends Component {
     }
 
     createUser = () =>{
-        console.log("creating user");
         const { email, username, firstname, lastname,phone, password, biography, isSponsor } = this.state;
         const user = { email, username, firstname, lastname, password, phone,biography, isSponsor };
+        const path = '/profile';
         axios.post('http://localhost:5000/user/register', user)
             .then((res) => {
-                window.location="/profile"})
-            .catch((e)=> {
+                localStorage.setItem('token',res.data.token);
+                this.props.history.push(path);
+          }).catch((e)=> {
                 if (e.response && e.response.data) {
                     alert("Could not create Account: "+ e.response.data.message);
                 }
