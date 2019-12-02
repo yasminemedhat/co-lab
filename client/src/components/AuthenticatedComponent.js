@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {getJwt} from "../helpers/jwt";
 import Axios from "axios";
-import { Redirect } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 class AuthenticateComponent extends Component{
     
@@ -14,22 +14,20 @@ class AuthenticateComponent extends Component{
     }
 
 
-    componentWillMount(){
+    componentDidMount(){
         const jwt = getJwt();
         if(!jwt){
-            this.props.history.push('./login');
+            this.props.history.push('/login');
         }
 
-        Axios.get('/profile', {headers: { Authorization: jwt } })
+        Axios.get('http://localhost:5000/user/profile', {headers: { Authorization: jwt } })
         .then( (res) => {
             this.setState({user: res.data});
+
         }).catch(err => {
-            console.log("auth ", err.data);
-            localStorage.removeItem('jwt');
-            window.location='/login';
+            localStorage.removeItem('token');
+            this.props.history.push('/login');
         })
-        const user = {email: "bla"}
-        this.setState({user: user});
         
     }
 
@@ -37,12 +35,6 @@ class AuthenticateComponent extends Component{
         console.log('user' + this.state.user);
         if(this.state.user === undefined){
             return(
-            //     <Redirect
-            //     to={{
-            //       pathname: "/login",
-            //       state: { from: this.props.location }
-            //     }}
-            //   />
             <div><h1>loading...</h1></div>
             );
         }
@@ -55,4 +47,4 @@ class AuthenticateComponent extends Component{
 
 
 } 
-export default AuthenticateComponent;
+export default withRouter(AuthenticateComponent);

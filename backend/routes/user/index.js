@@ -77,18 +77,11 @@ user.post('/resetPassword', [
      check('email', 'Please inculde a valid email').isEmail()],
      require('./resetPassword'));
      
-<<<<<<< HEAD
 
 //@route Get    user/profile
 //@description  get user's data to show their profile
 //@access       requires authentication
 user.get('/profile',auth,require('./profile'));
-=======
-user.get('/profile/:id', async(req,res)=>{
-    let user=await Account.findOne({id});
-    res.json({user});
-})
->>>>>>> add authentication to login
 
 
 

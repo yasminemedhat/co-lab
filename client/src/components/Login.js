@@ -24,9 +24,9 @@ class Login extends React.Component {
     this.setState({ [input]: e.target.value});
 }
   constuctor(props) {
-    this.super();
     this.routeChange = this.routeChange.bind(this);
     this.loginUser = this.loginUser.bind(this);
+    console.log(props)
   }
   routeChange = () => {
     let path = "/RegistrationForm";
@@ -38,7 +38,7 @@ class Login extends React.Component {
     const { email, password} = this.state;
     const credentials = { email, password }
     let path = "/profile";
-    axios.post('/user/login', credentials)
+    axios.post('http://localhost:5000/user/login', credentials)
         .then((res) => {
             localStorage.setItem('token',res.data.token);
             this.props.history.push(path);
@@ -51,17 +51,16 @@ class Login extends React.Component {
         
   }
 
-  render() {
+  render(props) {
     const {email, password} = this.state;
     const values = {email, password};
-
+    
 
     return (
       <div>
       
         <div className="Limiter">
           <div className="main_container">
-           
              <LoginForm
               sumbit = {this.loginUser}
               handleChange= {this.handleChange}

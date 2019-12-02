@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link }  from "react-router-dom";
-
+import "../css/header.css"
 class HomeNavbar extends Component {
     
     render() { 
@@ -13,8 +13,8 @@ class HomeNavbar extends Component {
        
                <ul>
                  <Link to='/'>Home</Link>
-                 <Link to='/about'>About</Link>
-                 <Link to='/login'>Login</Link>
+                 <Link to='/about' >About</Link>
+                 <Link to='/login' >Login</Link>
                </ul>
    
         
