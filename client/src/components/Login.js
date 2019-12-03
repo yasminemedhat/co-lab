@@ -34,7 +34,6 @@ class Login extends React.Component {
   };
 
   loginUser = () =>{
-    console.log("user is loogging");
     const { email, password} = this.state;
     const credentials = { email, password }
     let path = "/profile";
@@ -66,10 +65,11 @@ class Login extends React.Component {
               handleChange= {this.handleChange}
               values = {values}></LoginForm>
              <div className="otherlogin">
-               <Link to='/'>Forgot password?</Link>
+               <Link to='/forgotPassword'>Forgot password?</Link>
+               <br></br>
             <span className="txt1">Not a member?</span>
 
-            <button onClick={this.routeChange}>sign up </button>
+            <button onClick={this.routeChangeToSignup}>sign up </button>
           </div>
 
             
