@@ -60,7 +60,10 @@ class RegistrationForm extends Component {
         axios.post('http://localhost:5000/user/register', user)
             .then((res) => {
                 localStorage.setItem('token',res.data.token);
-                this.props.history.push(path);
+                this.props.history.push({pathname : path,
+                    state :{
+                    user: res.data.user,
+                    }});
           }).catch((e)=> {
                 if (e.response && e.response.data) {
                     alert("Could not create Account: "+ e.response.data.message);

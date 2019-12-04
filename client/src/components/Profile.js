@@ -6,6 +6,9 @@ import Img from 'react-image'
 
 
 class Profile extends Component {
+  state = {
+    email: '',
+  }
 
   constructor(props){
     super(props);
@@ -35,7 +38,9 @@ class Profile extends Component {
   fileUploadHandler = ()=> {
 
   }
-
+  componentDidMount(){
+    this.setState({email: this.props.location.state.user.email});
+  }
 
 
   render() {
@@ -71,7 +76,7 @@ class Profile extends Component {
           </div>
           <div className="col">
           <div className="profile_info">
-            <p>email:</p>
+            <p>email: {this.state.email}</p>
             <p>phone:</p>
             <p>Bio:</p>
             </div>

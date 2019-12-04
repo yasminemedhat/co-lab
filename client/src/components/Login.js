@@ -7,6 +7,7 @@ import "../fonts/Linearicons-Free-v1.0.0/icon-font.min.css"
 import LoginForm from './LoginForm.js';
 import { Link }  from "react-router-dom";
 import axios from "axios";
+import { withRouter } from "react-router-dom";
 
 
 
@@ -40,7 +41,13 @@ class Login extends React.Component {
     axios.post('http://localhost:5000/user/login', credentials)
         .then((res) => {
             localStorage.setItem('token',res.data.token);
-            this.props.history.push(path);
+            this.props.history.push({
+              pathname : path,
+              state :{
+              user: res.data.user,
+              }
+              });
+            // this.props.history.push(path);
           })
         .catch((e)=> {
             if (e.response && e.response.data) {
@@ -69,7 +76,7 @@ class Login extends React.Component {
                <br></br>
             <span className="txt1">Not a member?</span>
 
-            <button onClick={this.routeChangeToSignup}>sign up </button>
+            <button onClick={this.routeChange}>sign up </button>
           </div>
 
             
@@ -93,5 +100,5 @@ class Login extends React.Component {
 
 
 
-export default Login;
+export default withRouter(Login);
 
