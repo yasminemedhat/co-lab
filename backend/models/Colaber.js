@@ -14,6 +14,8 @@ const ColaberSchema=new mongoose.Schema({
         ref: "interestList"
     }],
     bio:        { type: String}
+    isSponsor:  { type: Boolean},
+    isPremium:  { type: Boolean},
 });
 
 const Colaber2=Account.discriminator('Colaber',ColaberSchema);
