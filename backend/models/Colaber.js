@@ -1,15 +1,19 @@
 const mongoose=require('mongoose');
 const Account=require('./Account');
+const interestList=require('./InterestList');
 
 const ColaberSchema=new mongoose.Schema({
-    username:   { type: String, required: true},
-    firstName:  { type: String, required: true, trim: true},
-    lastName:   { type: String, required: true, trim: true},
+    firstName:  { type: String, required: true},
+    lastName:   { type: String, required: true},
     avatar:     { type: String},
     phone:      { type: Number},
-    isSponsor:  { type: Boolean, default: false},
-    isPremium:  { type: Boolean, default: false},
-    projects:   [{type: mongoose.Schema.Types.ObjectId, ref: 'Project' }]
+    projects:   [{type: mongoose.Schema.Types.ObjectId, ref: 'Project' }],
+    job:        { type: String},
+    interests: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "interestList"
+    }],
+    bio:        { type: String}
 });
 
 const Colaber2=Account.discriminator('Colaber',ColaberSchema);
