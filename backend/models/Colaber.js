@@ -13,7 +13,7 @@ const ColaberSchema=new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "interestList"
     }],
-    bio:        { type: String}
+    bio:        { type: String},
     isSponsor:  { type: Boolean},
     isPremium:  { type: Boolean},
 });

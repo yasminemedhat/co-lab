@@ -4,14 +4,14 @@ module.exports=async(req, res)=> {
     const {id,token}=req.params;
     let user=await Account.findOne({_id: id});
     if(!user){
-        return res.status(500).json({msg:'Server error.'});
+        return res.status(500).json({message:'Server error.'});
     }
     //decode token for authorisation:
     const secret = user.password + '-' + user._id.getTimestamp();
     try {
         const decoded=jwt.verify(token,secret);
     } catch (error) {
-        return res.status(401).json({msg:'Unauthorised request. Cannot change password.'});
+        return res.status(401).json({message:'Unauthorised request. Cannot change password.'});
         
     }
     console.log(id);

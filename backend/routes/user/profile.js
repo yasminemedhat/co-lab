@@ -7,12 +7,12 @@ module.exports=async(req,res)=>{
     try {
         let user=await Colaber.findOne({_id: id}).select('-password'); 
         if(!user){
-            return res.status(404).send('User not found');
+            return res.status(404).json({message:'User not found'});
         }
         res.send(user);        
 
     } catch (error) {
-        res.status(400).send('Server Error');
+        res.status(400).json({message:'Server Error'});
         console.log(error);
 
     }

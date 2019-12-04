@@ -15,7 +15,7 @@ module.exports= async (req, res) => {
             res.send(interests);
         }
         else {
-            res.status(500).json({msg:'Something went wrong.'});
+            res.status(500).json({message:'Something went wrong.'});
         }
 
     });

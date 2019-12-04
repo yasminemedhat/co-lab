@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
     try {
         let user = await Account.findOne({ email });
         if (!user) {
-            return res.status(400).json({ msg: 'Email Does not exist' });
+            return res.status(400).json({ message: 'Email Does not exist' });
         }
 
         const payload = {

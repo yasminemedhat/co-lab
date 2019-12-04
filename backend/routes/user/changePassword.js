@@ -18,7 +18,7 @@ module.exports=async (req,res)=>{
         await Account.updateOne({_id: id},{password});
     } catch (error) {
         console.log(error);
-        return res.status(500).json({msg: 'Server error.'});
+        return res.status(500).json({message: 'Server error.'});
     }
     res.send("Password changed!");
 

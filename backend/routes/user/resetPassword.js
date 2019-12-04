@@ -18,7 +18,7 @@ module.exports=async(req,res)=>{
 
     let user=await Account.findOne({_id: id});
     if(!user){
-        return res.status(500).json({msg:'Server error.'});
+        return res.status(500).json({message:'Server error.'});
     }
     console.log('User found');
 
@@ -30,7 +30,7 @@ module.exports=async(req,res)=>{
         const decoded=jwt.verify(token,secret);
     } catch (error) {
         console.log(error);
-        return res.status(401).json({msg:'Unauthorised request. Cannot change password.'});
+        return res.status(401).json({message:'Unauthorised request. Cannot change password.'});
         
     }
 
