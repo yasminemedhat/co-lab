@@ -4,7 +4,7 @@ const {validationResult } = require('express-validator');
 module.exports=async (req,res)=>{
     const errors=validationResult(req);
     if(!errors.isEmpty()){
-        return res.status(400).json({message: errors});
+        return res.status(400).json({message: errors.errors[0].msg});
     }
 
     const id=req.user.id;

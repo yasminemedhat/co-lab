@@ -17,7 +17,7 @@ module.exports = async (req, res) => {
     //if there are missing fields
     if (!errors.isEmpty()) {
         console.log('errors');
-        return res.status(400).json({ message: errors.array() });
+        return res.status(400).json({ message: errors.errors[0].msg});
     }
 
     console.log('new User attempt');

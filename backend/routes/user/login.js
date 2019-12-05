@@ -11,7 +11,7 @@ module.exports=async (req,res)=>{
 
     //in case of errors
     if(!errors.isEmpty){
-        return res.status(400).json({message: errors.array()});
+        return res.status(400).json({message: errors.errors[0].msg});
     }
     console.log('Login attempt started');
 
