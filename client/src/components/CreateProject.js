@@ -4,12 +4,14 @@ import "../css/createProject.css";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
 import Img from "react-image";
+import Linkify from "react-linkify";
 
 class CreateProject extends Component {
   state = {
     projectName: "",
     description: "",
-    creator: ""
+    creator: "",
+    projectLink: ""
   };
   fileObj = [];
   fileArray = [];
@@ -42,32 +44,48 @@ class CreateProject extends Component {
   };
 
   render() {
-    let images = null;
-    let row= [];
-    let rowIndex = -1
-    for (let i=0;i<this.state.file.length;i= i+3){
-        rowIndex++
-        row[rowIndex] = <div className="row imageRow">
-            <div className = "col imagecol">
+    let row = [];
+    let rowIndex = -1;
+    for (let i = 0; i < this.state.file.length; i = i + 3) {
+      rowIndex++;
+      row[rowIndex] = (
+        <div className="row imageRow">
+          <div className="col imagecol">
             <Img className="pictures" src={this.fileArray[i]}></Img>
-            </div>
-            <div className = "col imagecol">
-            <Img className="pictures" src={this.fileArray[i+1]}></Img>
-            </div>
-            <div className = "col imagecol">
-            <Img className="pictures" src={this.fileArray[i+2]}></Img>
-            </div>  
-            </div>
-
+          </div>
+          <div className="col imagecol">
+            <Img className="pictures" src={this.fileArray[i + 1]}></Img>
+          </div>
+          <div className="col imagecol">
+            <Img className="pictures" src={this.fileArray[i + 2]}></Img>
+          </div>
+        </div>
+      );
     }
-
-  
-
+    let link = null;
+    var isUrl = require("is-url")
+    if (isUrl(this.state.projectLink)) {
+      link = <div>{this.state.projectLink}</div>;
+    } else {
+      link = (
+        <input
+          type="text"
+          placeholder="paste a link to your project"
+          value={this.state.projectLink}
+          onChange={this.handleChange("projectLink")}
+        ></input>
+      );
+    }
 
     return (
       <div className="  Container projectContainer ">
         <div className="row">
-          <div className="col"></div>
+          <div className="col">
+            <h4> project Link</h4>
+            <Linkify>
+            {link}
+            </Linkify>
+          </div>
           <div className="col">
             <input
               type="text"
@@ -98,21 +116,12 @@ class CreateProject extends Component {
             >
               Add Pictures
             </button>
-            <button className="profile-btn"onClick={this.uploadFiles}>
+            <button className="profile-btn" onClick={this.uploadFiles}>
               Uploade picture
             </button>
           </div>
         </div>
-         <div className="imageContainer">
-         
-          { 
-            
-              row
-          }
-          
-          </div>
-        
-     
+        <div className="imageContainer">{row}</div>
       </div>
     );
   }
