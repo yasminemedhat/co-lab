@@ -36,10 +36,11 @@ module.exports = async (req, res) => {
 
         //references for interests
         var list = [];
-        for (var i = 0; i < interests.length; i++) {
-            interest = await interestsList.findOne({ interest: interests[i] });
-            list.push(interest._id);
-        }
+        if(interests)
+            for (var i = 0; i < interests.length; i++) {
+                interest = await interestsList.findOne({ interest: interests[i] });
+                list.push(interest._id);
+            }
 
         console.log(list);
 
