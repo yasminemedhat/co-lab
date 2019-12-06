@@ -4,6 +4,9 @@ import "../css/createProject.css";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
 import Img from "react-image";
+import axios from "axios";
+import {getJwt} from "../helpers/jwt";
+
 
 class CreateProject extends Component {
   state = {
@@ -19,8 +22,10 @@ class CreateProject extends Component {
     this.state = {
       file: [null]
     };
+    this.createProject = this.createProject.bind(this);
     this.uploadMultipleFiles = this.uploadMultipleFiles.bind(this);
     this.uploadFiles = this.uploadFiles.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   uploadMultipleFiles(e) {
@@ -41,6 +46,35 @@ class CreateProject extends Component {
     this.setState({ [input]: e.target.value });
   };
 
+  createProject(){
+    const { projectName, description } = this.state;
+    console.log(projectName);
+
+    const project = {  name: projectName,
+                       description: description };
+    const jwt = getJwt();
+    const path = '/profile';
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': jwt
+    }
+    axios.post('http://localhost:5000/project/add', project,{headers:headers })
+        .then((res) => {
+            alert('Project created successfully!');
+            const user  = this.props.location.state.user;
+            this.props.history.push({
+              pathname : path,
+              state :{
+              user: user,
+              }
+              });
+            this.props.history.push(path);
+      }).catch((e)=> {
+            if (e.response && e.response.data) {
+                alert("Could not create project: "+ e.response.data.message);
+            }
+        });
+  }
   render() {
     let images = null;
     let row= [];
@@ -102,6 +136,7 @@ class CreateProject extends Component {
               Uploade picture
             </button>
           </div>
+          
         </div>
          <div className="imageContainer">
          
@@ -111,8 +146,8 @@ class CreateProject extends Component {
           }
           
           </div>
-        
-     
+          <button className="btn btn-primary float-right" onClick={this.createProject}>Create</button>
+         
       </div>
     );
   }

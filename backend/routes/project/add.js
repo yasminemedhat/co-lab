@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
 
     //pull from request
     const { name, description } = req.body;
-    console.log(req.user);
+    console.log(req.body);
   
 
     try {

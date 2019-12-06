@@ -22,6 +22,7 @@ class AuthenticateComponent extends Component{
 
         Axios.get('http://localhost:5000/user/profile', {headers: { Authorization: jwt } })
         .then( (res) => {
+            console.log("eshta");
             this.setState({user: res.data});
 
         }).catch(err => {
