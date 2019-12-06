@@ -10,6 +10,7 @@ import RegistrationForm from "./RegistrationForm";
 import HomeNavbar from "./home-navbar";
 import Profile from "./Profile";
 import AuthenticatedComponent from "./AuthenticatedComponent";
+import CreateProject from "./CreateProject";
 
 class Header extends React.Component {
   render() {
@@ -23,6 +24,7 @@ class Header extends React.Component {
           <Route path="/login" exact strict  component = {Login}></Route>
           <Route path="/forgotPassword" exact strict  component = {ForgotPassword}></Route>
           <Route path="/RegistrationForm" exact strict component ={RegistrationForm} />
+          <Route path="/CreateProject" exact strict component ={CreateProject} />
           <AuthenticatedComponent>
             <Route path="/profile" exact strict component ={Profile} />
           </AuthenticatedComponent>

@@ -2,8 +2,13 @@ import React, {Component} from "react";
 import "../css/login.css";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
+import Select from 'react-select';
+
 
 class UserBasicForm extends Component {
+
+
+ 
   
   continue = e => {
     e.preventDefault();
@@ -16,9 +21,17 @@ class UserBasicForm extends Component {
     }
     
   }
+
+  handleChange =e =>{
+    this.props.handleWorkingField(e.target.value)
+  }
+
+
   
   render() {
     const { values } = this.props;
+    
+
     return (
       <div className="main_container">
         <div className="wrap-login100 p-l-50 p-r-50 p-t-77 p-b-30">
@@ -132,10 +145,16 @@ class UserBasicForm extends Component {
 
 
             <div className="wrap-input100 validate-input m-b-16">
-              <select className ="browser-default custom-select">
-                {values.Interests.map((interest => <option key={interest.value} value={interest.value}>{interest.display}</option>))}
-              
-              </select>
+              <Select className =""
+              value={values.selectedWorkingField}
+              defaultValue = {values.selectedWorkingField}
+              placeholder = "Select your working field"
+              onChange = {this.handleChange}
+              options = {values.Interests}
+              autoFocus={true}
+              />
+               
+           
             </div>
 
             <div className="container-login100-form-btn p-t-25">
