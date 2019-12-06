@@ -24,9 +24,10 @@ class Header extends React.Component {
           <Route path="/login" exact strict  component = {Login}></Route>
           <Route path="/forgotPassword" exact strict  component = {ForgotPassword}></Route>
           <Route path="/RegistrationForm" exact strict component ={RegistrationForm} />
-          <Route path="/CreateProject" exact strict component ={CreateProject} />
+        
           <AuthenticatedComponent>
             <Route path="/profile" exact strict component ={Profile} />
+            <Route path="/CreateProject" exact strict component ={CreateProject} />
           </AuthenticatedComponent>
           
 
