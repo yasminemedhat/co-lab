@@ -11,7 +11,7 @@ module.exports=async (req,res)=>{
 
     //in case of errors
     if(!errors.isEmpty){
-        return res.status(400).json({message: errors.array()});
+        return res.status(400).json({message: errors.errors[0].msg});
     }
     console.log('Login attempt started');
 
@@ -50,7 +50,7 @@ module.exports=async (req,res)=>{
            (err,token) =>{
                if(err)throw err;
                console.log("JWT auth from login: ", token);
-               res.json({token});
+               res.json({token,user});
            }
         );//TEMPORARY 3600000
         

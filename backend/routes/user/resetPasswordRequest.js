@@ -13,7 +13,7 @@ module.exports = async (req, res) => {
     //in case of errors
     if (!errors.isEmpty()) {
         console.log(errors);
-        return res.status(400).json({ message: errors.array()});
+        return res.status(400).json({message: errors.errors[0].msg});
     }
     console.log('no errors');
 
@@ -91,7 +91,7 @@ module.exports = async (req, res) => {
                 return res.status(500).json({ message: 'Server Error. Please try again.' });
             } else {
                 console.log('Email sent');
-                res.send('<p>To reset your password, please check your email</p>');
+                res.send('To reset your password, please check your email');
             }
 
         });
