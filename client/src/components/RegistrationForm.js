@@ -53,9 +53,14 @@ class RegistrationForm extends Component {
         this.setState({ isSponsor: !this.state.isSponsor});
     }
 
+    handleWorkingField = SelectedOption =>{
+        this.setState({selectedWorkingField:SelectedOption})
+        console.log(`Option selected:`, SelectedOption)
+    }
+
     createUser = () =>{
-        const { email, username, firstname, lastname,phone, password, biography, isSponsor } = this.state;
-        const user = { email, username, firstname, lastname, password, phone,biography, isSponsor };
+        const { email, username, firstname, lastname,phone, password, biography, isSponsor, selectedWorkingField } = this.state;
+        const user = { email, username, firstname, lastname, password, phone,biography, isSponsor, selectedWorkingField };
         const path = '/profile';
         axios.post('http://localhost:5000/user/register', user)
             .then((res) => {
@@ -80,7 +85,7 @@ class RegistrationForm extends Component {
 	
 			   
                let  interestsList = data.map(Interests => { return {value: Interests, display: Interests, label: Interests} })
-               this.setState({ Interests: [{value: '', display: '(Select your working field)'}].concat(interestsList) });
+               this.setState({ Interests: interestsList });
               
 
 
@@ -95,8 +100,8 @@ class RegistrationForm extends Component {
 
     render() { 
         const { step } = this.state;
-        const { email, username, firstname, lastname,phone, password, biography,Interests,isSponsor } = this.state;
-        const values = { email, username, firstname, lastname, password, phone,biography,Interests, isSponsor };
+        const { email, username, firstname, lastname,phone, password, biography,Interests,isSponsor, selectedWorkingField } = this.state;
+        const values = { email, username, firstname, lastname, password, phone,biography,Interests, isSponsor, selectedWorkingField };
         
         switch(step){
             case 1:
@@ -106,6 +111,7 @@ class RegistrationForm extends Component {
                         handleChange= {this.handleChange}
                         values = {values}
                         interests = {this.componentDidMount}
+                        handleWorkingField = {this.handleWorkingField}
                     />
                  );
             case 2:
