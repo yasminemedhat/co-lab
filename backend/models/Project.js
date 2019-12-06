@@ -10,8 +10,8 @@ const ProjectSchema = new Schema({
     name:           {  type: String, required: true, trim: true},
     description:    {  type: String},
     rating:         {  type: Number},
-    likes:          [{ type: String}],
-    followers:      [{ type: String }],
+    likes:          [{ type: Schema.Types.ObjectId, ref: 'Colaber'}],
+    followers:      [{ type: Schema.Types.ObjectId, ref: 'Colaber'}],
     creator:        {  type: Schema.Types.ObjectId, ref: 'Colaber'}
 }, options,
 );
