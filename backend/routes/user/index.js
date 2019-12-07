@@ -1,7 +1,8 @@
 const user = require('express').Router();
-
 //checks req.body for missing fields
 const { check } = require('express-validator');
+const redis=require('redis');
+const redisClient=redis.createClient();
 
 //database 
 const interestList = require('../../models/InterestList');
@@ -36,7 +37,7 @@ user.post('/register', [
 //              the chosen interests are the ones that would be shown in the discover feed
 //              (customized discover)
 //@access        public-> no token needed 
-user.get('/interestsList',require('./interestsList'));
+user.get('/interestsList', require('./interestsList'));
 
 //@route POST   user/login
 //@description  user login using email and password 
@@ -74,12 +75,12 @@ user.post('/resetPassword', [
 //@route POST   user/changePassword
 //@description  change password from a logged-in session
 //@access       auth required
-user.post('/changePassword',[
+user.post('/changePassword', [
     check('password', 'Please enter a password with 6 or more characters').isLength({ min: 6 }),
     auth],
     require('./changePassword'));
 
-    
+
 
 //@TODO:    delete an account
 
@@ -90,7 +91,29 @@ user.post('/changePassword',[
 //@route Get    user/profile
 //@description  get user's data to show their profile
 //@access       requires authentication
-user.get('/profile',auth,require('./profile'));
+user.get('/profile', auth, require('./profile'));
+
+
+
+//@route POST   user/logout ->Post because browser pre-fetches for get requests
+//@description  blacklist jwt using redis
+//@access       requires authentication
+user.post('/logout', auth, async (req, res) => {
+    console.log('logout route ');
+    //get expiration and creation times
+    const exp =   req.exp;
+    const token = req.token;
+    const now = Date.now() / 1000;
+    const timeLeft = exp - now; //in seconds
+    console.log(timeLeft);
+   try {//save in blacklist.
+    redisClient.set(token, true, 'EX', Math.trunc(timeLeft),redis.print);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message: 'Server Error'});       
+    }
+    res.send('Logged out.');
+});
 
 
 

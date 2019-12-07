@@ -40,7 +40,7 @@ module.exports = async (req, res) => {
         //console.log(user._id.getTimestamp());
         //console.log('jwt done');
 
-        const token = jwt.sign(payload, secret,{expiresIn: 2700});
+        const token = jwt.sign(payload, secret,{expiresIn: "2h"});
         console.log(token);
         console.log(user._id);
         console.log(secret);
