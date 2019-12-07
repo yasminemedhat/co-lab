@@ -2,6 +2,8 @@ import React, {Component} from "react";
 import {getJwt} from "../helpers/jwt";
 import Axios from "axios";
 import { withRouter } from "react-router-dom";
+import Navbar from "./navbar";
+
 
 class AuthenticateComponent extends Component{
     
@@ -11,8 +13,22 @@ class AuthenticateComponent extends Component{
         this.state = {
             user: undefined,
         }
+        this.logout = this.logout.bind(this);
+        
     }
 
+    logout (){
+        const jwt = getJwt();
+        const headers = {
+            Authorization: jwt
+          }
+        Axios.post('http://localhost:5000/user/logout', this.state.user, {headers: headers})
+        .then((res)=> {
+            this.setState({user: undefined});
+            localStorage.removeItem('token');
+            this.props.history.push('/login');
+        })
+    }
 
     componentDidMount(){
         const jwt = getJwt();
@@ -22,7 +38,6 @@ class AuthenticateComponent extends Component{
 
         Axios.get('http://localhost:5000/user/profile', {headers: { Authorization: jwt } })
         .then( (res) => {
-            console.log("eshta");
             this.setState({user: res.data});
 
         }).catch(err => {
@@ -40,8 +55,12 @@ class AuthenticateComponent extends Component{
         }
         return(
             <div>
-                {this.props.children}
-            </div>            
+                <Navbar logout={this.logout}/>
+                <div>
+                    {this.props.children}
+                </div> 
+            </div>
+                       
         );
     }
 
