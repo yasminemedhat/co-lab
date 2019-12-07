@@ -24,7 +24,13 @@ class Profile extends Component {
 
   routeChange = () => {
     let path = "/CreateProject";
-    this.props.history.push(path);
+    const user  = this.props.location.state.user;
+    this.props.history.push({
+      pathname : path,
+      state :{
+      user: user,
+      }
+      });
   };
 
 
