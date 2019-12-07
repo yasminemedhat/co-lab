@@ -8,6 +8,7 @@ import LoginForm from './LoginForm.js';
 import { Link }  from "react-router-dom";
 import axios from "axios";
 import { withRouter } from "react-router-dom";
+import HomeNavbar from "./home-navbar";
 
 
 
@@ -64,7 +65,7 @@ class Login extends React.Component {
 
     return (
       <div>
-      
+        <HomeNavbar />
         <div className="Limiter">
           <div className="main_container">
              <LoginForm

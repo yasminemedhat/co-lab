@@ -6,7 +6,9 @@ import "../fonts/Linearicons-Free-v1.0.0/icon-font.min.css";
 import UserBasicForm from "./UserBasicForm.js";
 import UserAdditionalInformation from "./UserAdditionalInfo.js";
 import axios from "axios";
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
+import HomeNavbar from "./home-navbar";
+
 
 class RegistrationForm extends Component {
     state = { 
@@ -106,6 +108,8 @@ class RegistrationForm extends Component {
         switch(step){
             case 1:
                 return ( 
+                    <div>
+                    <HomeNavbar />
                     <UserBasicForm
                         nextStep = {this.nextStep}
                         handleChange= {this.handleChange}
@@ -113,9 +117,12 @@ class RegistrationForm extends Component {
                         interests = {this.componentDidMount}
                         handleWorkingField = {this.handleWorkingField}
                     />
+                    </div>
                  );
             case 2:
                 return(
+                    <div>
+                    <HomeNavbar />
                     <UserAdditionalInformation
                         nextStep = {this.nextStep}
                         handleChange= {this.handleChange}
@@ -123,6 +130,7 @@ class RegistrationForm extends Component {
                         sumbit = {this.createUser}
                         values = {values}
                     />
+                    </div>
                     
 
                 );

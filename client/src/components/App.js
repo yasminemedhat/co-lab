@@ -7,7 +7,6 @@ import ForgotPassword from './forgotPassword';
 import Home from "./Home";
 import About from "./About";
 import RegistrationForm from "./RegistrationForm";
-import HomeNavbar from "./home-navbar";
 import Profile from "./Profile";
 import AuthenticatedComponent from "./AuthenticatedComponent";
 import CreateProject from "./CreateProject";
@@ -16,7 +15,6 @@ class Header extends React.Component {
   render() {
     return (
       <Router>
-        <HomeNavbar />
         <Switch>
           <Route path="/Auth" exact strict component = {AuthenticatedComponent}></Route>
           <Route path="/" exact strict  component ={Home} ></Route>
