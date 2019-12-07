@@ -47,17 +47,14 @@ class RegistrationForm extends Component {
 
     //Handle fields change
     handleChange = input => e => {
+        console.log(input)
+        console.log(e.target.value)
         this.setState({ [input]: e.target.value});
     }
 
     //handle isSponsor field change
     handleIsSponsor = () => {
         this.setState({ isSponsor: !this.state.isSponsor});
-    }
-
-    handleWorkingField = SelectedOption =>{
-        this.setState({selectedWorkingField:SelectedOption})
-        console.log(`Option selected:`, SelectedOption)
     }
 
     createUser = () =>{
@@ -87,7 +84,7 @@ class RegistrationForm extends Component {
 	
 			   
                let  interestsList = data.map(Interests => { return {value: Interests, display: Interests, label: Interests} })
-               this.setState({ Interests: interestsList });
+               this.setState({ Interests: [{value: '', display: '(Select your working Field)'}].concat(interestsList) });
               
 
 
