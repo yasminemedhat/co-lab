@@ -68,7 +68,6 @@ class CreateProject extends Component {
               user: user,
               }
               });
-            this.props.history.push(path);
       }).catch((e)=> {
             if (e.response && e.response.data) {
                 alert("Could not create project: "+ e.response.data.message);
