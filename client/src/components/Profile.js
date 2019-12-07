@@ -3,12 +3,13 @@ import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
 import Img from "react-image";
 import ProjectPopup from "./ProjectPopup";
+import axios from "axios";
+import {getJwt} from "../helpers/jwt";
 
 class Profile extends Component {
   state = {
-    email: "",
-    firstName: "",
-    lastName: ""
+    user: undefined,
+    projects: []
   };
 
   constructor(props) {
@@ -19,6 +20,7 @@ class Profile extends Component {
       showPopup: false
     };
     this.fileSelectedHandler = this.fileSelectedHandler.bind(this);
+    this.createProject = this.createProject.bind(this);
   }
 
   togglePopup() {
@@ -27,16 +29,16 @@ class Profile extends Component {
     });
   }
 
-  routeChange = () => {
-    let path = "/CreateProject";
-    const user = this.props.location.state.user;
-    this.props.history.push({
-      pathname: path,
-      state: {
-        user: user
-      }
-    });
-  };
+  // routeChange = () => {
+  //   let path = "/CreateProject";
+  //   const user = this.props.location.state.user;
+  //   this.props.history.push({
+  //     pathname: path,
+  //     state: {
+  //       user: user
+  //     }
+  //   });
+  // };
 
   fileSelectedHandler = event => {
     this.setState({
@@ -57,10 +59,44 @@ class Profile extends Component {
   fileUploadHandler = () => {};
   componentDidMount() {
     this.setState({
-      email: this.props.location.state.user.email,
-      firstName: this.props.location.state.user.firstName,
-      lastName: this.props.location.state.user.lastName
+      // email: this.props.location.state.user.email,
+      // firstName: this.props.location.state.user.firstName,
+      // lastName: this.props.location.state.user.lastName
+      user: this.props.location.state.user
     });
+  }
+
+  createProject(project){
+    // const { projectName, description, images, link } = newProject;
+
+    // const project = {  name: projectName,
+    //                    description: description,
+    //                     images: images,
+    //                     link: link };
+    const jwt = getJwt();
+    const path = '/profile';
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': jwt
+    }
+    axios.post('http://localhost:5000/project/add', project,{headers:headers })
+        .then((res) => {
+            alert('Project created successfully!');
+            // const user  = this.props.location.state.user;
+            // this.props.history.push({
+            //   pathname : path,
+            //   state :{
+            //   user: user,
+            //   }
+            //   });
+            const projects = this.state.projects;
+            projects.push(project)
+            this.setState({projects});
+      }).catch((e)=> {
+            if (e.response && e.response.data) {
+                alert("Could not create project: "+ e.response.data.message);
+            }
+        });
   }
 
   render() {
@@ -71,6 +107,11 @@ class Profile extends Component {
     } else {
       image = (
         <Img className="profile" src={require("../images/profile.png")}></Img>
+      );
+    }
+    if(this.state.user === undefined){
+      return(
+      <div><h1>loading...</h1></div>
       );
     }
     return (
@@ -104,9 +145,9 @@ class Profile extends Component {
               <h1>
                 {this.state.firstName} {this.state.lastName}
               </h1>
-              <p>email: {this.state.email}</p>
-              <p>phone:</p>
-              <p>Bio:</p>
+              <p>email: {this.state.user.email}</p>
+              <p>phone:  {this.state.user.phone_number}</p>
+              <p>Bio:  {this.state.user.bioghraphy}</p>
             </div>
           </div>
 
@@ -121,6 +162,7 @@ class Profile extends Component {
               <ProjectPopup
                 text='Click "Close Button" to hide popup'
                 closePopup={this.togglePopup.bind(this)}
+                createProject={this.createProject}
               />
             ) : null}
           </div>

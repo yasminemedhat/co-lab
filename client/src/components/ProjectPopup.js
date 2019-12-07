@@ -12,7 +12,8 @@ export default class ProjectPopup extends Component {
     projectName: "",
     description: "",
     creator: "",
-    projectLink: ""
+    projectLink: "",
+    images: []
   };
   fileObj = [];
   fileArray = [];
@@ -23,6 +24,8 @@ export default class ProjectPopup extends Component {
       file: [null]
     };
     this.uploadMultipleFiles = this.uploadMultipleFiles.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleCreateProject = this.handleCreateProject.bind(this);
   }
 
   uploadMultipleFiles(e) {
@@ -32,7 +35,7 @@ export default class ProjectPopup extends Component {
     for (let i = 0; i < this.fileObj[0].length; i++) {
       this.fileArray.push(URL.createObjectURL(this.fileObj[0][i]));
     }
-    this.setState({ file: this.fileArray });
+    this.setState({ images: this.fileArray });
   }
 
   //Handle fields change
@@ -45,6 +48,17 @@ export default class ProjectPopup extends Component {
       visible: false
     });
   }
+
+  handleCreateProject(){
+    const project = {name: this.state.projectName,
+                      description: this.state.description,
+                      images: this.state.images,
+                      link: this.state.link
+                    };
+    this.props.createProject(project);
+    this.closeModal();
+  }
+
 
   render() {
     let row = [];
@@ -106,7 +120,7 @@ export default class ProjectPopup extends Component {
             <h1>Add Project</h1>
             <div className="row">
             <div className="col">
-            <h5> project Link</h5>
+            <p> project Link</p>
             <Linkify>
             {link}
             </Linkify>
@@ -114,8 +128,9 @@ export default class ProjectPopup extends Component {
               <div className="col">
                 <input
                   type="text"
-                  placeholder="Project Name"
+                  placeholder="* Project Name"
                   value={this.state.projectName}
+                  required
                   onChange={this.handleChange("projectName")}
                 />
                 <br></br>
@@ -123,8 +138,9 @@ export default class ProjectPopup extends Component {
                 <textarea
                   className="description"
                   value={this.state.description}
+                  required
                   onChange={this.handleChange("description")}
-                  placeholder="Project Description"
+                  placeholder="* Project Description"
                 />
               </div>
               <div className="col">
@@ -145,6 +161,7 @@ export default class ProjectPopup extends Component {
               </div>
             </div>
             <div className="imageContainer">{row}</div>
+            <button className="btn btn-primary float-right" onClick={this.handleCreateProject}>Create</button>
             <a href="javascript:void(0);" onClick={() => this.closeModal()}>
               Close
             </a>
