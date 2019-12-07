@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import "../css/profile.css";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
 import Img from "react-image";
-import CreateProject from "./CreateProject";
+import ProjectPopup from "./ProjectPopup";
 
 class Profile extends Component {
   state = {
@@ -17,22 +16,27 @@ class Profile extends Component {
     this.state = {
       selectedFile: null,
       imagePreviewURL: null,
-     
+      showPopup: false
     };
     this.fileSelectedHandler = this.fileSelectedHandler.bind(this);
   }
 
+  togglePopup() {
+    this.setState({
+      showPopup: !this.state.showPopup
+    });
+  }
+
   routeChange = () => {
     let path = "/CreateProject";
-    const user  = this.props.location.state.user;
+    const user = this.props.location.state.user;
     this.props.history.push({
-      pathname : path,
-      state :{
-      user: user,
+      pathname: path,
+      state: {
+        user: user
       }
-      });
+    });
   };
-
 
   fileSelectedHandler = event => {
     this.setState({
@@ -109,12 +113,16 @@ class Profile extends Component {
           <div className="col">
             <button
               className="profile-btn"
-              onClick={this.routeChange}
+              onClick={this.togglePopup.bind(this)}
             >
               Add project
             </button>
-
-          
+            {this.state.showPopup ? (
+              <ProjectPopup
+                text='Click "Close Button" to hide popup'
+                closePopup={this.togglePopup.bind(this)}
+              />
+            ) : null}
           </div>
         </div>
       </div>

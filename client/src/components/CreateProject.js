@@ -29,6 +29,8 @@ class CreateProject extends Component {
   }
 
   uploadMultipleFiles(e) {
+    this.fileObj = [];
+    this.fileArray =[];
     this.fileObj.push(e.target.files);
     for (let i = 0; i < this.fileObj[0].length; i++) {
       this.fileArray.push(URL.createObjectURL(this.fileObj[0][i]));
