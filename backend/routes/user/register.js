@@ -90,7 +90,7 @@ module.exports = async (req, res) => {
         //json web token 
         jwt.sign(
             payload, config.get('jwtSecret'),
-            { expiresIn: 36000 },
+            { expiresIn: config.get('jwtExpiration') },
             (err, token) => {
                 console.log('token')
                 if (err) throw err;
@@ -98,7 +98,7 @@ module.exports = async (req, res) => {
                 console.log(profile);
                 res.json({ token, user: profile });
             }
-        );//TEMPORARY 3600000
+        );
 
 
     } catch (error) {

@@ -46,13 +46,13 @@ module.exports=async (req,res)=>{
         //create auth token
         jwt.sign(
             payload, config.get('jwtSecret'),
-            {expiresIn:36000},
+            {expiresIn:config.get('jwtExpiration')},
            (err,token) =>{
                if(err)throw err;
                console.log("JWT auth from login: ", token);
                res.json({token,user});
            }
-        );//TEMPORARY 3600000
+        );
         
     }
     catch(err){
