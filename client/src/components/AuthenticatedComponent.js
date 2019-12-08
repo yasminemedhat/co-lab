@@ -45,7 +45,7 @@ class AuthenticateComponent extends Component{
         }
         Axios.get(process.env.REACT_APP_baseAPIURL+'/user/profile', {headers: { Authorization: jwt } })
         .then( (res) => {
-            this.setState({user: res.data});
+            this.setState({user: res.data.user});
 
         }).catch(err => {
             localStorage.removeItem('token');
