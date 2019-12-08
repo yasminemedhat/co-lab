@@ -3,7 +3,7 @@ import {getJwt} from "../helpers/jwt";
 import Axios from "axios";
 import { withRouter } from "react-router-dom";
 import Navbar from "./navbar";
-
+import { logout } from '../utils/APICalls';
 
 class AuthenticateComponent extends Component{
     
@@ -17,13 +17,21 @@ class AuthenticateComponent extends Component{
         
     }
 
-    logout (){
+    // logout (){
+    //     const jwt = getJwt();
+    //     const headers = {
+    //         Authorization: jwt
+    //       }
+    //     Axios.post('http://localhost:5000/user/logout', this.state.user, {headers: headers})
+    //     .then((res)=> {
+    //         this.setState({user: undefined});
+    //         localStorage.removeItem('token');
+    //         this.props.history.push('/login');
+    //     })
+    // }
+    logout(){
         const jwt = getJwt();
-        const headers = {
-            Authorization: jwt
-          }
-        Axios.post('http://localhost:5000/user/logout', this.state.user, {headers: headers})
-        .then((res)=> {
+        logout(jwt,this.state.user).then(res => {
             this.setState({user: undefined});
             localStorage.removeItem('token');
             this.props.history.push('/login');
@@ -35,8 +43,7 @@ class AuthenticateComponent extends Component{
         if(!jwt){
             this.props.history.push('/login');
         }
-
-        Axios.get('http://localhost:5000/user/profile', {headers: { Authorization: jwt } })
+        Axios.get(process.env.REACT_APP_baseAPIURL+'/user/profile', {headers: { Authorization: jwt } })
         .then( (res) => {
             this.setState({user: res.data});
 
