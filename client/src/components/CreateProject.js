@@ -77,7 +77,6 @@ class CreateProject extends Component {
         });
   }
   render() {
-    let images = null;
     let row= [];
     let rowIndex = -1
     for (let i=0;i<this.state.file.length;i= i+3){

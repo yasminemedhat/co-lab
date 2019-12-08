@@ -2,15 +2,17 @@ import React, { Component } from "react";
 import "../css/login.css";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
-import Select from "react-select";
+// import Select from "react-select";
 
 class UserBasicForm extends Component {
   continue = e => {
     e.preventDefault();
+
     const values = this.props.values;
+    console.log(values);
     if (
       values.email.length === 0 ||
-      values.username.length === 0 ||
+      values.workingField.length === 0 ||
       values.firstname.length === 0 ||
       values.lastname.length === 0 ||
       values.password.length === 0
@@ -49,22 +51,6 @@ class UserBasicForm extends Component {
               <span className="focus-input100"></span>
               <span className="symbol-input100">
                 <span className="lnr lnr-envelope"></span>
-              </span>
-            </div>
-
-            <div className="wrap-input100 validate-input m-b-16">
-              <input
-                className="input100"
-                type="text"
-                required
-                name="username"
-                placeholder="username"
-                onChange={this.props.handleChange("username")}
-                defaultValue={values.username}
-              />
-              <span className="focus-input100"></span>
-              <span className="symbol-input100">
-                <span className="lnr lnr-user"></span>
               </span>
             </div>
 
@@ -135,7 +121,7 @@ class UserBasicForm extends Component {
             </div>
 
             <div>
-              <select defaultValue={values.selectedWorkingField} onChange={this.props.handleChange("selectedWorkingField")} >
+              <select defaultValue={values.selectedWorkingField} onChange={this.props.handleChange("workingField")} >
                 {values.Interests.map(interest => (
                   <option key={interest.value} value={interest.value}>
                     {interest.display}

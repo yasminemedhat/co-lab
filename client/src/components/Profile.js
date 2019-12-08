@@ -3,8 +3,8 @@ import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
 import Img from "react-image";
 import ProjectPopup from "./ProjectPopup";
-import axios from "axios";
 import {getJwt} from "../helpers/jwt";
+import { createProject } from '../utils/APICalls';
 
 class Profile extends Component {
   state = {
@@ -57,12 +57,16 @@ class Profile extends Component {
   };
 
   fileUploadHandler = () => {};
+
   componentDidMount() {
+    //  to do: get projects of the user set state
     this.setState({
       // email: this.props.location.state.user.email,
       // firstName: this.props.location.state.user.firstName,
       // lastName: this.props.location.state.user.lastName
-      user: this.props.location.state.user
+
+      user: this.props.location.state.user,
+      
     });
   }
 
@@ -75,26 +79,22 @@ class Profile extends Component {
     //                     link: link };
     const jwt = getJwt();
     const path = '/profile';
-    const headers = {
-      'Content-Type': 'application/json',
-      'Authorization': jwt
-    }
-    axios.post('http://localhost:5000/project/add', project,{headers:headers })
-        .then((res) => {
-            alert('Project created successfully!');
-            // const user  = this.props.location.state.user;
+    // 
+    createProject(jwt, project).then(res => {
+      alert('Project created successfully!');
+      const projects = this.state.projects;
+      projects.push(project)
+      this.setState({projects});
+       // const user  = this.props.location.state.user;
             // this.props.history.push({
             //   pathname : path,
             //   state :{
             //   user: user,
             //   }
             //   });
-            const projects = this.state.projects;
-            projects.push(project)
-            this.setState({projects});
-      }).catch((e)=> {
-            if (e.response && e.response.data) {
-                alert("Could not create project: "+ e.response.data.message);
+    }).catch((e)=> {
+            if (e && e.data) {
+                alert("Could not create project: "+ e.data.message);
             }
         });
   }

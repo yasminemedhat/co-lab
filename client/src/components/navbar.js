@@ -7,7 +7,6 @@ import { withRouter } from "react-router-dom";
 class Navbar extends Component {
     constuctor(props) {
         this.super(props);
-        this.handleLogout = this.handleLogout.bind(this);
     }
 
     render() { 
