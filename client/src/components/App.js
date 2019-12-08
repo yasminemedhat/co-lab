@@ -16,7 +16,6 @@ class Header extends React.Component {
     return (
       <Router>
         <Switch>
-          <Route path="/Auth" exact strict component = {AuthenticatedComponent}></Route>
           <Route path="/" exact strict  component ={Home} ></Route>
           <Route path="/about" exact strict component = {About}></Route>
           <Route path="/login" exact strict  component = {Login}></Route>

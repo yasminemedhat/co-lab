@@ -3,6 +3,7 @@ import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
 import Img from "react-image";
 import ProjectPopup from "./ProjectPopup";
+import ProjectLink from "./ProjectLink.js";
 import {getJwt} from "../helpers/jwt";
 import { createProject } from '../utils/APICalls';
 
@@ -21,6 +22,17 @@ class Profile extends Component {
     };
     this.fileSelectedHandler = this.fileSelectedHandler.bind(this);
     this.createProject = this.createProject.bind(this);
+    const projects = [{
+      name: "my first project",
+      description: "best project evaaa",
+    },{
+      name: "my second project",
+      description: "best second project evaaa",
+    }
+  ];
+    this.state = {
+      projects: projects
+    };
   }
 
   togglePopup() {
@@ -115,6 +127,7 @@ class Profile extends Component {
       );
     }
     return (
+      <div>
       <div className="  Container profile_container ">
         <div className="row" style={{ width: "100%" }}>
           <div className="col">
@@ -140,7 +153,7 @@ class Profile extends Component {
               </button>
             </div>
           </div>
-          <div className="col">
+          <div className="col-4">
             <div className="profile_info">
               <h1>
                 {this.state.firstName} {this.state.lastName}
@@ -165,9 +178,23 @@ class Profile extends Component {
                 createProject={this.createProject}
               />
             ) : null}
-          </div>
-        </div>
+            </div>
+            </div>
+            
+            
+        
       </div>
+      <div className="row Container profile_container">
+      <h4 style={{fontStyle: "bold", margin: "10px"}}>Projects  </h4>
+      <br></br>
+      {this.state.projects.length > 0 ? 
+        // <div className="container">
+        this.state.projects.map((project, i) => {                     
+            // Return the element. Also pass key     
+            return(<ProjectLink key={i} project={project} />)
+      }): null}
+    </div>
+    </div>
     );
   }
 }
