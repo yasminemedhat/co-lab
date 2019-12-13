@@ -4,8 +4,9 @@ import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
 import Img from "react-image";
 import ProjectPopup from "./ProjectPopup";
 import ProjectLink from "./ProjectLink.js";
-import {getJwt} from "../helpers/jwt";
-import { createProject } from '../utils/APICalls';
+import { getJwt } from "../helpers/jwt";
+import { createProject } from "../utils/APICalls";
+import { Container, Row, Col } from "react-bootstrap";
 
 class Profile extends Component {
   state = {
@@ -22,14 +23,16 @@ class Profile extends Component {
     };
     this.fileSelectedHandler = this.fileSelectedHandler.bind(this);
     this.createProject = this.createProject.bind(this);
-    const projects = [{
-      name: "my first project",
-      description: "best project evaaa",
-    },{
-      name: "my second project",
-      description: "best second project evaaa",
-    }
-  ];
+    const projects = [
+      {
+        name: "my first project",
+        description: "best project evaaa"
+      },
+      {
+        name: "my second project",
+        description: "best second project evaaa"
+      }
+    ];
     this.state = {
       projects: projects
     };
@@ -77,12 +80,11 @@ class Profile extends Component {
       // firstName: this.props.location.state.user.firstName,
       // lastName: this.props.location.state.user.lastName
 
-      user: this.props.location.state.user,
-      
+      user: this.props.location.state.user
     });
   }
 
-  createProject(project){
+  createProject(project) {
     // const { projectName, description, images, link } = newProject;
 
     // const project = {  name: projectName,
@@ -90,25 +92,27 @@ class Profile extends Component {
     //                     images: images,
     //                     link: link };
     const jwt = getJwt();
-    const path = '/profile';
-    // 
-    createProject(jwt, project).then(res => {
-      alert('Project created successfully!');
-      const projects = this.state.projects;
-      projects.push(project)
-      this.setState({projects});
-       // const user  = this.props.location.state.user;
-            // this.props.history.push({
-            //   pathname : path,
-            //   state :{
-            //   user: user,
-            //   }
-            //   });
-    }).catch((e)=> {
-            if (e && e.data) {
-                alert("Could not create project: "+ e.data.message);
-            }
-        });
+    const path = "/profile";
+    //
+    createProject(jwt, project)
+      .then(res => {
+        alert("Project created successfully!");
+        const projects = this.state.projects;
+        projects.push(project);
+        this.setState({ projects });
+        // const user  = this.props.location.state.user;
+        // this.props.history.push({
+        //   pathname : path,
+        //   state :{
+        //   user: user,
+        //   }
+        //   });
+      })
+      .catch(e => {
+        if (e && e.data) {
+          alert("Could not create project: " + e.data.message);
+        }
+      });
   }
 
   render() {
@@ -121,80 +125,88 @@ class Profile extends Component {
         <Img className="profile" src={require("../images/profile.png")}></Img>
       );
     }
-    if(this.state.user === undefined){
-      return(
-      <div><h1>loading...</h1></div>
+    if (this.state.user === undefined) {
+      return (
+        <div>
+          <h1>loading...</h1>
+        </div>
       );
     }
     return (
-      <div>
-      <div className="  Container profile_container ">
-        <div className="row" style={{ width: "100%" }}>
-          <div className="col">
-            <div className="">
-              <div className="image-container">{image}</div>
-            </div>
+     
+        <div className="profile_container">
+          <Row style={{ width: "100%" }}>
+            <Col>
+              <div className="">
+                <div className="image-container">{image}</div>
+              </div>
 
-            <div className="row">
-              <input
-                style={{ display: "none" }}
-                ref={fileInput => (this.fileInput = fileInput)}
-                type="file"
-                onChange={this.fileSelectedHandler}
-              ></input>
+              <div className="row">
+                <input
+                  style={{ display: "none" }}
+                  ref={fileInput => (this.fileInput = fileInput)}
+                  type="file"
+                  onChange={this.fileSelectedHandler}
+                ></input>
+                <button
+                  className="profile-btn"
+                  onClick={() => this.fileInput.click()}
+                >
+                  Pick File
+                </button>
+                <button
+                  className="profile-btn"
+                  onClick={this.fileUploadHandler}
+                >
+                  Uploade picture
+                </button>
+              </div>
+            </Col>
+            <Col>
+              <div className="profile_info">
+                <h1>
+                  {this.state.firstName} {this.state.lastName}
+                </h1>
+                <p>email: {this.state.user.email}</p>
+                <p>phone: {this.state.user.phone_number}</p>
+                <p>Bio: {this.state.user.bioghraphy}</p>
+              </div>
+            </Col>
+
+            <Col>
               <button
                 className="profile-btn"
-                onClick={() => this.fileInput.click()}
+                onClick={this.togglePopup.bind(this)}
               >
-                Pick File
+                Add project
               </button>
-              <button className="profile-btn" onClick={this.fileUploadHandler}>
-                Uploade picture
-              </button>
-            </div>
-          </div>
-          <div className="col-4">
-            <div className="profile_info">
-              <h1>
-                {this.state.firstName} {this.state.lastName}
-              </h1>
-              <p>email: {this.state.user.email}</p>
-              <p>phone:  {this.state.user.phone_number}</p>
-              <p>Bio:  {this.state.user.bioghraphy}</p>
-            </div>
-          </div>
+              {this.state.showPopup ? (
+                <ProjectPopup
+                  text='Click "Close Button" to hide popup'
+                  closePopup={this.togglePopup.bind(this)}
+                  createProject={this.createProject}
+                 
+                />
+              ) : null}
+            </Col>
+          </Row>
+          <h4 style={{ fontStyle: "bold", margin: "10px" }}>Projects </h4>
+          <Row style={{ width: "100%" }}>
+          
+            
+              <br></br>
+              {this.state.projects.length > 0
+                ? // <div className="container">
+                  this.state.projects.map((project, i) => {
+                    // Return the element. Also pass key
+                    return <Col><ProjectLink key={i} project={project} /></Col>;
+                  })
+                : null}
+     
+          </Row>
 
-          <div className="col">
-            <button
-              className="profile-btn"
-              onClick={this.togglePopup.bind(this)}
-            >
-              Add project
-            </button>
-            {this.state.showPopup ? (
-              <ProjectPopup
-                text='Click "Close Button" to hide popup'
-                closePopup={this.togglePopup.bind(this)}
-                createProject={this.createProject}
-              />
-            ) : null}
-            </div>
-            </div>
-            
-            
-        
-      </div>
-      <div className="row Container profile_container">
-      <h4 style={{fontStyle: "bold", margin: "10px"}}>Projects  </h4>
-      <br></br>
-      {this.state.projects.length > 0 ? 
-        // <div className="container">
-        this.state.projects.map((project, i) => {                     
-            // Return the element. Also pass key     
-            return(<ProjectLink key={i} project={project} />)
-      }): null}
-    </div>
-    </div>
+        </div>
+
     );
   }
 }

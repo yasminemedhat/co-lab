@@ -1,7 +1,6 @@
 .profile_container{
    
         width: 100%;
-        display: flex;
         
         padding: 15px;
         background: #0250c5;
@@ -50,3 +49,22 @@
     background: #333333;
   }
   
+
+.Container {
+    max-width: 720px;
+}
+
+
+
+.container {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+
+    
+    padding: 15px;
+    background: #0250c5;
+    background: linear-gradient(45deg, #912064, #0c28efb8);
+}
