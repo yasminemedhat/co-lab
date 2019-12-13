@@ -93,6 +93,11 @@ user.post('/changePassword', [
 //@access       requires authentication
 user.get('/profile', auth, require('./profile'));
 
+//@route GET    user/viewProjects
+//@description  view projects for certain user
+//@access       requires authentication 
+user.get('/viewProjects', auth, require('./viewProjects'));
+
 
 
 //@route POST   user/logout ->Post because browser pre-fetches for get requests
