@@ -12,7 +12,8 @@ const ProjectSchema = new Schema({
     rating:         {  type: Number},
     likes:          [{ type: Schema.Types.ObjectId, ref: 'Colaber'}],
     followers:      [{ type: Schema.Types.ObjectId, ref: 'Colaber'}],
-    creator:        {  type: Schema.Types.ObjectId, ref: 'Colaber'}
+    creator:        {  type: Schema.Types.ObjectId, ref: 'Colaber'},
+    images:         [{type: String}]
 }, options,
 );
 

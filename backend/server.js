@@ -1,6 +1,7 @@
 const express = require('express');
 const connectDB = require('./config/db'); //Database
 const path = require('path');
+const drive=require('./services/drive');
 
 //const initInterests=require('./middleware/initInterests');
 
@@ -17,6 +18,9 @@ app.use(cors());
 
 //configure and connect database
 connectDB();
+
+//connect Drive
+drive.connectDrive();
 
 //initialise intersts (ONE TIME ONLY)
 //already initialised and therefore function is no longer needed
