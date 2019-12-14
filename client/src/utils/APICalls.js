@@ -48,15 +48,29 @@ export const logout = (jwt, user) =>{
     });
 }
 
-export const createProject = (jwt, project)=> {
+export const createProject = (jwt, formData)=> {
     const headers = {
-        'Content-Type': 'application/json',
+        'Content-Type': "multipart/form-data",
         'Authorization': jwt
-    }
-    return axiosInstance.post('project/add', project,{headers:headers })
+      }
+//   axios({
+//     method: "post", 
+//     url: '${process.env.REACT_APP_baseAPIURL}/project/add',
+//     data,
+//     config: { headers: headers }
+//   });
+    return axiosInstance.post('project/add', formData,{headers:headers })
         .then((res) => {
             return res;
       });
+}
+export const getProjects = (jwt) => {
+    console.log("deen om el tokens ", jwt);
+    return axiosInstance.get('user/viewProjects', {headers: { Authorization: jwt } }).then(res => {
+        // axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${user.data.token}`;
+        console.log('form api getting projs ', res.data);
+        return res.data;
+    })
 }
 
 export const getInterestsList=() => {
@@ -83,15 +97,20 @@ export const getInterestsList=() => {
 // });
 
 // export const APIURL = process.env.REACT_APP_baseAPIURL;
-export const getPhotos = () => axiosInstance.get(`/photos`);
+export const getPhotos = (jwt) => axiosInstance.get(`/photos`);
 
-export const addPhoto = data =>
+export const addPhoto = (jwt,data) => {
+    const headers = {
+        'Content-Type': "multipart/form-data",
+        'Authorization': jwt
+      }
   axios({
     method: "post", 
-    url: `/photos/add`,
+    url: '${process.env.REACT_APP_baseAPIURL}/project/add',
     data,
-    config: { headers: { "Content-Type": "multipart/form-data" } }
+    config: { headers: headers }
   });
+}
 export const editPhoto = data =>
   axios({
     method: "put",

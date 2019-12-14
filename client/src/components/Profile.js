@@ -5,13 +5,13 @@ import Img from "react-image";
 import ProjectPopup from "./ProjectPopup";
 import ProjectLink from "./ProjectLink.js";
 import { getJwt } from "../helpers/jwt";
-import { createProject } from "../utils/APICalls";
-import { Container, Row, Col } from "react-bootstrap";
+import { createProject, getProjects } from "../utils/APICalls";
+import {  Row, Col } from "react-bootstrap";
 
 class Profile extends Component {
   state = {
     user: undefined,
-    projects: []
+    projects: [{}]
   };
 
   constructor(props) {
@@ -21,21 +21,8 @@ class Profile extends Component {
       imagePreviewURL: null,
       showPopup: false
     };
-    this.fileSelectedHandler = this.fileSelectedHandler.bind(this);
     this.createProject = this.createProject.bind(this);
-    const projects = [
-      {
-        name: "my first project",
-        description: "best project evaaa"
-      },
-      {
-        name: "my second project",
-        description: "best second project evaaa"
-      }
-    ];
-    this.state = {
-      projects: projects
-    };
+
   }
 
   togglePopup() {
@@ -55,51 +42,36 @@ class Profile extends Component {
   //   });
   // };
 
-  fileSelectedHandler = event => {
-    this.setState({
-      selectedFile: event.target.files[0]
-    });
-
-    let reader = new FileReader();
-
-    reader.onloadend = () => {
-      this.setState({
-        imagePreviewUrl: reader.result
-      });
-    };
-
-    reader.readAsDataURL(event.target.files[0]);
-  };
-
-  fileUploadHandler = () => {};
 
   componentDidMount() {
-    //  to do: get projects of the user set state
-    this.setState({
-      // email: this.props.location.state.user.email,
-      // firstName: this.props.location.state.user.firstName,
-      // lastName: this.props.location.state.user.lastName
-
-      user: this.props.location.state.user
+    
+      this.setState({
+        user: this.props.location.state.user
+      });
+      
+      const jwt = getJwt();
+    getProjects(jwt)
+    .then(res => {
+      const projects = res;
+      this.setState({projects});
+    })
+    .catch(err => {
+      if (err && err.status) {
+        alert("Could get project: " + err.message);
+      }
     });
   }
+    
 
-  createProject(project) {
-    // const { projectName, description, images, link } = newProject;
-
-    // const project = {  name: projectName,
-    //                    description: description,
-    //                     images: images,
-    //                     link: link };
+  createProject(formData) {
     const jwt = getJwt();
     const path = "/profile";
-    //
-    createProject(jwt, project)
+    createProject(jwt,formData)
       .then(res => {
         alert("Project created successfully!");
-        const projects = this.state.projects;
-        projects.push(project);
-        this.setState({ projects });
+        // var projects = this.state.projects;
+        // projects.push(res.data);
+        // this.setState({ projects });
         // const user  = this.props.location.state.user;
         // this.props.history.push({
         //   pathname : path,
@@ -107,10 +79,11 @@ class Profile extends Component {
         //   user: user,
         //   }
         //   });
+        window.location.reload();
       })
-      .catch(e => {
-        if (e && e.data) {
-          alert("Could not create project: " + e.data.message);
+      .catch(err => {
+        if (err && err.status) {
+          alert("Could not create project: " + err.message);
         }
       });
   }
@@ -195,11 +168,11 @@ class Profile extends Component {
           
             
               <br></br>
-              {this.state.projects.length > 0
+              {this.state.projects
                 ? // <div className="container">
                   this.state.projects.map((project, i) => {
                     // Return the element. Also pass key
-                    return <Col><ProjectLink key={i} project={project} /></Col>;
+                    return <Col key={i}><ProjectLink key={i} project={project} /></Col>;
                   })
                 : null}
      

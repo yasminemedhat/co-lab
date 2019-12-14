@@ -93,11 +93,11 @@ module.exports = {
           auth: jwtClient,
           resource: imageMetadata,
           media: media,
-          fields: 'id, webViewLink'
+          fields: 'id, webContentLink'
         });
-        var { id, webViewLink } = response.data;
+        var { id, webContentLink } = response.data;
 
-        links.push(webViewLink);
+        links.push(webContentLink);
         //set permissions:
         setPermissions(id);
 

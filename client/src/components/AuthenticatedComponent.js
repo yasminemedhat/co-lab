@@ -45,6 +45,7 @@ class AuthenticateComponent extends Component{
         }
         Axios.get(process.env.REACT_APP_baseAPIURL+'/user/profile', {headers: { Authorization: jwt } })
         .then( (res) => {
+            console.log("tamam")
             this.setState({user: res.data.user});
 
         }).catch(err => {
@@ -55,6 +56,9 @@ class AuthenticateComponent extends Component{
     }
 
     render(){
+        const childrenWithProps = React.Children.map(this.props.children, child =>
+            React.cloneElement(child, { user: this.state.user })
+          );
         if(this.state.user === undefined){
             return(
             <div><h1>loading...</h1></div>
@@ -64,7 +68,8 @@ class AuthenticateComponent extends Component{
             <div>
                 <Navbar logout={this.logout}/>
                 <div>
-                    {this.props.children}
+                    {/* {this.props.children} */}
+                    {childrenWithProps}
                 </div> 
             </div>
                        
