@@ -7,38 +7,35 @@ import Linkify from "react-linkify";
 import { photosStore } from "./store";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
-import ProjectPhotos from "./ProjectPhotos";
 
-export default class ProjectPopup extends Component {
+class ProjectPopup extends Component {
   state = {
     projectName: "",
     description: "",
-    creator: "",
     projectLink: "",
     images: []
   };
-  fileObj = [];
-  fileArray = [];
+  // fileObj = [];
+  // fileArray = [];
   constructor(props) {
     super(props);
     this.state = {
-      visible: true,
-      file: [null]
-    };
-    this.uploadMultipleFiles = this.uploadMultipleFiles.bind(this);
+      visible: true};
+    // this.uploadMultipleFiles = this.uploadMultipleFiles.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleCreateProject = this.handleCreateProject.bind(this);
+    this.onChangeImages = this.onChangeImages.bind(this);
   }
 
-  uploadMultipleFiles(e) {
-    this.fileObj = [];
-    this.fileArray = [];
-    this.fileObj.push(e.target.files);
-    for (let i = 0; i < this.fileObj[0].length; i++) {
-      this.fileArray.push(URL.createObjectURL(this.fileObj[0][i]));
-    }
-    this.setState({ images: this.fileArray });
-  }
+  // uploadMultipleFiles(e) {
+  //   this.fileObj = [];
+  //   this.fileArray = [];
+  //   this.fileObj.push(e.target.files);
+  //   for (let i = 0; i < this.fileObj[0].length; i++) {
+  //     this.fileArray.push(URL.createObjectURL(this.fileObj[0][i]));
+  //   }
+  //   this.setState({ images: this.fileArray });
+  // }
 
   //Handle fields change
   handleChange = input => e => {
@@ -51,6 +48,10 @@ export default class ProjectPopup extends Component {
     });
   }
 
+  onChangeImages = e => {
+    this.setState({ images: e.target.files })
+  };
+
   handleCreateProject() {
     const project = {
       name: this.state.projectName,
@@ -58,35 +59,21 @@ export default class ProjectPopup extends Component {
       images: this.state.images,
       link: this.state.link
     };
-    this.props.createProject(project);
+    const { images } = this.state;
+
+    const formData = new FormData();
+    formData.append('name', this.state.projectName);
+    formData.append('description', this.state.description);
+    for (let i = 0 ; i < images.length ; i++) {
+      formData.append("photos", images[i]);
+   }
+
+    this.props.createProject(formData);
     this.closeModal();
   }
 
   render() {
-    let row = [];
-    let rowIndex = -1;
-    for (let i = 0; i < this.state.file.length; i = i + 5) {
-      rowIndex++;
-      row[rowIndex] = (
-        <div className="row imageRow">
-          <div className="col imagecol">
-            <Img className="pictures" src={this.fileArray[i]}></Img>
-          </div>
-          <div className="col imagecol">
-            <Img className="pictures" src={this.fileArray[i + 1]}></Img>
-          </div>
-          <div className="col imagecol">
-            <Img className="pictures" src={this.fileArray[i + 2]}></Img>
-          </div>
-          <div className="col imagecol">
-            <Img className="pictures" src={this.fileArray[i + 3]}></Img>
-          </div>
-          <div className="col imagecol">
-            <Img className="pictures" src={this.fileArray[i + 4]}></Img>
-          </div>
-        </div>
-      );
-    }
+
 
     let link = null;
     var isUrl = require("is-url");
@@ -138,7 +125,13 @@ export default class ProjectPopup extends Component {
                 />
               </div>
               <div className="col">
-               <ProjectPhotos  photosStore={photosStore}></ProjectPhotos>
+              <input
+                onChange={this.onChangeImages}
+                type="file"
+                name="images"
+                multiple
+                accept="image/png, image/jpeg, image/jpg"
+              />
               </div>
             </div>
             <div>
@@ -160,3 +153,4 @@ export default class ProjectPopup extends Component {
     );
   }
 }
+export default ProjectPopup;

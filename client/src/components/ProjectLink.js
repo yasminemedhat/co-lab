@@ -7,10 +7,25 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 
 class ProjectLink extends Component {
+    state={
+        name: "",
+        description: "",
+        link: "",
+        imageUrl: ""
+    };
+    constructor(props){
+        super(props);
+    }
+    componentDidMount(){
+        const {name, description, link} = this.props.project;
+        const image = this.props.project.images ? this.props.project.images[0] : require('../images/img-01.png')
+        console.log("image: ", image);
+        this.setState({name,description,link,image});
+    }
     render() { 
         return (
-                <Card style={{ width: '18rem', height: '18rem', margin: "10px"  }}>
-                    {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
+                <Card style={{ width: '18rem', height: '25rem', margin: "10px"  }}>
+                    <Card.Img style={{ width: '18rem', height: '15rem'}} variant="top" src={this.state.image} />
                     <Card.Body>
                         <Card.Title>{this.props.project.name}</Card.Title>
                         <Card.Text>{this.props.project.description}</Card.Text>
