@@ -5,7 +5,7 @@ import PhotoForm from "./PhotoForm";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import { observer } from "mobx-react";
-import { getPhotos, deletePhoto, APIURL } from "./requests";
+import { getPhotos, deletePhoto } from "../utils/APICalls";
 
 
 
@@ -60,7 +60,7 @@ function ProjectPhotos({ photosStore }) {
               <tr key={i}>
               
                 <td>
-                  <img src={`${APIURL}/${path}`} style={{ width: 200 }} />
+                  <img src={`${process.env.REACT_APP_baseAPIURL}/${path}`} style={{ width: 200 }} />
                 </td>
                 <td>
                   <Button onClick={handleEditShow.bind(this, p)}>Edit</Button>

@@ -82,3 +82,21 @@ export const getInterestsList=() => {
 //     }
 // });
 
+// export const APIURL = process.env.REACT_APP_baseAPIURL;
+export const getPhotos = () => axiosInstance.get(`${APIURL}/photos`);
+
+export const addPhoto = data =>
+  axios({
+    method: "post", 
+    url: `${APIURL}/photos/add`,
+    data,
+    config: { headers: { "Content-Type": "multipart/form-data" } }
+  });
+export const editPhoto = data =>
+  axios({
+    method: "put",
+    url: `${APIURL}/photos/edit`,
+    data,
+    config: { headers: { "Content-Type": "multipart/form-data" } }
+  });
+export const deletePhoto = id => axios.delete(`${APIURL}/photos/delete/${id}`);
