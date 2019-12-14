@@ -4,8 +4,10 @@ import Img from "react-image";
 import "../css/projectPopup.css";
 import "../css/profile.css";
 import Linkify from "react-linkify";
+import { photosStore } from "./store";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
+import ProjectPhotos from "./ProjectPhotos";
 
 export default class ProjectPopup extends Component {
   state = {
@@ -49,16 +51,16 @@ export default class ProjectPopup extends Component {
     });
   }
 
-  handleCreateProject(){
-    const project = {name: this.state.projectName,
-                      description: this.state.description,
-                      images: this.state.images,
-                      link: this.state.link
-                    };
+  handleCreateProject() {
+    const project = {
+      name: this.state.projectName,
+      description: this.state.description,
+      images: this.state.images,
+      link: this.state.link
+    };
     this.props.createProject(project);
     this.closeModal();
   }
-
 
   render() {
     let row = [];
@@ -82,13 +84,12 @@ export default class ProjectPopup extends Component {
           <div className="col imagecol">
             <Img className="pictures" src={this.fileArray[i + 4]}></Img>
           </div>
-     
         </div>
       );
     }
 
     let link = null;
-    var isUrl = require("is-url")
+    var isUrl = require("is-url");
     if (isUrl(this.state.projectLink)) {
       link = <div>{this.state.projectLink}</div>;
     } else {
@@ -103,28 +104,21 @@ export default class ProjectPopup extends Component {
     }
 
     return (
-  
       <section>
-    
         <Modal
-          
           visible={this.state.visible}
-          width="500"
-          height="500"
+          width="600"
+          height="600"
           effect="fadeInUp"
-         
           onClickAway={() => this.closeModal()}
         >
-       
           <div className="popup">
             <h1>Add Project</h1>
             <div className="row">
-            <div className="col">
-            <p> project Link</p>
-            <Linkify>
-            {link}
-            </Linkify>
-          </div>
+              <div className="col">
+                <p> project Link</p>
+                <Linkify>{link}</Linkify>
+              </div>
               <div className="col">
                 <input
                   type="text"
@@ -144,32 +138,25 @@ export default class ProjectPopup extends Component {
                 />
               </div>
               <div className="col">
-                <input
-                  multiple
-                  style={{ display: "none" }}
-                  ref={fileInput => (this.fileInput = fileInput)}
-                  type="file"
-                  onChange={this.uploadMultipleFiles}
-                ></input>
-                <button
-                  className="picture-btn"
-                  onClick={() => this.fileInput.click()}
-                >
-                  Add Pictures
-                </button>
-            
+               <ProjectPhotos  photosStore={photosStore}></ProjectPhotos>
               </div>
             </div>
-            <div className="imageContainer">{row}</div>
-            <button className="btn btn-primary float-right" onClick={this.handleCreateProject}>Create</button>
+            <div>
+             
+             
+            </div>
+            <button
+              className="btn btn-primary float-right"
+              onClick={this.handleCreateProject}
+            >
+              Create
+            </button>
             <a href="javascript:void(0);" onClick={() => this.closeModal()}>
               Close
             </a>
           </div>
         </Modal>
-       
       </section>
-     
     );
   }
 }
