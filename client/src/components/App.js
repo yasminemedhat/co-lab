@@ -9,7 +9,7 @@ import About from "./About";
 import RegistrationForm from "./RegistrationForm";
 import Profile from "./Profile";
 import AuthenticatedComponent from "./AuthenticatedComponent";
-import CreateProject from "./CreateProject";
+import ProjectPage from "./ProjectPage";
 
 class Header extends React.Component {
   render() {
@@ -21,10 +21,11 @@ class Header extends React.Component {
           <Route path="/login" exact strict  component = {Login}></Route>
           <Route path="/forgotPassword" exact strict  component = {ForgotPassword}></Route>
           <Route path="/RegistrationForm" exact strict component ={RegistrationForm} />
+          
         
           <AuthenticatedComponent>
             <Route path="/profile" exact strict component ={Profile} />
-            <Route path="/CreateProject" exact strict component ={CreateProject} />
+            <Route path="/ProjectPage" exact strict component ={ProjectPage} />
           </AuthenticatedComponent>
           
 

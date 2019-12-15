@@ -17,13 +17,6 @@ input[type="text"]
     background: linear-gradient(45deg, #912064, #0c28efb8);
 }
 
-.pictures{
-    width: 200px;
-    height: 200px;
-    padding: 1%;
-    background-color: #fff;
-    padding: 4px;
-}
 
 .imagecol{
     text-align: center;

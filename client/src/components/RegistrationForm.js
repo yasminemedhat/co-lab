@@ -47,6 +47,7 @@ class RegistrationForm extends Component {
 
     //Handle fields change
     handleChange = input => e => {
+       
         this.setState({ [input]: e.target.value});
     }
 
@@ -54,10 +55,26 @@ class RegistrationForm extends Component {
     handleIsSponsor = () => {
         this.setState({ isSponsor: !this.state.isSponsor});
     }
+   
+    handleChosenInterests = e =>{
+      
+           
+        
+            
+              this.setState({
+                selectedInterests:[].slice.call(e.target.selectedOptions).map(o => {
+                    return o.value;
+                })
+            });
+              console.log(this.state.selectedInterests)
+        
+       
+        
+    }
 
     createUser = () =>{
-        const { email, firstname, lastname,phone, password, biography, isSponsor, workingField } = this.state;
-        const user = { email, firstname, lastname, password, phone,biography, isSponsor, workingField };
+        const { email, username, firstname, lastname,phone, password, biography, isSponsor, selectedWorkingField, selectedInterests } = this.state;
+        const user = { email, username, firstname, lastname, password, phone,biography, isSponsor, selectedWorkingField, selectedInterests };
         const path = '/profile';
         signup(user).then((data) => {
             localStorage.setItem('token',data.token);
@@ -73,6 +90,9 @@ class RegistrationForm extends Component {
             
     }
 
+
+
+
       // get interestsList
       componentDidMount() {
 		getInterestsList().then(data => {
@@ -87,8 +107,8 @@ class RegistrationForm extends Component {
 
     render() { 
         const { step } = this.state;
-        const { email, firstname, lastname,phone, password, biography,Interests,isSponsor, workingField } = this.state;
-        const values = { email,firstname, lastname, password, phone,biography,Interests, isSponsor, workingField };
+        const { email, username, firstname, lastname,phone, password, biography,Interests,isSponsor, selectedWorkingField, selectedInterests } = this.state;
+        const values = { email, username, firstname, lastname, password, phone,biography,Interests, isSponsor, selectedWorkingField, selectedInterests };
         
         switch(step){
             case 1:
@@ -100,7 +120,7 @@ class RegistrationForm extends Component {
                         handleChange= {this.handleChange}
                         values = {values}
                         interests = {this.componentDidMount}
-                        handleWorkingField = {this.handleWorkingField}
+                     
                     />
                     </div>
                  );
@@ -114,6 +134,7 @@ class RegistrationForm extends Component {
                         handleSponsorship = {this.handleIsSponsor}
                         sumbit = {this.createUser}
                         values = {values}
+                        handleChosenInterests = {this.handleChosenInterests}
                     />
                     </div>
                     
