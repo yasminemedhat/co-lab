@@ -5,6 +5,7 @@ import Linkify from "react-linkify";
 // import { Card, Button } from 'reactstrap';
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
+import { Route , withRouter} from 'react-router-dom';
 
 class ProjectLink extends Component {
     state={
@@ -15,7 +16,19 @@ class ProjectLink extends Component {
     };
     constructor(props){
         super(props);
+        this.routeChange = this.routeChange.bind(this);
     }
+    routeChange = () => {
+        const path = "/ProjectPage";
+        const project = this.props.project;
+        this.props.history.push({
+          pathname : path,
+          state :{
+          project: project,
+          }
+          });
+      };
+    
     componentDidMount(){
         const {name, description, link} = this.props.project;
         const image = this.props.project.images ? this.props.project.images[0] : require('../images/img-01.png')
@@ -30,10 +43,10 @@ class ProjectLink extends Component {
                         <Card.Title>{this.props.project.name}</Card.Title>
                         <Card.Text>{this.props.project.description}</Card.Text>
                         {this.props.project.link? (<Linkify>{this.props.project.link}</Linkify>) : null}
-                        <Button variant="primary">show project</Button>
+                        <Button variant="primary"  onClick={this.routeChange}>show project</Button>
                     </Card.Body>
                 </Card>
             );
     }
 }
-export default ProjectLink;
+export default withRouter(ProjectLink);

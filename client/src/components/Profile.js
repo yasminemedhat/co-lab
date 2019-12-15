@@ -7,6 +7,7 @@ import ProjectLink from "./ProjectLink.js";
 import { getJwt } from "../helpers/jwt";
 import { createProject, getProjects } from "../utils/APICalls";
 import {  Row, Col } from "react-bootstrap";
+import { Route , withRouter} from 'react-router-dom';
 
 class Profile extends Component {
   state = {
@@ -184,4 +185,4 @@ class Profile extends Component {
   }
 }
 
-export default Profile;
+export default withRouter(Profile);

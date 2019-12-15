@@ -56,7 +56,13 @@ class UserAdditionalInformation extends Component {
                 </div>
 
                 <div className="wrap-input100  m-b-16">
-                 <ReactMultiSelectCheckboxes options={values.Interests} placeholderButtonLabel="select your interests"/>
+                <select multiple={true} defaultValue={values.selectedInterests}  onChange={this.props.handleChosenInterests} >
+                {values.Interests.map(interest => (
+                  <option key={interest.value} value={interest.value}>
+                    {interest.label}
+                  </option>
+                ))}
+              </select>
                 </div>
 
 
