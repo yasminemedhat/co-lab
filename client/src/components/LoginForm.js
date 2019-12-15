@@ -5,8 +5,13 @@ import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
 
 class LoginForm extends Component {
 
+  submit = e => {
+    e.preventDefault();
+    this.props.sumbit();
+  }
 
   render() {
+    const { values } = this.props;
     return (
       <div className="wrap-login100 p-l-50 p-r-50 p-t-77 p-b-30">
         <form className="login100-form validate-form">
@@ -20,6 +25,8 @@ class LoginForm extends Component {
               type="text"
               name="email"
               placeholder="Email"
+              onChange={this.props.handleChange('email')}
+              defaultValue = {values.email}
             />
             <span className="focus-input100"></span>
             <span className="symbol-input100">
@@ -36,6 +43,7 @@ class LoginForm extends Component {
               type="password"
               name="pass"
               placeholder="Password"
+              onChange={this.props.handleChange('password')}
             />
             <span className="focus-input100"></span>
             <span className="symbol-input100">
@@ -56,7 +64,7 @@ class LoginForm extends Component {
           </div>
 
           <div className="container-login100-form-btn p-t-25">
-            <button className="login100-form-btn">Login</button>
+            <input type="submit" className="login100-form-btn" value="Login" onClick={this.submit}/>
           </div>
 
         </form>

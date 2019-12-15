@@ -1,4 +1,8 @@
 {
     "mongoURI" : "mongodb+srv://lougy:lougy123@co-lab-vfyef.gcp.mongodb.net/test?retryWrites=true&w=majority",
-    "jwtSecret": "secretKey"
+    "jwtSecret": "secretKey",
+    "jwtExpiration":"2h",
+    "client_secret":"KLI1cNYB_AnIGI125xQyfxew",
+    "redirect_uris":["urn:ietf:wg:oauth:2.0:oob","http://localhost"],
+    "client_id":"161496657439-fph4ffhaktctvu46jqv3ecpvngriiieu.apps.googleusercontent.com"
 }

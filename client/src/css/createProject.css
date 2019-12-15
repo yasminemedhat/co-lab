@@ -1,0 +1,40 @@
+input[type="text"]
+{
+    background: transparent;
+    border: none;
+}
+
+.description{
+    background: transparent;
+    border: none;
+    height: 100px;
+}
+
+.projectContainer{
+    width: 100%;
+    min-height: 100vh;
+    padding: 15px;
+    background: linear-gradient(45deg, #912064, #0c28efb8);
+}
+
+.pictures{
+    width: 200px;
+    height: 200px;
+    padding: 1%;
+    background-color: #fff;
+    padding: 4px;
+}
+
+.imagecol{
+    text-align: center;
+    margin: 0px;
+}
+
+.imageContainer{
+    text-align: center;
+}
+
+.imageRow{
+    width: 56%;
+    margin-left: 22%;
+}

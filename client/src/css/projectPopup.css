@@ -1,0 +1,63 @@
+input[type="text"]
+{
+    background: transparent;
+    border: none;
+}
+
+.description{
+    background: transparent;
+    border: none;
+    height: 100px;
+}
+
+
+.pictures{
+    width: 50px !important;
+    height: 50px !important;
+    padding: 1%;
+    background-color: #fff;
+    padding: 4px;
+}
+
+.imagecol{
+    text-align: center;
+    margin: 0px;
+}
+
+.imageContainer{
+    text-align: center;
+}
+
+.imageRow{
+    width:100% !important;
+    margin-left: 0% !important;
+}
+.picture-btn{
+    font-family: Raleway-Bold;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #fff;
+    text-transform: uppercase;
+    margin: 1%;
+  
+    width: 30%;
+    height: 30px;
+    border-radius: 3px;
+    background: #d33f8d;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   
+    -webkit-transition: all 0.4s;
+    -o-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    transition: all 0.4s;
+}
+
+.popup{
+    padding: 4%;
+}
