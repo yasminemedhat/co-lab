@@ -41,6 +41,7 @@ class Login extends React.Component {
     login(email, password)
           .then(data => {
               localStorage.setItem('token',data.token);
+              console.log("after login: ", data.user);
               this.props.history.push({
                 pathname : path,
                 state :{

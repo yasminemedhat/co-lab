@@ -20,8 +20,8 @@ class RegistrationForm extends Component {
         password: '',
         phone: '',
         biography: '',
-        Interests:[],
-        selectedInterests:[],
+        interests:[],
+        interestsList:[],
         workingField:'',
         isSponsor: false,
      }
@@ -49,6 +49,7 @@ class RegistrationForm extends Component {
     handleChange = input => e => {
        
         this.setState({ [input]: e.target.value});
+        console.log(e.target.value);
     }
 
     //handle isSponsor field change
@@ -57,24 +58,17 @@ class RegistrationForm extends Component {
     }
    
     handleChosenInterests = e =>{
-      
-           
-        
-            
-              this.setState({
-                selectedInterests:[].slice.call(e.target.selectedOptions).map(o => {
-                    return o.value;
-                })
-            });
-              console.log(this.state.selectedInterests)
-        
-       
-        
-    }
+        this.setState({
+        interests:[].slice.call(e.target.selectedOptions).map(o => {
+            return o.value;
+        })
+    });
+        console.log(this.state.interests);
+     }
 
     createUser = () =>{
-        const { email, username, firstname, lastname,phone, password, biography, isSponsor, selectedWorkingField, selectedInterests } = this.state;
-        const user = { email, username, firstname, lastname, password, phone,biography, isSponsor, selectedWorkingField, selectedInterests };
+        const { email, username, firstname, lastname,phone, password, biography, isSponsor, workingField, interests } = this.state;
+        const user = { email, username, firstname, lastname, password, phone,biography, isSponsor, workingField, interests };
         const path = '/profile';
         signup(user).then((data) => {
             localStorage.setItem('token',data.token);
@@ -97,7 +91,7 @@ class RegistrationForm extends Component {
       componentDidMount() {
 		getInterestsList().then(data => {
 	        let  interestsList = data.map(Interests => { return {value: Interests, display: Interests, label: Interests} })
-            this.setState({ Interests: [{value: '', display: '(Select your working Field)'}].concat(interestsList) });
+            this.setState({ interestsList: [{value: '', display: '(Select your working Field)'}].concat(interestsList) });
           }).catch(err => {
               if(err && err.data){
                 alert("Could not find interests: ",err.data.message);
@@ -107,8 +101,8 @@ class RegistrationForm extends Component {
 
     render() { 
         const { step } = this.state;
-        const { email, username, firstname, lastname,phone, password, biography,Interests,isSponsor, selectedWorkingField, selectedInterests } = this.state;
-        const values = { email, username, firstname, lastname, password, phone,biography,Interests, isSponsor, selectedWorkingField, selectedInterests };
+        const { email, username, firstname, lastname,phone, password, biography,interests,isSponsor, workingField,interestsList } = this.state;
+        const values = { email, username, firstname, lastname, password, phone,biography,interests, isSponsor, workingField, interestsList };
         
         switch(step){
             case 1:
@@ -119,7 +113,7 @@ class RegistrationForm extends Component {
                         nextStep = {this.nextStep}
                         handleChange= {this.handleChange}
                         values = {values}
-                        interests = {this.componentDidMount}
+                        interestsList = {this.componentDidMount}
                      
                     />
                     </div>

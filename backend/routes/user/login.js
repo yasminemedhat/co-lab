@@ -39,9 +39,9 @@ module.exports=async (req,res)=>{
             }
         };
         //to return user's data:
-        var filter='email, firstName, lastName, isSponsor, isPremium';
-        var profile=_.pick(user,filter.split(', '));
-        console.log(profile);
+        // var filter='email, firstName, lastName, isSponsor, isPremium, avatar, bio, workingField';
+        // var profile=_.pick(user,filter.split(', '));
+        // console.log(profile);
     
         //create auth token
         jwt.sign(

@@ -5,14 +5,16 @@ import Img from "react-image";
 import ProjectPopup from "./ProjectPopup";
 import ProjectLink from "./ProjectLink.js";
 import { getJwt } from "../helpers/jwt";
-import { createProject, getProjects } from "../utils/APICalls";
+import { createProject, getProjects, editUserAvatar,getUser } from "../utils/APICalls";
 import {  Row, Col } from "react-bootstrap";
 import { Route , withRouter} from 'react-router-dom';
 
 class Profile extends Component {
   state = {
     user: undefined,
-    projects: [{}]
+    projects: [{}],
+    profilePicture: '',
+    profilePictureUrl: ''
   };
 
   constructor(props) {
@@ -23,7 +25,7 @@ class Profile extends Component {
       showPopup: false
     };
     this.createProject = this.createProject.bind(this);
-
+    this.onChangeProfilePicture = this.onChangeProfilePicture.bind(this);
   }
 
   togglePopup() {
@@ -42,15 +44,45 @@ class Profile extends Component {
   //     }
   //   });
   // };
+  onChangeProfilePicture = e => {
+    this.setState({ profilePicture: e.target.file })
+  };
 
+  changeProfilePicture(){
+    const jwt = getJwt();
+    const path = "/profile";
+    const formData = new FormData();
+    formData.append('avatar', this.state.profilePicture);
+    editUserAvatar(jwt,formData)
+      .then(res => {
+        alert("The avatar was saved succesfully!");
+        window.location.reload();
+      })
+      .catch(err => {
+        if (err && err.status) {
+          alert("Could save the avatar: " + err.message);
+        }
+      });
+  }
 
   componentDidMount() {
-    
-      this.setState({
-        user: this.props.location.state.user
+    const jwt = getJwt();
+    getUser(jwt).then(data => {
+        console.log("comp did mount: ", data.user);
+        this.setState({user: data.user})
+        console.log("state: ",this.state.user);
+      })
+      .catch(err => {
+        if (err && err.status) {
+          alert("Could not get user: " + err.message);
+        }
       });
+      // this.setState({
+      //   user: this.props.location.state.user
+      // });
       
-      const jwt = getJwt();
+      // const jwt = getJwt();
+      
     getProjects(jwt)
     .then(res => {
       const projects = res;
@@ -111,12 +143,12 @@ class Profile extends Component {
         <div className="profile_container">
           <Row style={{ width: "100%" }}>
             <Col>
-              <div className="">
+              {/* <div className="">
                 <div className="image-container">{image}</div>
-              </div>
+              </div> */}
 
               <div className="row">
-                <input
+                {/* <input
                   style={{ display: "none" }}
                   ref={fileInput => (this.fileInput = fileInput)}
                   type="file"
@@ -133,22 +165,40 @@ class Profile extends Component {
                   onClick={this.fileUploadHandler}
                 >
                   Uploade picture
-                </button>
+                </button> */}
+                { this.state.user.avatar ? (<Img className="profile" src={this.state.user.avatar}></Img>)
+                  : (<div><Img className="profile" src={require("../images/profile.png")}></Img>
+                <input
+                onChange={this.onChangeProfilePicture}
+                type="file"
+                name="profilePicture"
+                accept="image/png, image/jpeg, image/jpg"
+                  /><button
+                  className="profile-btn"
+                  onClick={this.changeProfilePicture}
+                >
+                  Save profile picture
+                </button></div>)}
+                </div>
+              </Col>
+              <Col>
+              <div className="profile_info" style={{ float: "left" }}>
+                <h4>
+                  {this.state.user.firstName} {this.state.user.lastName}
+                </h4>
+                
+                <p>Email: {this.state.user.email}</p>
+                {this.state.user.phone_number ? (<p>Phone: {this.state.user.phone_number}</p>) : null}
+                {this.state.user.bio ? (<p>Bio: {this.state.user.bio}</p>) : null}
               </div>
-            </Col>
-            <Col>
-              <div className="profile_info">
-                <h1>
-                  {this.state.firstName} {this.state.lastName}
-                </h1>
-                <p>email: {this.state.user.email}</p>
-                <p>phone: {this.state.user.phone_number}</p>
-                <p>Bio: {this.state.user.bioghraphy}</p>
-              </div>
-            </Col>
-
-            <Col>
+              </Col>
+            </Row>
+            
+          
+            <Row style={{ width: "100%" }}>
+              <Col>
               <button
+                style={{ float: "right", width: "140px" }}
                 className="profile-btn"
                 onClick={this.togglePopup.bind(this)}
               >
@@ -162,7 +212,7 @@ class Profile extends Component {
                  
                 />
               ) : null}
-            </Col>
+              </Col>
           </Row>
           <h4 style={{ fontStyle: "bold", margin: "10px" }}>Projects </h4>
           <Row style={{ width: "100%" }}>

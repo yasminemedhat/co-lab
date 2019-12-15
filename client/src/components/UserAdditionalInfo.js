@@ -56,8 +56,8 @@ class UserAdditionalInformation extends Component {
                 </div>
 
                 <div className="wrap-input100  m-b-16">
-                <select multiple={true} defaultValue={values.selectedInterests}  onChange={this.props.handleChosenInterests} >
-                {values.Interests.map(interest => (
+                <select multiple={true} defaultValue={values.interests}  onChange={this.props.handleChosenInterests} >
+                {values.interestsList.map(interest => (
                   <option key={interest.value} value={interest.value}>
                     {interest.label}
                   </option>

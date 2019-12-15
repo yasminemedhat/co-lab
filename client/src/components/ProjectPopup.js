@@ -53,12 +53,7 @@ class ProjectPopup extends Component {
   };
 
   handleCreateProject() {
-    const project = {
-      name: this.state.projectName,
-      description: this.state.description,
-      images: this.state.images,
-      link: this.state.link
-    };
+    
     const { images } = this.state;
 
     const formData = new FormData();

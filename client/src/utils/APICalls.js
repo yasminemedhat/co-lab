@@ -34,7 +34,7 @@ export const login = (email, password) => {
 export const getUser = (jwt) => {
     return axiosInstance.get('user/profile', {headers: { Authorization: jwt } }).then(res => {
         // axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${user.data.token}`;
-        console.log('form api ', res.data);
+        console.log('form api 2', res);
         return res.data;
     })
 }
@@ -64,6 +64,17 @@ export const createProject = (jwt, formData)=> {
             return res;
       });
 }
+
+export const editUserAvatar = (jwt, formData) => {
+    const headers = {
+        'Content-Type': "multipart/form-data",
+        'Authorization': jwt
+      }
+      return axiosInstance.post('user/edit', formData,{headers:headers })
+        .then((res) => {
+            return res;
+      });
+}
 export const getProjects = (jwt) => {
     console.log("deen om el tokens ", jwt);
     return axiosInstance.get('user/viewProjects', {headers: { Authorization: jwt } }).then(res => {
@@ -79,43 +90,7 @@ export const getInterestsList=() => {
             return res.data;
         });	
 }
-// axios.post('http://localhost:5000/user/login', credentials)
-// .then((res) => {
-//     localStorage.setItem('token',res.data.token);
-//     this.props.history.push({
-//       pathname : path,
-//       state :{
-//       user: res.data.user,
-//       }
-//       });
-//     // this.props.history.push(path);
-//   })
-// .catch((e)=> {
-//     if (e.response && e.response.data) {
-//         alert("Error: "+ e.response.data.message);
-//     }
-// });
 
-// export const APIURL = process.env.REACT_APP_baseAPIURL;
-export const getPhotos = (jwt) => axiosInstance.get(`/photos`);
 
-export const addPhoto = (jwt,data) => {
-    const headers = {
-        'Content-Type': "multipart/form-data",
-        'Authorization': jwt
-      }
-  axios({
-    method: "post", 
-    url: '${process.env.REACT_APP_baseAPIURL}/project/add',
-    data,
-    config: { headers: headers }
-  });
-}
-export const editPhoto = data =>
-  axios({
-    method: "put",
-    url: `photos/edit`,
-    data,
-    config: { headers: { "Content-Type": "multipart/form-data" } }
-  });
-export const deletePhoto = id => axios.delete(`/photos/delete/${id}`);
+
+
