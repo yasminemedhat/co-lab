@@ -24,7 +24,7 @@ module.exports = {
       } else {
         console.log("Google autorization complete");
         //console.log(jwtClient);
-      
+
       }
     });
     try {
@@ -41,7 +41,7 @@ module.exports = {
   },
 
   uploadImages: async function (projectID, images) {
-    refreshToken();
+    await refreshToken();
     var links = []; //return array of urls
     //in case of an error -> return undefined
 
@@ -123,17 +123,18 @@ module.exports = {
 
 
   driveCleanUp: async function () {
-    refreshToken();
-    var res,files;
+    //var id='1dajgPmhX3diuvFRM1OJW0YB7TjzKKAkj'
+    await refreshToken();
+    var res, files;
     try {
 
       res = await drive.files.list({
         auth: jwtClient,
         fields: 'files(id, name)',
-        q: `parents='${projectFolderID}'`
+       // q: `parents='${id}'`
 
       });
-       files = res.data.files;
+      files = res.data.files;
       for (var i = 0; i < files.length; i++) {
         await drive.files.delete({
           auth: jwtClient,
@@ -142,13 +143,13 @@ module.exports = {
         });
       }
       console.log(`Deleted ${files.length} files`);
-    return true;
+      return true;
 
     } catch (error) {
       console.log('The API returned an error: ' + error);
       return false;
     }
-    
+
 
   },
 
@@ -158,7 +159,7 @@ module.exports = {
       auth: jwtClient,
       "fileId": folderID
     }).then(function (response) {
-      console.log('Folder deleted');
+      console.log(' deleted');
       return true;
     },
       function (err) {
@@ -169,44 +170,127 @@ module.exports = {
 
 
 
-  }
+  },
+
+  uploadAvatar: async function (image,id) {
+    await refreshToken();
+    const folderID = '1dajgPmhX3diuvFRM1OJW0YB7TjzKKAkj';
+    
+
+    var response;
+    try {
+      let bufferStream = new stream.PassThrough();
+        bufferStream.end(image.buffer);
+
+        var imageMetadata = {
+          'name': `${id}.jpg`,
+          parents: [folderID]
+        };
+        var media = {
+          mimeType: 'image/jpeg',
+          body: bufferStream
+        };
+      response = await drive.files.create({
+        auth: jwtClient,
+        resource: imageMetadata,
+        media: media,
+        fields: 'id, webContentLink'
+      });
+      console.log(response.status);
+      var { id, webContentLink } = response.data;
+
+      //set permissions:
+      setPermissions(id);
 
 
-  
+    } catch (error) {
+       //rollback -> delete file;
+       console.log(error);
+       var check = module.exports.deleteFolder(id);
+       if (!check)//try again
+       {
+         module.exports.deleteFolder(folderID);
+       }
+       return undefined;
 
+    }
+    return webContentLink;
+
+  },
+
+  deleteFileByID: async function(id){
+    await refreshToken();
+    var res;
+    try {
+        res=await drive.files.delete({
+              auth: jwtClient,
+              "fileId": id
+            });
+            console.log(res.status);
+
+     return true;
+
+    } catch (error) {
+      console.log('The API returned an error: ' + error);
+      return false;
+    }
+      
+
+   
+
+
+  },
+
+  updateAvatar: async function(avatar,email){
+    //delete first
+    var res=await module.exports.deleteAvatar(email);
+    return res;
+  //   if(!res){
+  //     return undefined;
+  //   }
+  //   //upload new image:
+  //   var url=await module.exports.uploadAvatar(avatar,email);
+
+  //   return url;
+  // }
+
+
+
+
+}
 }
 
 function setPermissions(id) {
   refreshToken();
   drive.permissions.create({
     "fileId": id,
+    auth: jwtClient,
     "resource": {
-      auth: jwtClient,
       "type": "anyone",
       "role": "reader",
       "allowFileDiscovery": false,//cannot search for it
     }
-  }).then(function (res,err) {
+  }).then(function (res, err) {
     if (err) {
+      console.log('ERROR in Permissions');
       console.log(err.status);
       console.log(res.status);
-      if(res.status !=200){
+      if (res.status != 200) {
         console.error(err);
         return false
       }
-      
+
     }
     else return true;
   });
 }
 
-async function refreshToken(){//check if token expired
-  const info=await jwtClient.getTokenInfo(jwtClient.credentials.access_token);
-  const exp=info.exp;
+async function refreshToken() {//check if token expired
+  const info = await jwtClient.getTokenInfo(jwtClient.credentials.access_token);
+  const exp = info.exp;
   const now = Date.now() / 1000;
   const timeLeft = exp - now; //in seconds
-  if(timeLeft<=20)
-  {
+  if (timeLeft <= 20) {
     module.exports.connectDrive();
   }
 

@@ -39,9 +39,8 @@ module.exports=async (req,res)=>{
             }
         };
         //to return user's data:
-        // var filter='email, firstName, lastName, isSponsor, isPremium, avatar, bio, workingField';
-        // var profile=_.pick(user,filter.split(', '));
-        // console.log(profile);
+        var filter = 'email, firstName, lastName, isSponsor, isPremium, biography, interests, projects, job, workingField, avatar';
+        var profile=_.pick(user,filter.split(', '));
     
         //create auth token
         jwt.sign(
@@ -50,7 +49,7 @@ module.exports=async (req,res)=>{
            (err,token) =>{
                if(err)throw err;
                console.log("JWT auth from login: ", token);
-               res.json({token,user});
+               res.json({token,user: profile});
            }
         );
         

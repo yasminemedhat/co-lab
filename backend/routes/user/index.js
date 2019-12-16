@@ -3,6 +3,8 @@ const user = require('express').Router();
 const { check } = require('express-validator');
 const redis=require('redis');
 const redisClient=redis.createClient();
+const multer = require('multer');//image
+const upload = multer(); 
 
 //database 
 const interestList = require('../../models/InterestList');
@@ -10,6 +12,8 @@ const interestList = require('../../models/InterestList');
 //jwt authentication
 const auth = require("../../middleware/auth");
 const jwt = require('jsonwebtoken');
+
+const drive=require("../../services/drive");
 
 
 
@@ -25,6 +29,7 @@ user.get('/', (req, res) => {
 //@description  register user
 //@access       public->no token to access it
 user.post('/register', [
+    upload.single('avatar'),
     check('firstname', 'firstname is required').not().isEmpty(),
     check('lastname', 'lastname is required').not().isEmpty(),
     check('isSponsor', 'Do you want to be a sponsor?').not().isEmpty(),
@@ -85,6 +90,13 @@ user.post('/changePassword', [
 //@TODO:    delete an account
 
 
+//@route PATCH    user/updateAccount
+//@description  update an account's data
+//@access       auth needed
+user.patch('/update',[
+    upload.single('avatar'),
+    auth
+], require('./update'));
 
 
 
@@ -119,6 +131,14 @@ user.post('/logout', auth, async (req, res) => {
     }
     res.send('Logged out.');
 });
+
+
+//test route:
+
+user.delete('/avi',(req,res)=>{
+    drive.updateAvatar('loujlouj@gmail.com');
+    res.send('hi');
+})
 
 
 
