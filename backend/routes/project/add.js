@@ -66,6 +66,7 @@ module.exports = async (req, res) => {
         if (user) {
             user.projects.unshift(project.id);
         }
+        console.log(user);
 
         await user.save();
         res.json(await Project.findOne({_id:project.id}));

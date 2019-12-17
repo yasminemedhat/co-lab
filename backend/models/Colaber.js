@@ -8,12 +8,12 @@ const ColaberSchema=new mongoose.Schema({
     avatar:     { type: String},
     phone:      { type: Number},
     projects:   [{type: mongoose.Schema.Types.ObjectId, ref: 'Project' }],
-    job:        { type: String},
+    workingField:        { type: String},
     interests: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "interestList"
     }],
-    bio:        { type: String},
+    biography:        { type: String},
     isSponsor:  { type: Boolean},
     isPremium:  { type: Boolean},
 });
