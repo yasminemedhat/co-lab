@@ -2,20 +2,20 @@ import React, {Component} from "react";
 import "../css/login.css";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
-import axios from "axios";
+import { changePassword } from "../utils/APICalls";
 
 
 class ForgotPassword extends Component {
-
   constructor(props) {
     super(props);
+    this.handleChange= this.handleChange.bind(this);
+    this.sendCode = this.sendCode.bind(this);
+    this.validateCodeForm = this.validateCodeForm.bind(this);
 
     this.state = {
-      email: "",
-      isSendingCode: false
-    };
+      email: ''
   }
-
+  }
   validateCodeForm() {
     return this.state.email.length > 0;
   }
@@ -29,22 +29,27 @@ class ForgotPassword extends Component {
 
   
   sendCode = e => {
+      e.preventDefault()
       const { email} = this.state;
+      if (!this.validateCodeForm()) {
+        return alert("All fields are required!");
+      }
+
       let path = "/login";
       console.log(email)
-      axios.post('http://localhost:5000/user/resetPasswordRequest', {email: email})
-          .then((res) => {
-            alert(res.response.data);
+      changePassword(email)
+      .then((data) => {
+            console.log("hiphiphorray");
+            alert(data);
             this.props.history.push(path);
             })
-          .catch((e)=> {
-              if (e.response && e.response.data) {
-                  alert("Error: "+ e.response.data.message);
-                  this.props.history.push('/forgotPassword');
-              }
-          });
-          alert('please check your email to reset the password');
-          this.props.history.push(path);
+      .catch((e)=> {
+          if (e && e.message) {
+              alert("Error: "+ e.message);
+              this.props.history.push('/forgotPassword');
+          }
+      });
+         
   }
  
 
@@ -70,9 +75,9 @@ class ForgotPassword extends Component {
                 <span className="lnr lnr-envelope"></span>
               </span>
             </div>
-            <div className="container-login100-form-btn p-t-25">
+            <div className="container-changePW-form-btn p-t-25">
               <button type="submit" 
-              className="login100-form-btn">Send code</button>
+              className="changePW-form-btn">Send code</button>
             </div>
         </form>
     );

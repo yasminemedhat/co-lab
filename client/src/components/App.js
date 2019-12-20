@@ -3,6 +3,7 @@ import "../css/header.css";
 import {BrowserRouter as Router, Switch } from 'react-router-dom'
 import {Route} from 'react-router-dom'
 import Login from './Login';
+import editUser from './editUser';
 import ForgotPassword from './forgotPassword';
 import Home from "./Home";
 import About from "./About";
@@ -24,7 +25,10 @@ class Header extends React.Component {
           
         
           <AuthenticatedComponent>
-            <Route path="/profile" exact strict component ={Profile} />
+            <Route path="/profile" exact strict component ={Profile} >
+              
+            </Route>
+            <Route path="/editUser" exact strict component ={editUser} />
             <Route path="/ProjectPage" exact strict component ={ProjectPage} />
           </AuthenticatedComponent>
           

@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 import Modal from "react-awesome-modal";
-import Img from "react-image";
 import "../css/projectPopup.css";
 import "../css/profile.css";
 import Linkify from "react-linkify";
-import { photosStore } from "./store";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
 
@@ -139,7 +137,7 @@ class ProjectPopup extends Component {
             >
               Create
             </button>
-            <a href="javascript:void(0);" onClick={() => this.closeModal()}>
+            <a  onClick={this.closeModal()}>
               Close
             </a>
           </div>

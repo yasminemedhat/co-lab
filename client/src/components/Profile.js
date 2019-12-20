@@ -5,9 +5,9 @@ import Img from "react-image";
 import ProjectPopup from "./ProjectPopup";
 import ProjectLink from "./ProjectLink.js";
 import { getJwt } from "../helpers/jwt";
-import { createProject, getProjects, editUserAvatar,getUser } from "../utils/APICalls";
+import { createProject, getProjects,getUser } from "../utils/APICalls";
 import {  Row, Col } from "react-bootstrap";
-import { Route , withRouter} from 'react-router-dom';
+import { withRouter} from 'react-router-dom';
 
 class Profile extends Component {
   state = {
@@ -25,7 +25,6 @@ class Profile extends Component {
       showPopup: false
     };
     this.createProject = this.createProject.bind(this);
-    this.onChangeProfilePicture = this.onChangeProfilePicture.bind(this);
   }
 
   togglePopup() {
@@ -44,26 +43,6 @@ class Profile extends Component {
   //     }
   //   });
   // };
-  onChangeProfilePicture = e => {
-    this.setState({ profilePicture: e.target.file })
-  };
-
-  changeProfilePicture(){
-    const jwt = getJwt();
-    const path = "/profile";
-    const formData = new FormData();
-    formData.append('avatar', this.state.profilePicture);
-    editUserAvatar(jwt,formData)
-      .then(res => {
-        alert("The avatar was saved succesfully!");
-        window.location.reload();
-      })
-      .catch(err => {
-        if (err && err.status) {
-          alert("Could save the avatar: " + err.message);
-        }
-      });
-  }
 
   componentDidMount() {
     const jwt = getJwt();
@@ -98,7 +77,6 @@ class Profile extends Component {
 
   createProject(formData) {
     const jwt = getJwt();
-    const path = "/profile";
     createProject(jwt,formData)
       .then(res => {
         alert("Project created successfully!");
@@ -122,15 +100,6 @@ class Profile extends Component {
   }
 
   render() {
-    let { imagePreviewUrl } = this.state;
-    let image = null;
-    if (imagePreviewUrl) {
-      image = <Img className="profile" src={imagePreviewUrl}></Img>;
-    } else {
-      image = (
-        <Img className="profile" src={require("../images/profile.png")}></Img>
-      );
-    }
     if (this.state.user === undefined) {
       return (
         <div>
@@ -143,42 +112,10 @@ class Profile extends Component {
         <div className="profile_container">
           <Row style={{ width: "100%" }}>
             <Col>
-              {/* <div className="">
-                <div className="image-container">{image}</div>
-              </div> */}
 
               <div className="row">
-                {/* <input
-                  style={{ display: "none" }}
-                  ref={fileInput => (this.fileInput = fileInput)}
-                  type="file"
-                  onChange={this.fileSelectedHandler}
-                ></input>
-                <button
-                  className="profile-btn"
-                  onClick={() => this.fileInput.click()}
-                >
-                  Pick File
-                </button>
-                <button
-                  className="profile-btn"
-                  onClick={this.fileUploadHandler}
-                >
-                  Uploade picture
-                </button> */}
                 { this.state.user.avatar ? (<Img className="profile" src={this.state.user.avatar}></Img>)
-                  : (<div><Img className="profile" src={require("../images/profile.png")}></Img>
-                <input
-                onChange={this.onChangeProfilePicture}
-                type="file"
-                name="profilePicture"
-                accept="image/png, image/jpeg, image/jpg"
-                  /><button
-                  className="profile-btn"
-                  onClick={this.changeProfilePicture}
-                >
-                  Save profile picture
-                </button></div>)}
+                  : (<Img className="profile" src={require("../images/profile.png")}></Img>)}
                 </div>
               </Col>
               <Col>
@@ -188,8 +125,9 @@ class Profile extends Component {
                 </h4>
                 
                 <p>Email: {this.state.user.email}</p>
-                {this.state.user.phone_number ? (<p>Phone: {this.state.user.phone_number}</p>) : null}
-                {this.state.user.bio ? (<p>Bio: {this.state.user.bio}</p>) : null}
+                {this.state.user.phone ? (<p>Phone: {this.state.user.phone}</p>) : null}
+                {this.state.user.biography ? (<p>biography: {this.state.user.biography}</p>) : null}
+                {this.state.user.phone ? (<p>Phone Number: {this.state.user.phone}</p>) : null}
               </div>
               </Col>
             </Row>

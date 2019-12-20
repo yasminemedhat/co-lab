@@ -3,6 +3,7 @@
 const axiosInstance = axios.create({
     baseURL: process.env.REACT_APP_baseAPIURL,
     withCredentials: false,
+    timeout: 30000,
 });
 
 axiosInstance.interceptors.response.use(
@@ -30,6 +31,13 @@ export const login = (email, password) => {
         return res.data;
     })
 }
+export const changePassword = (email) =>{
+    return axiosInstance.post('/user/resetPasswordRequest', {email: email})
+    .then((res) => {
+        return res.data
+    })
+}
+
 
 export const getUser = (jwt) => {
     return axiosInstance.get('user/profile', {headers: { Authorization: jwt } }).then(res => {
@@ -65,18 +73,16 @@ export const createProject = (jwt, formData)=> {
       });
 }
 
-export const editUserAvatar = (jwt, formData) => {
+export const updateUser = (jwt, formData) => {
     const headers = {
         'Content-Type': "multipart/form-data",
         'Authorization': jwt
       }
-      return axiosInstance.post('user/edit', formData,{headers:headers })
-        .then((res) => {
+      return axiosInstance.patch('user/update', formData,{headers:headers }).then((res) => {
             return res;
       });
 }
 export const getProjects = (jwt) => {
-    console.log("deen om el tokens ", jwt);
     return axiosInstance.get('user/viewProjects', {headers: { Authorization: jwt } }).then(res => {
         // axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${user.data.token}`;
         console.log('form api getting projs ', res.data);

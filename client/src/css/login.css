@@ -342,7 +342,20 @@ iframe {
   flex-wrap: wrap;
   justify-content: center;
 }
-
+.container-changePW-form-btn{
+  width: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  text-align: center;
+}
+.changePW-form-btn{
+  width: 20%;
+  height: 50px;
+  border-radius: 3px;
+  background: #d33f8d;
+}
 .login100-form-btn {
   font-family: Raleway-Bold;
   font-size: 16px;
@@ -367,6 +380,11 @@ iframe {
   -o-transition: all 0.4s;
   -moz-transition: all 0.4s;
   transition: all 0.4s;
+}
+
+.change-pw-btn{
+  width: 20%;
+  align-self: center;
 }
 
 .login100-form-btn:hover {

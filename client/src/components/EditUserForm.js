@@ -1,31 +1,62 @@
 import React, { Component } from "react";
 import { getUser } from '../utils/APICalls';
 import { getJwt } from "../helpers/jwt";
+import "../css/login.css";
+import "../bootstrap/css/bootstrap.min.css";
+import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
+import Img from "react-image";
 
 class editUserForm extends Component {
-  state={
-      user: undefined
-  }
-
-  constructor(props){
-      super(props);
-      this.handleChange = this.handleChange.bind(this);
-      this.handleIsSponsor = this.handleIsSponsor.bind(this);
-  }
-  //Handle fields change
-  handleChange = input => e => {
-    var user = this.state.user;
-    user[input] = e.target.value;
-    this.setState({ user});
+ 
+ state={
+   
+ }
+  
+ constructor(props){
+   super(props);
+   this.setState({isSponsor: this.props.user.isSponsor})
+   this.handleChange = this.handleChange.bind(this);
+  this.handleIsSponsor = this.handleIsSponsor.bind(this);
+  this.onChangeProfilePicture = this.onChangeProfilePicture.bind(this);
+  this.updateUser = this.updateUser.bind(this);
+ }
+ handleChange = input => e => {
+  this.setState({ [input] : e.target.value});
 }
 
 //handle isSponsor field change
 handleIsSponsor = () => {
-    var user = this.state.user;
-    user.isSponsor = !user.isSponsor
-    this.setState({ user});
+  this.setState({ isSponsor : !this.state.isSponsor});
 }
-
+onChangeProfilePicture = e => {
+  this.setState({ profilePicture: e.target.files[0] })
+  console.log("dakhaly on change pp", this.state.profilePicture, e.target.files[0])
+};
+updateUser = () =>{
+    const formData = new FormData();
+    if(this.state.profilePicture){
+        console.log("enta ta3ban?")
+        formData.append('avatar', this.state.profilePicture);
+        console.log("fi pp");
+    }
+    if(this.state.isSponsor){
+        formData.append('isSponsor', this.state.isSponsor)
+    }
+    if(this.state.firstname){
+        formData.append('firstname', this.state.firstname)
+    }
+    if(this.state.lastname){
+        formData.append('lastname', this.state.lastname)
+    }
+    if(this.state.phone){
+        console.log("phoneee ;)")
+        formData.append('phone', this.state.phone)
+    }
+    if(this.state.biography){
+        formData.append('biography', this.state.biography)
+    }
+    this.props.updateUser(formData);
+}
 // handleChosenInterests = e =>{
 //     var user = this.state.user;
 //     var newInterests:[].slice.call(e.target.selectedOptions).map(o => {
@@ -36,26 +67,15 @@ handleIsSponsor = () => {
 // });
 //     console.log(this.state.interests);
 //  }
-  componentDidMount(){
-    const jwt = getJwt();
-    getUser(jwt).then(res => {
-        this.setState({user: res.user})
-      })
-      .catch(err => {
-        if (err && err.status) {
-          alert("Could not get user: " + err.message);
-        }
-      });
-  }
+  // componentDidMount(){
+  //   const jwt = getJwt();
+  //   this.setState
+  // }
 
   render() {
-    const user = this.state.user;
-    if(user === undefined){
-        return(
-        <div><h1>loading...</h1></div>
-        );
-    }
+    const {email,avatar, firstName, lastName, isSponsor, phone, biography } = this.props.user;
     return (
+      <div className="wrap-login100 p-l-50 p-r-50 p-t-77 p-b-30">
           <form className="login100-form validate-form">
             <span className="login100-form-title p-b-55">
               Edit Information
@@ -65,24 +85,23 @@ handleIsSponsor = () => {
               className="wrap-input100 validate-input m-b-16"
               data-validate="Valid email is required: ex@abc.xyz"
             >
-            <p>Email: {user.email}</p>
+            <p>Email: {email}</p>
             </div>
-            <Img className="profile" src={this.state.user.profilePictureUrl}></Img>
+            <Img className="profile" src={avatar}></Img>
             <input
-                // onChange={this.onChangeProfilePicture}
+                onChange={this.onChangeProfilePicture}
                 type="file"
-                name="profilePicture"
                 accept="image/png, image/jpeg, image/jpg"
                   />
             <div className="wrap-input100 validate-input m-b-16">
               <input
                 className="input100"
                 type="text"
-                required
                 name="firstname"
+                defaultValue={firstName}
                 placeholder="first name"
                 onChange={this.props.handleChange("firstname")}
-                value={user.firstname}
+                
               />
               <span className="focus-input100"></span>
               <span className="symbol-input100">
@@ -97,8 +116,8 @@ handleIsSponsor = () => {
                 name="lastname"
                 placeholder="last name"
                 required="required"
-                onChange={this.props.handleChange("lastname")}
-                value={user.lastname}
+                onChange={this.handleChange("lastname")}
+                defaultValue={lastName}
               />
               <span className="focus-input100"></span>
               <span className="symbol-input100">
@@ -107,21 +126,37 @@ handleIsSponsor = () => {
             </div>
 
             <div className="wrap-input100 validate-input m-b-16">
+              <label>Phone number
               <input
                 className="input100"
                 type="tel"
                 name="phone"
                 placeholder="phone"
-                onChange={this.props.handleChange("phone")}
-                value={values.phone}
-              />
+                onChange={this.handleChange("phone")}
+                defaultValue={phone}
+              /></label>
               <span className="focus-input100"></span>
               <span className="symbol-input100">
                 <span className="lnr lnr-phone"></span>
               </span>
             </div>
-
-            <div>
+            <div className="wrap-input100  m-b-16"
+                    >
+                      <label>Bio 
+                    <input
+                    className="input100"
+                    type="text"
+                    name="biography"
+                    placeholder="Biography"
+                    onChange={this.handleChange('biography')}
+                    defaultValue = {biography}
+                    /></label>
+                    <span className="focus-input100"></span>
+                    <span className="symbol-input100">
+                    <span className="lnr lnr-bio"></span>
+                    </span>
+                </div>
+            {/* <div>
               <select value={user.workingField} onChange={this.props.handleChange("workingField")} >
                 {values.interestsList.map(interest => (
                   <option key={interest.value} value={interest.value}>
@@ -129,38 +164,23 @@ handleIsSponsor = () => {
                   </option>
                 ))}
               </select>
-            </div>
+            </div> */}
             <div className="wrap-input100 validate-input m-b-16">
                 <label> 
                     <input
                     type="checkbox"
-                    required
                     name="isSponsor"
                     placeholder=""
-                    onChange={this.props.handleSponsorship}
-                    defaultChecked={user.isSponsor}
+                    onChange={this.handleIsSponsor}
+                    defaultChecked={isSponsor}
                     /> Sponsor</label>
                     
                 </div>
 
 
-                <div className="wrap-input100  m-b-16"
-                    >
-                    <input
-                    className="input100"
-                    type="text"
-                    name="biography"
-                    placeholder="Biography"
-                    onChange={this.props.handleChange('biography')}
-                    value = {user.biography}
-                    />
-                    <span className="focus-input100"></span>
-                    <span className="symbol-input100">
-                    <span className="lnr lnr-bio"></span>
-                    </span>
-                </div>
+                
 
-                <div className="wrap-input100  m-b-16">
+                {/* <div className="wrap-input100  m-b-16">
                 <select multiple={true} value={user.interests}  onChange={this.props.handleChosenInterests} >
                 {values.interestsList.map(interest => (
                   <option key={interest.value} value={interest.value}>
@@ -168,12 +188,13 @@ handleIsSponsor = () => {
                   </option>
                 ))}
               </select>
-                </div>
+                </div> */}
 
                 <div className="container-login100-form-btn p-t-25">
-                    <input type="submit" className="login100-form-btn" value="Create Account" onClick={this.continue}/>
+                    <input type="submit" className="login100-form-btn" value="Save Changes" onClick={this.updateUser}/>
                 </div>
           </form>
+          </div>
      
     );
   }
