@@ -3,9 +3,10 @@ import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
 import Img from "react-image";
 import ProjectPopup from "./ProjectPopup";
+import CollaborationPopup from "./CollaborationPopup";
 import ProjectLink from "./ProjectLink.js";
 import { getJwt } from "../helpers/jwt";
-import { createProject, getProjects,getUser } from "../utils/APICalls";
+import { createProject, getProjects,getUser, createCollaboration } from "../utils/APICalls";
 import {  Row, Col } from "react-bootstrap";
 import { withRouter} from 'react-router-dom';
 
@@ -13,23 +14,27 @@ class Profile extends Component {
   state = {
     user: undefined,
     projects: [{}],
-    profilePicture: '',
-    profilePictureUrl: ''
+    collaborations: [{}]
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      selectedFile: null,
-      imagePreviewURL: null,
-      showPopup: false
+      showPopup: false,
+      showPopup2: false
     };
     this.createProject = this.createProject.bind(this);
+    this.createCollaboration = this.createCollaboration.bind(this);
   }
 
   togglePopup() {
     this.setState({
       showPopup: !this.state.showPopup
+    });
+  }
+  togglePopup2() {
+    this.setState({
+      showPopup2: !this.state.showPopup2
     });
   }
 
@@ -72,6 +77,16 @@ class Profile extends Component {
         alert("Could get project: " + err.message);
       }
     });
+    // getCollaborations(jwt)
+    // .then(res => {
+    //   const collaborations = res;
+    //   this.setState({collaborations});
+    // })
+    // .catch(err => {
+    //   if (err && err.status) {
+    //     alert("Could get collaborations: " + err.message);
+    //   }
+    // });
   }
     
 
@@ -80,21 +95,24 @@ class Profile extends Component {
     createProject(jwt,formData)
       .then(res => {
         alert("Project created successfully!");
-        // var projects = this.state.projects;
-        // projects.push(res.data);
-        // this.setState({ projects });
-        // const user  = this.props.location.state.user;
-        // this.props.history.push({
-        //   pathname : path,
-        //   state :{
-        //   user: user,
-        //   }
-        //   });
         window.location.reload();
       })
       .catch(err => {
         if (err && err.status) {
           alert("Could not create project: " + err.message);
+        }
+      });
+  }
+  createCollaboration(formData) {
+    const jwt = getJwt();
+    createCollaboration(jwt,formData)
+      .then(res => {
+        alert("Collaboration created successfully!");
+        window.location.reload();
+      })
+      .catch(err => {
+        if (err && err.status) {
+          alert("Could not create collaboration: " + err.message);
         }
       });
   }
@@ -136,7 +154,7 @@ class Profile extends Component {
             <Row style={{ width: "100%" }}>
               <Col>
               <button
-                style={{ float: "right", width: "140px" }}
+                style={{ float: "right", width: "180px" }}
                 className="profile-btn"
                 onClick={this.togglePopup.bind(this)}
               >
@@ -165,6 +183,25 @@ class Profile extends Component {
                   })
                 : null}
      
+          </Row>
+          <Row style={{ width: "100%" }}>
+              <Col>
+              <button
+                style={{ float: "right", width: "180px" }}
+                className="profile-btn"
+                onClick={this.togglePopup2.bind(this)}
+              >
+                Add Co-Laboration
+              </button>
+              {this.state.showPopup2 ? (
+                <CollaborationPopup
+                  text='Click "Close Button" to hide popup'
+                  closePopup2={this.togglePopup2.bind(this)}
+                  createCollaboration={this.createCollaboration}
+                 
+                />
+              ) : null}
+              </Col>
           </Row>
 
         </div>
