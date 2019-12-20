@@ -20,6 +20,7 @@ class Navbar extends Component {
                <ul>
                  <Link to='/'>Home</Link>
                  <Link to='/about' >About</Link>
+                 <Link to='/editUser' >Edit Profile</Link>
                  <button className='logout-link'
                         onClick={this.props.logout}>Logout</button>
                </ul>

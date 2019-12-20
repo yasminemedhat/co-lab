@@ -2,7 +2,6 @@ import React, {Component} from "react";
 import "../css/registration.css";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
-import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
 
 class UserAdditionalInformation extends Component {
 

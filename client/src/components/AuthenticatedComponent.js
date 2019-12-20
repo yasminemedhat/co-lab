@@ -45,7 +45,6 @@ class AuthenticateComponent extends Component{
         }
         Axios.get(process.env.REACT_APP_baseAPIURL+'/user/profile', {headers: { Authorization: jwt } })
         .then( (res) => {
-            console.log("tamam")
             this.setState({user: res.data.user});
 
         }).catch(err => {
@@ -66,7 +65,8 @@ class AuthenticateComponent extends Component{
         }
         return(
             <div>
-                <Navbar logout={this.logout}/>
+                <Navbar logout={this.logout}
+                        user = {this.state.user}/>
                 <div>
                     {/* {this.props.children} */}
                     {childrenWithProps}

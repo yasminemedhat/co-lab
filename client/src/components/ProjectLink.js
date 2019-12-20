@@ -2,10 +2,9 @@ import React, { Component } from "react";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
 import Linkify from "react-linkify";
-// import { Card, Button } from 'reactstrap';
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
-import { Route , withRouter} from 'react-router-dom';
+import { withRouter} from 'react-router-dom';
 
 class ProjectLink extends Component {
     state={
