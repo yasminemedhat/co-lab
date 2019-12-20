@@ -6,35 +6,24 @@ import Linkify from "react-linkify";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
 
-class ProjectPopup extends Component {
+class CollaborationPopup extends Component {
   state = {
-    projectName: "",
+    collaborationName: "",
     description: "",
-    projectLink: "",
+    collaborationLink: "",
     images: []
   };
-  // fileObj = [];
-  // fileArray = [];
   constructor(props) {
     super(props);
     this.state = {
       visible: true};
     // this.uploadMultipleFiles = this.uploadMultipleFiles.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.handleCreateProject = this.handleCreateProject.bind(this);
+    this.handleCreateCollaboration = this.handleCreateCollaboration.bind(this);
     this.onChangeImages = this.onChangeImages.bind(this);
     this.closeModal = this.closeModal.bind(this);
   }
 
-  // uploadMultipleFiles(e) {
-  //   this.fileObj = [];
-  //   this.fileArray = [];
-  //   this.fileObj.push(e.target.files);
-  //   for (let i = 0; i < this.fileObj[0].length; i++) {
-  //     this.fileArray.push(URL.createObjectURL(this.fileObj[0][i]));
-  //   }
-  //   this.setState({ images: this.fileArray });
-  // }
 
   //Handle fields change
   handleChange = input => e => {
@@ -51,18 +40,21 @@ class ProjectPopup extends Component {
     this.setState({ images: e.target.files })
   };
 
-  handleCreateProject() {
+  handleCreateCollaboration() {
     
     const { images } = this.state;
 
     const formData = new FormData();
     formData.append('name', this.state.projectName);
     formData.append('description', this.state.description);
+    if(this.state.collaborationLink.length > 0){
+        formData.append('link', this.state.collaborationLink);
+    }
     for (let i = 0 ; i < images.length ; i++) {
       formData.append("photos", images[i]);
    }
 
-    this.props.createProject(formData);
+    this.props.createCollaboration(formData);
     this.closeModal();
   }
 
@@ -71,19 +63,17 @@ class ProjectPopup extends Component {
 
     let link = null;
     var isUrl = require("is-url");
-    if (isUrl(this.state.projectLink)) {
-      link = <div>{this.state.projectLink}</div>;
+    if (isUrl(this.state.collaborationLink)) {
+      link = <div>{this.state.collaborationLink}</div>;
     } else {
       link = (
-        <div>
-           <input
+          <div>
+        <input
           type="text"
-          placeholder="add link to your project"
+          placeholder="Add a link to the Co-laboration"
           value={this.state.projectLink}
-          onChange={this.handleChange("projectLink")}
-        ></input>
-        </div>
-       
+          onChange={this.handleChange("collaborationLink")}
+        ></input></div>
       );
     }
 
@@ -96,24 +86,24 @@ class ProjectPopup extends Component {
           effect="fadeInUp"
           onClickAway={this.closeModal}
         >
-          <button  onClick={this.closeModal}
+            <button  onClick={this.closeModal}
                     className="btn float-right">
               Close
             </button>
           <div className="popup">
-            <h1>Add Project</h1>
+            <h1>Add Co-Laboration</h1>
             <div className="row">
               <div className="col">
-                <p> project Link</p>
+                <p> Co-Laboration Link</p>
                 <Linkify>{link}</Linkify>
               </div>
               <div className="col">
                 <input
                   type="text"
-                  placeholder="* Project Name"
-                  value={this.state.projectName}
+                  placeholder="* Co-laboration Name"
+                  value={this.state.collaborationName}
                   required
-                  onChange={this.handleChange("projectName")}
+                  onChange={this.handleChange("collaborationName")}
                 />
                 <br></br>
                 <hr></hr>
@@ -122,7 +112,7 @@ class ProjectPopup extends Component {
                   value={this.state.description}
                   required
                   onChange={this.handleChange("description")}
-                  placeholder="* Project Description"
+                  placeholder="* Co-Laboration Description"
                 />
               </div>
               <div className="col">
@@ -141,7 +131,7 @@ class ProjectPopup extends Component {
             </div>
             <button
               className="btn btn-primary float-right"
-              onClick={this.handleCreateProject}
+              onClick={this.handleCreateCollaboration}
             >
               Create
             </button>
@@ -152,4 +142,4 @@ class ProjectPopup extends Component {
     );
   }
 }
-export default ProjectPopup;
+export default CollaborationPopup;

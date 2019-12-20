@@ -61,13 +61,17 @@ export const createProject = (jwt, formData)=> {
         'Content-Type': "multipart/form-data",
         'Authorization': jwt
       }
-//   axios({
-//     method: "post", 
-//     url: '${process.env.REACT_APP_baseAPIURL}/project/add',
-//     data,
-//     config: { headers: headers }
-//   });
     return axiosInstance.post('project/add', formData,{headers:headers })
+        .then((res) => {
+            return res;
+      });
+}
+export const createCollaboration = (jwt, formData)=> {
+    const headers = {
+        'Content-Type': "multipart/form-data",
+        'Authorization': jwt
+      }
+    return axiosInstance.post('collaboration/add', formData,{headers:headers })
         .then((res) => {
             return res;
       });
