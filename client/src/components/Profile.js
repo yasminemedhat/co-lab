@@ -171,7 +171,7 @@ class Profile extends Component {
               </Col>
           </Row>
           <h4 style={{ fontStyle: "bold", margin: "10px" }}>Projects </h4>
-          <Row style={{ width: "100%" }}>
+          <Row style={{ width: "100%", overflow: "hidden",overflowY: 'scroll',height: "430px"}}>
           
             
               <br></br>

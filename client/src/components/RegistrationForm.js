@@ -57,16 +57,20 @@ class RegistrationForm extends Component {
         this.setState({ isSponsor: !this.state.isSponsor});
     }
    
-    handleChosenInterests = e =>{
+    handleChosenInterests =selectedOption=>{
+       
+          
         this.setState({
-        interests:[].slice.call(e.target.selectedOptions).map(o => {
-            return o.value;
-        })
+        interests:selectedOption
+        
+        
     });
-        console.log(this.state.interests);
+   
+      
      }
 
     createUser = () =>{
+       
         const { email, username, firstname, lastname,phone, password, biography, isSponsor, workingField, interests } = this.state;
         const user = { email, username, firstname, lastname, password, phone,biography, isSponsor, workingField, interests };
         const path = '/profile';
@@ -87,8 +91,8 @@ class RegistrationForm extends Component {
 
 
 
-      // get interestsList
-      componentDidMount() {
+    // get interestsList
+    componentDidMount() {
 		getInterestsList().then(data => {
 	        let  interestsList = data.map(Interests => { return {value: Interests, display: Interests, label: Interests} })
             this.setState({ interestsList: [{value: '', display: '(Select your working Field)'}].concat(interestsList) });
@@ -103,7 +107,7 @@ class RegistrationForm extends Component {
         const { step } = this.state;
         const { email, username, firstname, lastname,phone, password, biography,interests,isSponsor, workingField,interestsList } = this.state;
         const values = { email, username, firstname, lastname, password, phone,biography,interests, isSponsor, workingField, interestsList };
-        
+       
         switch(step){
             case 1:
                 return ( 
