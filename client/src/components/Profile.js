@@ -9,8 +9,12 @@ import { getJwt } from "../helpers/jwt";
 import { createProject, getProjects,getUser, createCollaboration } from "../utils/APICalls";
 import {  Row, Col } from "react-bootstrap";
 import { withRouter} from 'react-router-dom';
+import {AuthContext} from '../authContext';
+
 
 class Profile extends Component {
+  static contextType = AuthContext;
+
   state = {
     user: undefined,
     projects: [{}],
@@ -50,24 +54,25 @@ class Profile extends Component {
   // };
 
   componentDidMount() {
-    const jwt = getJwt();
-    getUser(jwt).then(data => {
-        console.log("comp did mount: ", data.user);
-        this.setState({user: data.user})
-        console.log("state: ",this.state.user);
-      })
-      .catch(err => {
-        if (err && err.status) {
-          alert("Could not get user: " + err.message);
-        }
-      });
+    // const jwt = getJwt();
+    // getUser(jwt).then(data => {
+    //     console.log("comp did mount: ", data.user);
+    //     this.setState({user: data.user})
+    //     console.log("state: ",this.state.user);
+    //   })
+    //   .catch(err => {
+    //     if (err && err.status) {
+    //       alert("Could not get user: " + err.message);
+    //     }
+    //   });
+
       // this.setState({
       //   user: this.props.location.state.user
       // });
       
       // const jwt = getJwt();
-      
-    getProjects(jwt)
+    this.setState({user: this.context.user, authenticated: this.context.authenticated})
+    getProjects(this.context.accessToken)
     .then(res => {
       const projects = res;
       this.setState({projects});
