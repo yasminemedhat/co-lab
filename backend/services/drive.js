@@ -2,6 +2,7 @@
 const { google } = require('googleapis');
 const credentials = require('../config/credentials.json');
 const projectFolderID = '1surIZv3i1tH1m_rMzmvUGiZi1ctVLlih';
+const colabFolderID   = '1H9fbcCPtcpZJyyAwtiCaXd8AuWnY_MdK';
 const stream = require('stream');
 const fs = require('fs-extra');
 
@@ -40,8 +41,11 @@ module.exports = {
 
   },
 
-  uploadImages: async function (projectID, images) {
+  uploadImages: async function (projectID, images,option) {//option 1 -> project, option 2-> colaboration
     await refreshToken();
+    
+    const destination=(option===1)? projectFolderID:colabFolderID;
+    console.log(destination);
     var links = []; //return array of urls
     //in case of an error -> return undefined
 
@@ -52,7 +56,7 @@ module.exports = {
     var fileMetadata = {
       'name': projectID,
       'mimeType': 'application/vnd.google-apps.folder',
-      'parents': [projectFolderID]
+      'parents': [destination]
 
     };
     var response;
