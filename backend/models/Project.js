@@ -13,7 +13,8 @@ const ProjectSchema = new Schema({
     likes:          [{ type: Schema.Types.ObjectId, ref: 'Colaber'}],
     followers:      [{ type: Schema.Types.ObjectId, ref: 'Colaber'}],
     creator:        {  type: Schema.Types.ObjectId, ref: 'Colaber'},
-    images:         [{type: String}]
+    images:         [{ type: String}],
+    link:           {  type: String}
 }, options,
 );
 

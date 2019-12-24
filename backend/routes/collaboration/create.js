@@ -1,7 +1,8 @@
 const Colaber = require('../../models/Colaber');
-const Project = require('../../models/Project');
+const Colaboration = require('../../models/Colaboration');
 const { validationResult } = require('express-validator');
 const drive = require('../../services/drive');//google drive
+const mongoose=require('mongoose');
 
 
 
@@ -15,35 +16,33 @@ module.exports = async (req, res) => {
         return res.status(400).json({ message: errors.errors[0].msg });
     }
 
-    console.log('new Project attempt');
-
     //pull from request
-    const { name, description } = req.body;
-    console.log(req.body);
+    const { name, description, link } = req.body;
+    //console.log(req.body);
     //pull images
     var files;
     try {
         files = req.files;
-        console.log(`files =${files}`);
     } catch (error) {
         console.log(error);
         return res.status(500).json({ message: 'Server Error' })
     }
+    const session= await mongoose.startSession()
+    session.startTransaction();
 
     try {
         //create new project and save to database
-        project = new Project({
+        collaboration = new Colaboration({
             name,
             description,
-            creator: req.user.id
-        });
-        //console.log(project.id);
-        
+            creator: req.user.id,
+            link
+        });        
 
         //save images to google drive
         var urls;
         if (files && files.length > 0) {
-             urls = await drive.uploadImages(project._id, files,1);
+             urls = await drive.uploadImages(collaboration.id, files, 2);
             if (urls == null)
                {
                 console.log('Error in image uploading');
@@ -51,23 +50,34 @@ module.exports = async (req, res) => {
                } 
 
                //push images urls to the mongoose document->
-               project.images=urls;
+               collaboration.images=urls;
 
         }
+       
         
-        //get user and add project to the user's project list
+        //get user and add colab to the user's project list
         let user = await Colaber.findOne({ _id: req.user.id }).select('-password');
         if (user) {
-            user.projects.unshift(project.id);
+            user.collaborations.unshift(collaboration.id);
         }
 
         await user.save();
-        await project.save();
-        res.json(project);
+        await collaboration.save();
+        // commit the changes if everything was successful
+        await session.commitTransaction();
+        return res.json(collaboration);
+
 
     } catch (error) {
-        console.log(error.message);
-        res.status(500).json({ message: 'Server Error' });
-        //TODO: remove project from user and from project db;
-    }
+        console.log(error);
+        await session.abortTransaction();
+        //TODO -> Delete images;
+        return res.status(500).json({ message: 'Server Error' });
+
+        //TODO: remove collaboration from user and from project db;
+    }finally {
+        // ending the session
+        session.endSession();
+
+      }
 }
