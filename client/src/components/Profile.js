@@ -5,8 +5,9 @@ import Img from "react-image";
 import ProjectPopup from "./ProjectPopup";
 import CollaborationPopup from "./CollaborationPopup";
 import ProjectLink from "./ProjectLink.js";
+import ColabLink from "./ColabLink.js";
 import { getJwt } from "../helpers/jwt";
-import { createProject, getProjects,getUser, createCollaboration } from "../utils/APICalls";
+import { createProject, getProjects, createCollaboration, getCollaborations } from "../utils/APICalls";
 import {  Row, Col } from "react-bootstrap";
 import { withRouter} from 'react-router-dom';
 import {AuthContext} from '../authContext';
@@ -15,22 +16,26 @@ import {AuthContext} from '../authContext';
 class Profile extends Component {
   static contextType = AuthContext;
 
-  state = {
-    user: undefined,
-    projects: [{}],
-    collaborations: [{}]
-  };
+  // state = {
+  //   user: this.context.user,
+  //   projects: [{}],
+  //   collaborations: [{}]
+  // };
 
   constructor(props) {
     super(props);
     this.state = {
       showPopup: false,
-      showPopup2: false
+      showPopup2: false,
+      loadingProjects: true,
+      loadingCollaborations: true
     };
     this.createProject = this.createProject.bind(this);
     this.createCollaboration = this.createCollaboration.bind(this);
+    this.showColabDetails = this.showColabDetails.bind(this);
+    this.componentDidMount = this.componentDidMount.bind(this);
   }
-
+  
   togglePopup() {
     this.setState({
       showPopup: !this.state.showPopup
@@ -42,6 +47,15 @@ class Profile extends Component {
     });
   }
 
+  showColabDetails= colab => {
+    let path = './ColabDetails';
+    this.props.history.push({
+      pathname : path,
+      state :{
+      collaboration: colab,
+      }
+    });
+  }
   // routeChange = () => {
   //   let path = "/CreateProject";
   //   const user = this.props.location.state.user;
@@ -54,75 +68,81 @@ class Profile extends Component {
   // };
 
   componentDidMount() {
-    // const jwt = getJwt();
-    // getUser(jwt).then(data => {
-    //     console.log("comp did mount: ", data.user);
-    //     this.setState({user: data.user})
-    //     console.log("state: ",this.state.user);
-    //   })
-    //   .catch(err => {
-    //     if (err && err.status) {
-    //       alert("Could not get user: " + err.message);
-    //     }
-    //   });
-
-      // this.setState({
-      //   user: this.props.location.state.user
-      // });
-      
-      // const jwt = getJwt();
-    this.setState({user: this.context.user, authenticated: this.context.authenticated})
-    getProjects(this.context.accessToken)
-    .then(res => {
-      const projects = res;
-      this.setState({projects});
-    })
-    .catch(err => {
-      if (err && err.status) {
-        alert("Could get project: " + err.message);
-      }
-    });
-    // getCollaborations(jwt)
-    // .then(res => {
-    //   const collaborations = res;
-    //   this.setState({collaborations});
-    // })
-    // .catch(err => {
-    //   if (err && err.status) {
-    //     alert("Could get collaborations: " + err.message);
-    //   }
-    // });
+    this.setState({user: this.context.user, authenticated: this.context.authenticated});
+    if(!this.state.projects){
+      getProjects(this.context.accessToken)
+      .then(data => {
+        const projects = data;
+        this.setState({projects});
+        this.setState({loadingProjects: false});
+      })
+      .catch(err => {
+        if (err && err.status) {
+          alert("Could get project: " + err.message);
+        }
+      });
+    }
+    if(!this.state.collaborations){
+      getCollaborations(this.context.accessToken)
+      .then(data => {
+        const collaborations = data;
+        this.setState({collaborations});
+        this.setState({loadingCollaborations: false})
+      })
+      .catch(err => {
+        if (err && err.status) {
+          alert("Could get collaborations: " + err.message);
+        }
+      });
+    }
+    this.setState({loadingCollaborations: false});
+    this.setState({loadingProjects: false});
   }
     
 
   createProject(formData) {
+    this.setState({loadingProjects: true});
+    alert("Creating project please wait");
     const jwt = getJwt();
     createProject(jwt,formData)
       .then(res => {
         alert("Project created successfully!");
-        window.location.reload();
+        // window.location.reload();
+        let projects = this.state.projects;
+        projects.unshift(res.data);
+        this.setState({projects});
+        
       })
       .catch(err => {
         if (err && err.status) {
           alert("Could not create project: " + err.message);
         }
       });
+      this.setState({loadingProjects: false});
   }
   createCollaboration(formData) {
+    this.setState({loadingCollaborations: true});
+    alert("Creating collaboration please wait");
     const jwt = getJwt();
     createCollaboration(jwt,formData)
       .then(res => {
         alert("Collaboration created successfully!");
-        window.location.reload();
+        let collaborations = this.state.collaborations;
+        collaborations.unshift(res.data);
+        this.setState({collaborations});
+        
       })
       .catch(err => {
         if (err && err.status) {
           alert("Could not create collaboration: " + err.message);
         }
       });
+      this.setState({loadingCollaborations: false});
   }
+  
 
   render() {
+    
     if (this.state.user === undefined) {
       return (
         <div>
@@ -176,11 +196,12 @@ class Profile extends Component {
               </Col>
           </Row>
           <h4 style={{ fontStyle: "bold", margin: "10px" }}>Projects </h4>
-          <Row style={{ width: "100%", overflow: "hidden",overflowY: 'scroll',height: "430px"}}>
+          <Row style={{  width: "100%", overflow: "hidden",overflowY: 'scroll',height: "430px"}}>
           
             
               <br></br>
-              {this.state.projects
+              {this.state.loadingProjects ? (<div><h5>Loading Projects...</h5></div>) :
+              this.state.projects
                 ? // <div className="container">
                   this.state.projects.map((project, i) => {
                     // Return the element. Also pass key
@@ -208,7 +229,19 @@ class Profile extends Component {
               ) : null}
               </Col>
           </Row>
-
+          <h4 style={{ fontStyle: "bold", margin: "10px" }}>Collaborations </h4>
+          <Row style={{ width: "100%", overflow: "hidden",overflowY: 'scroll',height: "4300px"}}>
+          
+            
+              <br></br>
+              {this.state.collaborations
+                ? this.state.collaborations.map((colab, i) => {
+                      // Return the element. Also pass key
+                      return <Col key={i}><ColabLink key={i} collaboration={colab} showDetails={this.showColabDetails}/></Col>;
+                    })
+                  : null}
+     
+          </Row>
         </div>
 
     );
