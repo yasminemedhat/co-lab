@@ -9,12 +9,15 @@ import Home from "./Home";
 import About from "./About";
 import RegistrationForm from "./RegistrationForm";
 import Profile from "./Profile";
-import AuthenticatedComponent from "./AuthenticatedComponent";
+import Auth from "./Auth";
 import ProjectPage from "./ProjectPage";
+import Navbar from "./navbar";
+import AuthenticatedComponent from "./AuthenticatedComponent";
 
 class Header extends React.Component {
   render() {
     return (
+      <Auth>
       <Router>
         <Switch>
           <Route path="/" exact strict  component ={Home} ></Route>
@@ -30,12 +33,13 @@ class Header extends React.Component {
             </Route>
             <Route path="/editUser" exact strict component ={editUser} />
             <Route path="/ProjectPage" exact strict component ={ProjectPage} />
-          </AuthenticatedComponent>
           
+            </AuthenticatedComponent>
 
         </Switch>
-
+        
        </Router>
+       </Auth>
     );
   }
 }

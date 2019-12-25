@@ -2,13 +2,19 @@ import React, { Component } from "react";
 import { Link }  from "react-router-dom";
 import "../css/header.css"
 import { withRouter } from "react-router-dom";
+import {AuthContext} from '../authContext';
 
 
 class Navbar extends Component {
+  static contextType = AuthContext;
+
     constuctor(props) {
         this.super(props);
+        this.logout = this.logout.bind(this);
     }
-
+    logout(){
+      this.context.logout();
+    }
     render() { 
         return (  
             <div className="topnav">
@@ -27,6 +33,10 @@ class Navbar extends Component {
    
         
         </div>
+        <div>
+                    {this.props.children}
+                   
+                </div> 
       </div>
         );
     }
