@@ -1,5 +1,5 @@
 const Colaber = require('../../models/Colaber');
-const Colaboration = require('../../models/Colaboration');
+const Collaboration = require('../../models/Colaboration');
 const { validationResult } = require('express-validator');
 
 module.exports = async  (req, res) => {
