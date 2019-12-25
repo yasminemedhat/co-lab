@@ -71,7 +71,7 @@ export const createCollaboration = (jwt, formData)=> {
         'Content-Type': "multipart/form-data",
         'Authorization': jwt
       }
-    return axiosInstance.post('collaboration/add', formData,{headers:headers })
+    return axiosInstance.post('collaboration/create', formData,{headers:headers })
         .then((res) => {
             return res;
       });
@@ -90,6 +90,13 @@ export const getProjects = (jwt) => {
     return axiosInstance.get('user/viewProjects', {headers: { Authorization: jwt } }).then(res => {
         // axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${user.data.token}`;
         console.log('form api getting projs ', res.data);
+        return res.data;
+    })
+}
+export const getCollaborations = (jwt) => {
+    return axiosInstance.get('user/getCollaborations', {headers: { Authorization: jwt } }).then(res => {
+        // axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${user.data.token}`;
+        console.log('form api getting colabs ', res.data);
         return res.data;
     })
 }

@@ -10,7 +10,6 @@ import { withRouter } from "react-router-dom";
 import HomeNavbar from "./home-navbar";
 
 import { login } from '../utils/APICalls';
-import { AuthConsumer } from '../authContext';
 import {AuthContext} from '../authContext';
 
 

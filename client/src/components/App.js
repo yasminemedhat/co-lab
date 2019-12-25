@@ -11,7 +11,7 @@ import RegistrationForm from "./RegistrationForm";
 import Profile from "./Profile";
 import Auth from "./Auth";
 import ProjectPage from "./ProjectPage";
-import Navbar from "./navbar";
+import ColabDetails from "./ColabDetails";
 import AuthenticatedComponent from "./AuthenticatedComponent";
 
 class Header extends React.Component {
@@ -33,7 +33,7 @@ class Header extends React.Component {
             </Route>
             <Route path="/editUser" exact strict component ={editUser} />
             <Route path="/ProjectPage" exact strict component ={ProjectPage} />
-          
+            <Route path="/ColabDetails" exact strict component ={ColabDetails} />
             </AuthenticatedComponent>
 
         </Switch>

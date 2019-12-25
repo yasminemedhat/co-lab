@@ -12,16 +12,6 @@ class ProjectPage extends Component {
     project: undefined,
 
   };
- 
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      
-    };
- 
-  }
-
   componentDidMount() {
     
     this.setState({

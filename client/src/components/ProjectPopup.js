@@ -58,9 +58,12 @@ class ProjectPopup extends Component {
     const formData = new FormData();
     formData.append('name', this.state.projectName);
     formData.append('description', this.state.description);
-    for (let i = 0 ; i < images.length ; i++) {
-      formData.append("photos", images[i]);
-   }
+    if(images){
+      for (let i = 0 ; i < images.length ; i++) {
+        formData.append("photos", images[i]);
+     }
+    }
+    
 
     this.props.createProject(formData);
     this.closeModal();

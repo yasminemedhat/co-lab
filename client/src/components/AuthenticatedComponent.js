@@ -1,31 +1,38 @@
 import React, {Component} from "react";
-import {getJwt} from "../helpers/jwt";
-import Axios from "axios";
-import { withRouter } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
 import Navbar from "./navbar";
-import { logout } from '../utils/APICalls';
 import {AuthContext} from '../authContext';
-import Login from './Login';
 
 class AuthenticateComponent extends Component{
     static contextType = AuthContext;
     constructor(props){
         super(props);
+        this.state= {isLoading: true};
         this.logout = this.logout.bind(this);
     }
     logout(){
         this.context.logout();
         
     }
+    componentDidMount(){
+       this.setState({isLoading: false});
+    }
     render(){
-        let value = this.context.authenticated ?
-        <div><Navbar logout={this.logout}/>
+
+        var content;
+        if(this.state.isLoading){
+            content =  (<div><h1>loading...</h1></div>)
+        }
+        else {
+            content = this.context.authenticated ?
+            <div><Navbar logout={this.logout}/>
                  <div>
                     {this.props.children}
                    
-                </div></div> : <Login></Login>;
+                </div></div> :  <Redirect to='/login'/>;
+        }
                  
-            return <div>{value}</div>
+            return <div>{content}</div>
                        
         
     }
