@@ -110,7 +110,10 @@ user.get('/profile', auth, require('./profile'));
 //@access       requires authentication 
 user.get('/viewProjects', auth, require('./viewProjects'));
 
-
+//@route GET    user/getCollabortions
+//@description  view collaborations for certain user
+//@access       requires authentication 
+user.get('/getCollaborations', auth, require('./getCollaborations'));
 
 //@route POST   user/logout ->Post because browser pre-fetches for get requests
 //@description  blacklist jwt using redis
