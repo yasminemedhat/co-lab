@@ -8,7 +8,7 @@ module.exports=async(req,res)=>{
         if(!user){
             return res.status(404).json({message:'User not found'});
         }
-        Collaborations = user.Collaborations
+        Collaborations = user.collaborations
         res.json(Collaborations)
             
     } catch (error) {
