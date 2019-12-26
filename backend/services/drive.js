@@ -245,23 +245,19 @@ module.exports = {
 
   },
 
-  updateAvatar: async function(avatar,email){
-    //delete first
-    var res=await module.exports.deleteAvatar(email);
-    return res;
-  //   if(!res){
-  //     return undefined;
-  //   }
-  //   //upload new image:
-  //   var url=await module.exports.uploadAvatar(avatar,email);
-
-  //   return url;
-  // }
-
-
-
-
-}
+getParentFolder: async function(id){
+  await refreshToken();
+  try {
+    var response=await drive.files.get({
+      "fileId": id,
+      fields: 'parents'
+    });
+    return response.data.parents[0];
+  } catch (error) {
+    console.log(error);
+    return undefined;
+  }
+  }
 }
 
 function setPermissions(id) {
