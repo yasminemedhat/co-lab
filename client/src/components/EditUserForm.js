@@ -5,11 +5,14 @@ import "../css/login.css";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
 import Img from "react-image";
+import { getInterestsList} from '../utils/APICalls';
+import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
 
 class editUserForm extends Component {
  
  state={
-   
+  interests:[],
+  interestsList:[],
  }
   
  constructor(props){
@@ -71,6 +74,18 @@ updateUser = () =>{
   //   const jwt = getJwt();
   //   this.setState
   // }
+
+      // get interestsList
+      componentDidMount() {
+        getInterestsList().then(data => {
+              let  interestsList = data.map(Interests => { return {value: Interests, display: Interests, label: Interests} })
+                this.setState({ interestsList: [{value: '', display: '(Select your working Field)'}].concat(interestsList) });
+              }).catch(err => {
+                  if(err && err.data){
+                    alert("Could not find interests: ",err.data.message);
+                  }
+            })	
+        }
 
   render() {
     const {email,avatar, firstName, lastName, isSponsor, phone, biography } = this.props.user;
@@ -176,7 +191,8 @@ updateUser = () =>{
                     /> Sponsor</label>
                     
                 </div>
-
+         
+                <ReactMultiSelectCheckboxes options={this.state.interestsList} />
 
                 
 
