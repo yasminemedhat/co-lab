@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link }  from "react-router-dom";
+import { NavLink }  from "react-router-dom";
 import "../css/header.css"
 class HomeNavbar extends Component {
     
@@ -12,9 +12,9 @@ class HomeNavbar extends Component {
         <div className="navigation">
        
                <ul>
-                 <Link to='/'>Home</Link>
-                 <Link to='/about' >About</Link>
-                 <Link to='/login' >Login</Link>
+                 <NavLink exact activeClassName="selectedLink" to='/'>Home</NavLink>
+                 <NavLink exact  activeClassName="selectedLink" to='/about' >About</NavLink>
+                 <NavLink exact activeClassName="selectedLink" to='/login' >Login</NavLink>
                </ul>
    
         

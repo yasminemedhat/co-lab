@@ -46,3 +46,7 @@
       float: left; 
       width: 20%;
   }
+
+  .selectedLink {
+    background: #5261ee;
+  }
