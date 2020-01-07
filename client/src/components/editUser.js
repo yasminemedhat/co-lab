@@ -23,6 +23,7 @@ class editUser extends Component {
     this.handleIsSponsor = this.handleIsSponsor.bind(this);
     this.onChangeProfilePicture = this.onChangeProfilePicture.bind(this);
     this.updateUser = this.updateUser.bind(this);
+    this.handleChosenInterests = this.handleChosenInterests.bind(this)
   }
   handleChange = input => e => {
     this.setState({ [input]: e.target.value });

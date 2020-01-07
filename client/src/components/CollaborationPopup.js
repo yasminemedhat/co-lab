@@ -5,13 +5,18 @@ import "../css/profile.css";
 import Linkify from "react-linkify";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
+import { getInterestsList} from '../utils/APICalls';
+import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
+
 
 class CollaborationPopup extends Component {
   state = {
     collaborationName: "",
     description: "",
     collaborationLink: "",
-    images: []
+    images: [],
+    chosenfields: [],
+    fieldsList: []
   };
   constructor(props) {
     super(props);
@@ -22,6 +27,7 @@ class CollaborationPopup extends Component {
     this.handleCreateCollaboration = this.handleCreateCollaboration.bind(this);
     this.onChangeImages = this.onChangeImages.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.handleChosenfields = this.handleChosenfields.bind(this)
   }
 
 
@@ -29,6 +35,27 @@ class CollaborationPopup extends Component {
   handleChange = input => e => {
     this.setState({ [input]: e.target.value });
   };
+  handleChosenfields =selectedOption=>{
+       
+          
+    this.setState({
+   chosenfields:selectedOption
+    
+    
+});
+  }
+
+  componentDidMount(){
+    getInterestsList().then(data => {
+      let  interestsList = data.map(Interests => { return {value: Interests, display: Interests, label: Interests} })
+        this.setState({ fieldsList:(interestsList) });
+      }).catch(err => {
+          if(err && err.data){
+            alert("Could not find project fields: ",err.data.message);
+          }
+    })
+
+  }
 
   closeModal() {
     this.setState({
@@ -47,6 +74,7 @@ class CollaborationPopup extends Component {
     const formData = new FormData();
     formData.append('name', this.state.projectName);
     formData.append('description', this.state.description);
+    formData.append('fields', this.state.chosenfields);
     if(this.state.collaborationLink.length > 0){
         formData.append('link', this.state.collaborationLink);
     }
@@ -125,10 +153,9 @@ class CollaborationPopup extends Component {
               />
               </div>
             </div>
-            <div>
-             
-             
-            </div>
+            <div className="row" style = {{    width: "100%" ,padding: "5%"}}>
+              <ReactMultiSelectCheckboxes options={this.state.fieldsList}   onChange={this.handleChosenfields} placeholderButtonLabel='Choose Project Field(s)' />
+              </div>
             <button
               className="btn btn-primary float-right"
               onClick={this.handleCreateCollaboration}

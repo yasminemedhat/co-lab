@@ -5,13 +5,18 @@ import "../css/profile.css";
 import Linkify from "react-linkify";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
+import { getInterestsList} from '../utils/APICalls';
+import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
+
 
 class ProjectPopup extends Component {
   state = {
     projectName: "",
     description: "",
     projectLink: "",
-    images: []
+    images: [],
+    chosenfields: [],
+    fieldsList: []
   };
   // fileObj = [];
   // fileArray = [];
@@ -21,6 +26,7 @@ class ProjectPopup extends Component {
       visible: true};
     // this.uploadMultipleFiles = this.uploadMultipleFiles.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleChosenfields = this.handleChosenfields.bind(this)
     this.handleCreateProject = this.handleCreateProject.bind(this);
     this.onChangeImages = this.onChangeImages.bind(this);
     this.closeModal = this.closeModal.bind(this);
@@ -41,6 +47,16 @@ class ProjectPopup extends Component {
     this.setState({ [input]: e.target.value });
   };
 
+  handleChosenfields =selectedOption=>{
+       
+          
+    this.setState({
+   chosenfields:selectedOption
+    
+    
+});
+  }
+
   closeModal() {
     this.setState({
       visible: false
@@ -51,6 +67,17 @@ class ProjectPopup extends Component {
     this.setState({ images: e.target.files })
   };
 
+  componentDidMount(){
+    getInterestsList().then(data => {
+      let  interestsList = data.map(Interests => { return {value: Interests, display: Interests, label: Interests} })
+        this.setState({ fieldsList:(interestsList) });
+      }).catch(err => {
+          if(err && err.data){
+            alert("Could not find project fields: ",err.data.message);
+          }
+    })
+
+  }
   handleCreateProject() {
     
     const { images } = this.state;
@@ -58,6 +85,8 @@ class ProjectPopup extends Component {
     const formData = new FormData();
     formData.append('name', this.state.projectName);
     formData.append('description', this.state.description);
+    formData.append('projectlink', this.state.projectLink);
+    formData.append('fields', this.state.chosenfields);
     if(images){
       for (let i = 0 ; i < images.length ; i++) {
         formData.append("photos", images[i]);
@@ -127,6 +156,9 @@ class ProjectPopup extends Component {
                   onChange={this.handleChange("description")}
                   placeholder="* Project Description"
                 />
+              </div>
+              <div className="row" style = {{    width: "100%" ,padding: "5%"}}>
+              <ReactMultiSelectCheckboxes options={this.state.fieldsList}   onChange={this.handleChosenfields} placeholderButtonLabel='Choose Project Field(s)' />
               </div>
               <div className="col">
               <input

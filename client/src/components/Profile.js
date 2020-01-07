@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
 import Img from "react-image";
+import "../css/profile.css";
 import ProjectPopup from "./ProjectPopup";
 import CollaborationPopup from "./CollaborationPopup";
 import ProjectLink from "./ProjectLink.js";
@@ -223,9 +224,10 @@ class Profile extends Component {
             
           }}>
             <HorizontalScroll
+            className="horizontal_scroll"
              style={{
             
-           
+            
               overflow: "hidden",
               overflowX: "scroll",
               
@@ -276,13 +278,28 @@ class Profile extends Component {
         </Row>
         <h4 style={{ fontStyle: "bold", margin: "10px" }}>Collaborations </h4>
         <Row
-          style={{
-            width: "100%",
-            overflow: "hidden",
-            overflowY: "scroll",
-            height: "430px"
-          }}
+      
+            style={{
+              width: "100%",
+              height: "430px"
+            }}
+       
         >
+          <div    style={{
+            width: "2000px",
+            height: "430px",
+     
+            
+          }}>
+            <HorizontalScroll
+            className="horizontal_scroll"
+             style={{
+            
+            
+              overflow: "hidden",
+              overflowX: "scroll",
+              
+            }}>
           <br></br>
           {this.state.collaborations
             ? this.state.collaborations.map((colab, i) => {
@@ -298,6 +315,8 @@ class Profile extends Component {
                 );
               })
             : null}
+              </HorizontalScroll>
+        </div>
         </Row>
       </div>
     );
