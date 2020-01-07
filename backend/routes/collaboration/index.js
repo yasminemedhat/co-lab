@@ -1,7 +1,6 @@
 const collaboration = require('express').Router();
 const multer = require('multer');
 const upload = multer(); //multer handles images because json doesn't support binary files
-const drive = require('../../services/drive');
 const { check } = require('express-validator');
 const auth = require("../../middleware/auth");
 const Colaboration = require('../../models/Colaboration');
@@ -30,31 +29,39 @@ collaboration.patch('/:id/addColaber', [
 ], require('./addColaber'));
 
 
-//@route GET        collaboration/:id/
+//@route GET        collaboration/:id
 //@description      get collaboration data   
 //@access           auth needed 
 collaboration.get('/:id', [
     auth,
-], async(req,res)=>{
+], async (req, res) => {
     try {
-        let colab=await Colaboration.findOne({_id:req.params.id})
-    .populate('members','firstName lastName email _id avatar');
-    console.log(colab);
-    if(colab==null){
-        return res.status(400).json({message: 'Collaboration not found'});   
+        let colab = await Colaboration.findOne({ _id: req.params.id })
+            .populate('members', 'firstName lastName email _id avatar');
+        console.log(colab);
+        if (colab == null) {
+            return res.status(400).json({ message: 'Collaboration not found' });
 
-    }
-    res.send(colab);
-        
+        }
+        res.send(colab);
+
     } catch (error) {
         console.log(error);
-        return res.status(500).json({message: 'Server Error.'});   
+        return res.status(500).json({ message: 'Server Error.' });
     }
-    
+
 
 });
 
+//@route DELETE     collaboration/:id/removeColaber
+//@description      creator can remove collaber, and colaber can leave collaboration   
+//@access           auth needed 
+collaboration.delete('/:id/removeColaber', auth, require('./removeColaber'));
 
 
+//@route DELETE     collaboration/:id
+//@description      Delete collaboration
+//@access           auth needed + only the creator can delete collaboration
+collaboration.delete('/:id',auth,require('./delete'));
 
 module.exports = collaboration;

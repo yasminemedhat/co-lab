@@ -24,7 +24,7 @@ module.exports = async  (req, res) => {
             .select('_id');
 
         if (!user)
-            return res.status(401).json({ message: 'Unauthorized. Cannot add Colabers.' });
+            return res.status(403).json({ message: 'Unauthorized. Cannot add Colabers.' });
 
         //add user
         //find Collaboration
@@ -35,6 +35,9 @@ module.exports = async  (req, res) => {
         if(!user)
             return res.send('Colaber not found');
             let colab=await Collaboration.findOne({_id: id});
+            if(colab==null){
+                return res.status(404).json({ message: 'Collaboration not found' });
+            }
 
         
         user.collaborations.addToSet(id);
