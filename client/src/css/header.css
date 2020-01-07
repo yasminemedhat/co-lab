@@ -50,3 +50,9 @@
   .selectedLink {
     background: #5261ee;
   }
+
+  .logout-NavLink{
+    color:  white!important;
+    padding-top: 4%;
+    padding-bottom: 5%;
+  }

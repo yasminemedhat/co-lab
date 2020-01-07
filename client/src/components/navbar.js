@@ -23,19 +23,16 @@ class Navbar extends Component {
         <div className="navigation">
         
             <NavLink
-              activeStyle={{
-                fontWeight: "bold",
-                color: "red"
-              }}
+              exact
               activeClassName="selectedLink"
               to="/"
             >
               Home
             </NavLink>
-            <NavLink activeClassName="selectedLink" to="/about">
+            <NavLink exact activeClassName="selectedLink" to="/about" >
               About
             </NavLink>
-            <NavLink activeClassName="selectedLink" to="/editUser">
+            <NavLink exact activeClassName="selectedLink" to="/editUser">
               Edit Profile
             </NavLink>
             <button className="logout-NavLink" onClick={this.props.logout}>
