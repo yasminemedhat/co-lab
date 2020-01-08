@@ -2,8 +2,7 @@ const Colaber = require('../../models/Colaber');
 const Project = require('../../models/Project')
 
 module.exports=async(req,res)=>{
-    const id=req.user.id;
-
+    const id=req.params.id;
     try {
         let user=await Colaber.findOne({_id: id}).select('-password').populate('projects') 
         if(!user){

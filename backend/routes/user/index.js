@@ -103,17 +103,22 @@ user.patch('/update',[
 //@route Get    user/profile
 //@description  get user's data to show their profile
 //@access       requires authentication
-user.get('/profile', auth, require('./profile'));
+user.get('/profile/:id', auth, require('./profile'));
+
+// //@route Get    user/profile/:id
+// //@description  get user's data to show their profile using id
+// //@access       requires authentication
+// user.get('/profile/:id', require('./userProfile'));
 
 //@route GET    user/viewProjects
 //@description  view projects for certain user
 //@access       requires authentication 
-user.get('/viewProjects', auth, require('./viewProjects'));
+user.get('/viewProjects/:id', auth, require('./viewProjects'));
 
 //@route GET    user/getCollabortions
 //@description  view collaborations for certain user
 //@access       requires authentication 
-user.get('/getCollaborations', auth, require('./getCollaborations'));
+user.get('/getCollaborations/:id', auth, require('./getCollaborations'));
 
 //@route POST   user/logout ->Post because browser pre-fetches for get requests
 //@description  blacklist jwt using redis
