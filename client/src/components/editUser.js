@@ -7,8 +7,12 @@ import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
 import Img from "react-image";
 import { getInterestsList} from '../utils/APICalls';
 import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
+import { AuthContext } from "../authContext";
+
 
 class editUser extends Component {
+  static contextType = AuthContext;
+
   state = {
     user: undefined,
     profilePicture: undefined,
@@ -35,11 +39,6 @@ class editUser extends Component {
   };
   onChangeProfilePicture = e => {
     this.setState({ profilePicture: e.target.files[0] });
-    console.log(
-      "dakhaly on change pp",
-      this.state.profilePicture,
-      e.target.files[0]
-    );
   };
 
   handleChosenInterests =selectedOption=>{
@@ -56,7 +55,7 @@ class editUser extends Component {
 
   updateUser = e => {
     e.preventDefault();
-    let path = "/profile";
+    let path = "/users/"+this.context.user.id;
     const jwt = getJwt();
     const formData = new FormData();
     if (this.state.profilePicture) {

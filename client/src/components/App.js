@@ -13,32 +13,38 @@ import Auth from "./Auth";
 import ProjectPage from "./ProjectPage";
 import ColabDetails from "./ColabDetails";
 import AuthenticatedComponent from "./AuthenticatedComponent";
+import NavBar from './navbar';
+import { AuthContext } from "../authContext";
+
 
 class Header extends React.Component {
+
   render() {
     return (
       <Auth>
-      <Router>
-        <Switch>
-          <Route path="/" exact strict  component ={Home} ></Route>
-          <Route path="/about" exact strict component = {About}></Route>
-          <Route path="/login" exact strict  component = {Login}></Route>
-          <Route path="/forgotPassword" exact strict  component = {ForgotPassword}></Route>
-          <Route path="/RegistrationForm" exact strict component ={RegistrationForm} />
+        
+        <Router>
+        <NavBar></NavBar>
+          <Switch>
+            <Route path="/" exact strict  component ={Home} ></Route>
+            <Route path="/about" exact strict component = {About}></Route>
+            <Route path="/login" exact strict  component = {Login}></Route>
+            <Route path="/forgotPassword" exact strict  component = {ForgotPassword}></Route>
+            <Route path="/RegistrationForm" exact strict component ={RegistrationForm} />
+            
           
-        
-          <AuthenticatedComponent>
-            <Route path="/profile" exact strict component ={Profile} >
-              
-            </Route>
-            <Route path="/editUser" exact strict component ={editUser} />
-            <Route path="/ProjectPage" exact strict component ={ProjectPage} />
-            <Route path="/ColabDetails" exact strict component ={ColabDetails} />
-            </AuthenticatedComponent>
+            <AuthenticatedComponent>
+              <Route path="/users/:id" exact strict component ={Profile} >
+                
+              </Route>
+              <Route path="/editUser" exact strict component ={editUser} />
+              <Route path="/projects/:id" exact strict component ={ProjectPage} />
+              <Route path="/collaborations/:id" exact strict component ={ColabDetails} />
+              </AuthenticatedComponent>
 
-        </Switch>
-        
-       </Router>
+          </Switch>
+          
+        </Router>
        </Auth>
     );
   }

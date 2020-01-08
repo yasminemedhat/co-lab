@@ -38,12 +38,14 @@ class Login extends React.Component {
 
   loginUser = () =>{
     const { email, password} = this.state;
-    let path = "/profile";
+    
     login(email, password)
           .then(data => {
               // localStorage.setItem('token',data.token);
-              // console.log("after login: ", data.user);
+              console.log("after login: ", data.user);
               this.context.initiateLogin(data);
+
+              let path = "/users/"+data.user.id;
               this.props.history.push({
                 pathname : path,
                 state :{
@@ -83,7 +85,6 @@ class Login extends React.Component {
 
     return (
       <div>
-        <HomeNavbar />
         <div className="Limiter">
           <div className="main_container">
              <LoginForm

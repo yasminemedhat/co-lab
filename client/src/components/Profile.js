@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
 import Img from "react-image";
+import Image from 'react-bootstrap/Image'
+
 import "../css/profile.css";
 import ProjectPopup from "./ProjectPopup";
 import CollaborationPopup from "./CollaborationPopup";
@@ -12,7 +14,8 @@ import {
   createProject,
   getProjects,
   createCollaboration,
-  getCollaborations
+  getCollaborations,
+  getUser
 } from "../utils/APICalls";
 import { Row, Col } from "react-bootstrap";
 import { withRouter } from "react-router-dom";
@@ -35,7 +38,10 @@ class Profile extends Component {
       showPopup: false,
       showPopup2: false,
       loadingProjects: true,
-      loadingCollaborations: true
+      loadingCollaborations: true,
+      user: '',
+      projects: [],
+      collaborations: []
     };
     this.createProject = this.createProject.bind(this);
     this.createCollaboration = this.createCollaboration.bind(this);
@@ -55,7 +61,7 @@ class Profile extends Component {
   }
 
   showColabDetails = colab => {
-    let path = "./ColabDetails";
+    const path = "/collaborations/"+colab._id;
     this.props.history.push({
       pathname: path,
       state: {
@@ -75,12 +81,25 @@ class Profile extends Component {
   // };
 
   componentDidMount() {
-    this.setState({
-      user: this.context.user,
-      authenticated: this.context.authenticated
-    });
-    if (!this.state.projects) {
-      getProjects(this.context.accessToken)
+    console.log("profile: props: ", this.props.match);
+    if(!this.state.user){
+      getUser(this.context.accessToken, this.props.match.params.id)
+        .then(data => {
+          this.setState({
+            user: data.user
+          })
+        })
+        .catch(err => {
+          if (err && err.status) {
+            alert("User not found: " + err.message);
+          }
+        })
+    }
+    // this.setState({
+    //   user: this.context.user,
+    //   authenticated: this.context.authenticated
+    // });
+      getProjects(this.context.accessToken,this.props.match.params.id)
         .then(data => {
           const projects = data;
           this.setState({ projects });
@@ -88,12 +107,11 @@ class Profile extends Component {
         })
         .catch(err => {
           if (err && err.status) {
-            alert("Could get project: " + err.message);
+            alert("Couldn't get project: " + err.message);
           }
         });
-    }
-    if (!this.state.collaborations) {
-      getCollaborations(this.context.accessToken)
+    
+      getCollaborations(this.context.accessToken,this.props.match.params.id)
         .then(data => {
           const collaborations = data;
           this.setState({ collaborations });
@@ -104,10 +122,10 @@ class Profile extends Component {
             alert("Could get collaborations: " + err.message);
           }
         });
-    }
+    
     this.setState({ loadingCollaborations: false });
     this.setState({ loadingProjects: false });
-  }
+    }
 
   createProject(formData) {
     this.setState({ loadingProjects: true });
@@ -163,12 +181,9 @@ class Profile extends Component {
           <Col>
             <div className="row">
               {this.state.user.avatar ? (
-                <Img className="profile" src={this.state.user.avatar}></Img>
+                <Image className="profile" src={this.state.user.avatar} roundedCircle></Image>
               ) : (
-                <Img
-                  className="profile"
-                  src={require("../images/profile.png")}
-                ></Img>
+                <Image className="profile" src={require("../images/profile.png")} roundedCircle></Image>
               )}
             </div>
           </Col>
@@ -258,7 +273,7 @@ class Profile extends Component {
         </HorizontalScroll>
         </div>
         </Row>
-        <Row style={{ width: "100%" }}>
+        <Row style={{ width: "100%" , marginTop: "20px"}}>
           <Col>
             <button
               style={{ float: "right", width: "180px" }}

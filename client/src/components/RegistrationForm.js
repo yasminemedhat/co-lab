@@ -73,9 +73,9 @@ class RegistrationForm extends Component {
        
         const { email, username, firstname, lastname,phone, password, biography, isSponsor, workingField, interests } = this.state;
         const user = { email, username, firstname, lastname, password, phone,biography, isSponsor, workingField, interests };
-        const path = '/profile';
         signup(user).then((data) => {
             localStorage.setItem('token',data.token);
+            const path = '/users/'+data.user.id;
             this.props.history.push({pathname : path,
                 state :{
                 user: data.user,

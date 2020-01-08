@@ -15,7 +15,7 @@ class About extends React.Component {
 
     return (
       <div>
-        <HomeNavbar />
+        {/* <HomeNavbar /> */}
       <div className="Limiter">
         <div className="main_container">
             <h2>This is about</h2>

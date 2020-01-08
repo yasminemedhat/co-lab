@@ -37,9 +37,9 @@ class ProjectPage extends Component {
     let rowIndex = -1
     for (let i=0;i<images.length;i= i+3){
         rowIndex++
-        row[rowIndex] = <div className="row imageRow">
+        row[rowIndex] = <div className="row imageRow" key={i}>
             <div className = "col imagecol">
-            <Img className="project_pictures" style={{ float: 'right'}} src={images[i]}></Img>
+            <Img className="project_pictures"  style={{ float: 'right'}} src={images[i]}></Img>
             </div>
             <div className = "col imagecol">
             <Img className="project_pictures" src={images[i+1]}></Img>

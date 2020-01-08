@@ -1,5 +1,6 @@
- import axios from 'axios'
-
+import axios from 'axios'
+import { Redirect } from 'react-router-dom';
+import React from "react";
 const axiosInstance = axios.create({
     baseURL: process.env.REACT_APP_baseAPIURL,
     withCredentials: false,
@@ -39,8 +40,8 @@ export const changePassword = (email) =>{
 }
 
 
-export const getUser = (jwt) => {
-    return axiosInstance.get('user/profile', {headers: { Authorization: jwt } }).then(res => {
+export const getUser = (jwt, id) => {
+    return axiosInstance.get('user/profile/'+id, {headers: { Authorization: jwt } }).then(res => {
         // axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${user.data.token}`;
         console.log('form api 2', res);
         return res.data;
@@ -63,7 +64,7 @@ export const createProject = (jwt, formData)=> {
       }
     return axiosInstance.post('project/add', formData,{headers:headers })
         .then((res) => {
-            return res;
+            return res.data;
       });
 }
 export const createCollaboration = (jwt, formData)=> {
@@ -86,15 +87,15 @@ export const updateUser = (jwt, formData) => {
             return res;
       });
 }
-export const getProjects = (jwt) => {
-    return axiosInstance.get('user/viewProjects', {headers: { Authorization: jwt } }).then(res => {
+export const getProjects = (jwt, userId) => {
+    return axiosInstance.get('user/viewProjects/'+userId, {headers: { Authorization: jwt } }).then(res => {
         // axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${user.data.token}`;
         console.log('form api getting projs ', res.data);
         return res.data;
     })
 }
-export const getCollaborations = (jwt) => {
-    return axiosInstance.get('user/getCollaborations', {headers: { Authorization: jwt } }).then(res => {
+export const getCollaborations = (jwt, userId) => {
+    return axiosInstance.get('user/getCollaborations/'+userId, {headers: { Authorization: jwt } }).then(res => {
         // axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${user.data.token}`;
         console.log('form api getting colabs ', res.data);
         return res.data;

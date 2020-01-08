@@ -11,14 +11,15 @@ class ProjectLink extends Component {
         name: "",
         description: "",
         link: "",
-        imageUrl: ""
+        imageUrl: "",
+        id: ''
     };
     constructor(props){
         super(props);
-        this.routeChange = this.routeChange.bind(this);
+        this.showProjectDetails = this.showProjectDetails.bind(this);
     }
-    routeChange = () => {
-        const path = "/ProjectPage";
+    showProjectDetails = () => {
+        const path = "/projects/"+ this.state.id;
         const project = this.props.project;
         this.props.history.push({
           pathname : path,
@@ -29,20 +30,21 @@ class ProjectLink extends Component {
       };
     
     componentDidMount(){
-        const {name, description, link} = this.props.project;
+        const {name, description, link, _id} = this.props.project;
         const image = this.props.project.images ? this.props.project.images[0] : require('../images/img-01.png')
         console.log("image: ", image);
-        this.setState({name,description,link,image});
+        this.setState({name,description,link,image, id: _id});
     }
     render() { 
         return (
-                <Card style={{ width: '18rem', height: '25rem', margin: "10px"  }}>
+                <Card tag='a'
+                onClick={() => {this.showProjectDetails()}} 
+                style={{  cursor: "pointer",width: '18rem', height: '25rem', margin: "10px"  }}>
                     <Card.Img style={{ width: '18rem', height: '15rem'}} variant="top" src={this.state.image} />
                     <Card.Body>
                         <Card.Title>{this.props.project.name}</Card.Title>
                         <Card.Text>{this.props.project.description}</Card.Text>
                         {this.props.project.link? (<Linkify>{this.props.project.link}</Linkify>) : null}
-                        <Button variant="primary"  onClick={this.routeChange}>show project</Button>
                     </Card.Body>
                 </Card>
             );
