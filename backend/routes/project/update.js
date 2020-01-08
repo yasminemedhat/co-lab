@@ -21,7 +21,6 @@ module.exports=async(req,res)=>{
 
         await project.save();
 
-        console.log(project);
         res.json({project});
 
     } catch (error) {
