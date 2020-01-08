@@ -8,12 +8,11 @@ class AuthenticateComponent extends Component{
     constructor(props){
         super(props);
         this.state= {isLoading: true};
-        this.logout = this.logout.bind(this);
     }
-    logout(){
-        this.context.logout();
+    // logout(){
+    //     this.context.logout();
         
-    }
+    // }
     componentDidMount(){
        this.setState({isLoading: false});
     }
@@ -23,14 +22,16 @@ class AuthenticateComponent extends Component{
         if(this.state.isLoading){
             content =  (<div><h1>loading...</h1></div>)
         }
-        else {
-            content = this.context.authenticated ?
-            <div><Navbar logout={this.logout}/>
-                 <div>
-                    {this.props.children}
-                   
-                </div></div> :  <Redirect to='/login'/>;
+        else if(this.context.authenticated) {
+            content =<div>
+            <div>
+               {this.props.children}
+              
+           </div></div>}
+        else{
+            window.location="/login";
         }
+        
                  
             return <div>{content}</div>
                        

@@ -40,7 +40,7 @@ class Home extends React.Component {
 
     return (
       <div>
-        <HomeNavbar />
+        {/* <HomeNavbar /> */}
         <div className="Limiter">
           <div className="gallery_container">
             <Gallery images={IMAGES} backdropClosesModal ={true}  enableLightbox={true}

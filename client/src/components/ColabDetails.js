@@ -23,7 +23,7 @@ const ColabDetails = ({location}) => {
         for (let i=0;i<colab.images.length;i= i+3){
             rowIndex++
             row[rowIndex] = 
-                <div className="row imageRow">
+                <div className="row imageRow" key={i}>
                     <div className = "col imagecol">
                     <Img className="project_pictures" style={{ float: 'right'}} src={colab.images[i]}></Img>
                     </div>

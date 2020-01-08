@@ -5,20 +5,19 @@ import {AuthProvider} from "../authContext";
 
 class Auth extends Component{
     
-    // state = {
-    //     authenticated: false,
-    //     user: {
-    //       userType: "visitor"
-    //     },
-    //     accessToken: ""
-    //   };
+    state = {
+        authenticated: false,
+        user: {
+          userType: "visitor"
+        },
+        accessToken: ""
+      };
     
       constructor(props){
         super(props);
-        console.log("authh + constructor");
         const jwt = getJwt();
         const user = getUserStored();
-        if(!jwt || !user){
+        if(!jwt){
           this.state = {
             authenticated: false,
             user: {
@@ -33,7 +32,7 @@ class Auth extends Component{
               accessToken: jwt,
               user: user
             };
-            console.log("constructorrr + then");
+            console.log("constructorrr + then",this.state.authenticated);
          
         }
       }
@@ -42,9 +41,10 @@ class Auth extends Component{
       };
     
       logout = () => {
-          console.log("logging outss");
+        console.log("logging outss");
         logout(this.state.accessToken,this.state.user).then(res => {
             localStorage.removeItem('token');
+            localStorage.removeItem('colab-user');
             this.setState({
                 authenticated: false,
                 user: {
@@ -52,6 +52,19 @@ class Auth extends Component{
                 },
                 accessToken: ""
             });
+        }).catch(err=> {
+          console.log(err);
+          if(err.status === 401){
+            localStorage.removeItem('token');
+            localStorage.removeItem('colab-user');
+            this.setState({
+                authenticated: false,
+                user: {
+                  role: "visitor"
+                },
+                accessToken: ""
+            });
+          }
         })
         
         
