@@ -15,7 +15,7 @@ import {
   getProjects,
   createCollaboration,
   getCollaborations,
-  getUser
+  getUser, followUser
 } from "../utils/APICalls";
 import { Row, Col } from "react-bootstrap";
 import { withRouter } from "react-router-dom";
@@ -69,19 +69,27 @@ class Profile extends Component {
       }
     });
   };
-  // routeChange = () => {
-  //   let path = "/CreateProject";
-  //   const user = this.props.location.state.user;
-  //   this.props.history.push({
-  //     pathname: path,
-  //     state: {
-  //       user: user
-  //     }
-  //   });
-  // };
+  
+  toggleFollowUser(){
+    followUser(this.context.accessToken, this.props.match.params.id)
+    .then(data => {
+      this.context.updateUser();
+    })
+    .catch(err => {
+      if(err && err.status){
+        alert("something went wrong: " + err.message);
+      }
+    })
+  }
+
+  followButton(){
+    if(this.context.user.following.includes(this.props.match.params.id)){
+      return true;
+    }
+      return false;
+  }
 
   componentDidMount() {
-    console.log("profile: props: ", this.props.match);
    getUser(this.context.accessToken, this.props.match.params.id)
         .then(data => {
           this.setState({
@@ -180,11 +188,25 @@ class Profile extends Component {
           <Col>
             <div className="row">
               {this.state.user.avatar ? (
-                <Image className="profile" src={this.state.user.avatar} roundedCircle></Image>
+                <Image className="profile" style={{margin: "2%"}} src={this.state.user.avatar} roundedCircle></Image>
               ) : (
-                <Image className="profile" src={require("../images/profile.png")} roundedCircle></Image>
+                <Image className="profile" style={{margin: "2%"}} src={require("../images/profile.png")} roundedCircle></Image>
               )}
             </div>
+            <Can role={this.context.user.userType} perform="users:follow" 
+              data={{
+                    userId: this.context.user._id,
+                    profileOwnerId: this.props.match.params.id
+                  }}
+              yes={() => (
+                <div className="follow-button">
+                  {this.followButton() ? <button
+                    className="unfollow-btn" onClick={()=> this.toggleFollowUser()}
+                  >unfollow</button> : <button className="follow-btn" onClick={()=> this.toggleFollowUser()}
+                  >follow</button>}
+               </div> )}/>
+              
+            
           </Col>
           <Col>
             <div className="profile_info" style={{ float: "left" }}>
@@ -207,7 +229,7 @@ class Profile extends Component {
         </Row>
         <Can role={this.context.user.userType} perform="projects:create" 
               data={{
-                    userId: this.context.user.id,
+                    userId: this.context.user._id,
                     profileOwnerId: this.props.match.params.id
                   }}
           yes={() => (
@@ -283,7 +305,7 @@ class Profile extends Component {
         <Row style={{height: "30px"}}></Row>
         <Can role={this.context.user.userType} perform="collaborations:create" 
               data={{
-                    userId: this.context.user.id,
+                    userId: this.context.user._id,
                     profileOwnerId: this.props.match.params.id
                   }}
           yes={() => (

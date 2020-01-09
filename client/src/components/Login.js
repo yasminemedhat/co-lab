@@ -44,7 +44,7 @@ class Login extends React.Component {
               console.log("after login: ", data.user);
               this.context.initiateLogin(data);
 
-              let path = "/users/"+data.user.id;
+              let path = "/users/"+data.user._id;
               this.props.history.push({
                 pathname : path,
                 state :{
