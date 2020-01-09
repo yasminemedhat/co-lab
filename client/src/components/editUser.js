@@ -92,20 +92,8 @@ class editUser extends Component {
   };
 
   componentDidMount() {
-    if (this.state.user === undefined) {
-      console.log("dakhalt did mount");
-      const jwt = getJwt();
-      getUser(jwt)
-        .then(res => {
-          this.setState({ user: res.user });
-          this.setState({ isSponsor: this.state.user.isSponsor });
-        })
-        .catch(err => {
-          if (err && err.status) {
-            alert("Could not get user: " + err.message);
-          }
-        });
-    }
+    
+    this.state.user = this.context.user; 
     getInterestsList().then(data => {
       let  interestsList = data.map(Interests => { return {value: Interests, display: Interests, label: Interests} })
         this.setState({ interestsList:(interestsList) });

@@ -9,14 +9,13 @@ import { Row, Col } from "react-bootstrap";
 
 class Navbar extends Component {
   static contextType = AuthContext;
-  state = {avater : ''}
+
   constuctor(props) {
     this.super(props);
     this.logout = this.logout.bind(this);
     this.goToProfile = this.goToProfile.bind(this);
   }
   logout() {
-    console.log("hey;")
     this.context.logout();
   }
   goToProfile(){
@@ -25,12 +24,8 @@ class Navbar extends Component {
       pathname : path
       });
   }
-  componentDidMount(){
-    if(this.context.authenticated===true &&this.context.user.avatar){
-      this.setState({avatar : this.context.user.avatar});
-    }
-    
-  }
+ 
+  
   render() {
     if(this.context.authenticated){
       return (
@@ -38,8 +33,8 @@ class Navbar extends Component {
           <div className="logo_avatar_div">
           <Row><Col tag='a'
             onClick={() => {this.goToProfile()}}>
-          {this.state.avatar ? (
-                <Image className="navbarAvatar" src={this.state.avatar} style={{width: 45, height: 45}} roundedCircle ></Image>
+          {this.context.user.avatar ? (
+                <Image className="navbarAvatar" src={this.context.user.avatar} style={{width: 45, height: 45}} roundedCircle ></Image>
               ) : (
                 <Image className="navbarAvatar" src={require("../images/profile.png")} style={{width: 45, height: 45}} roundedCircle></Image>
               )}

@@ -7,7 +7,6 @@ import "../fonts/Linearicons-Free-v1.0.0/icon-font.min.css"
 import LoginForm from './LoginForm.js';
 import { Link }  from "react-router-dom";
 import { withRouter } from "react-router-dom";
-import HomeNavbar from "./home-navbar";
 
 import { login } from '../utils/APICalls';
 import {AuthContext} from '../authContext';

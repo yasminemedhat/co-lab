@@ -18,6 +18,7 @@ class Auth extends Component{
         const jwt = getJwt();
         const user = getUserStored();
         if(!jwt){
+          console.log("auth construct msh tamam");
           this.state = {
             authenticated: false,
             user: {
@@ -25,14 +26,16 @@ class Auth extends Component{
             },
             accessToken: ""
           };
+          localStorage.removeItem('token');
+          localStorage.removeItem('colab-user');
         }
         else{
+          console.log("auth construct tamam");
             this.state ={
               authenticated: true,
               accessToken: jwt,
               user: user
             };
-            console.log("constructorrr + then",this.state.authenticated);
          
         }
       }
