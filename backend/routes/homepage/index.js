@@ -15,7 +15,7 @@ homepage.get('/', auth, async (req, res) => {
     try {
         let following = await Colaber.findById(id).select('following -_id');
         if (!following)
-            return res.json({ message: 'No followings' });
+            return res.status(204).json({ message: 'No followings' });
 
         let posts = await Project.find(
             {
@@ -26,6 +26,10 @@ homepage.get('/', auth, async (req, res) => {
         ).populate({
             path: 'members creator', select: 'firstName lastName email _id avatar',
         });
+
+        if(!posts)
+        return res.status(204).json({ message: 'No posts' });
+
 
         return res.json(posts);
     } catch (error) {
