@@ -14,7 +14,7 @@ import {
   createProject,
   getProjects,
   createCollaboration,
-  getCollaborations,
+  getCollaborations, getCollaboration,
   getUser, followUser
 } from "../utils/APICalls";
 import { Row, Col } from "react-bootstrap";
@@ -41,7 +41,8 @@ class Profile extends Component {
       loadingCollaborations: true,
       user: '',
       projects: [],
-      collaborations: []
+      collaborations: [],
+      followButton: true
     };
     this.createProject = this.createProject.bind(this);
     this.createCollaboration = this.createCollaboration.bind(this);
@@ -62,17 +63,21 @@ class Profile extends Component {
 
   showColabDetails = colab => {
     const path = "/collaborations/"+colab._id;
-    this.props.history.push({
-      pathname: path,
-      state: {
-        collaboration: colab
-      }
-    });
+    getCollaboration(this.context.accessToken,colab._id).then(data => {
+      this.props.history.push({
+        pathname: path,
+        state: {
+          collaboration: data
+        }
+      });
+    })
+    
   };
   
   toggleFollowUser(){
     followUser(this.context.accessToken, this.props.match.params.id)
     .then(data => {
+      this.setState({followButton: !this.state.followButton})
       this.context.updateUser();
     })
     .catch(err => {
@@ -101,7 +106,9 @@ class Profile extends Component {
             alert("User not found: " + err.message);
           }
         })
-    
+      if(this.context.user.following.includes(this.props.match.params.id)){
+        this.setState({followButton: false});
+      }
     // this.setState({
     //   user: this.context.user,
     //   authenticated: this.context.authenticated
@@ -200,10 +207,10 @@ class Profile extends Component {
                   }}
               yes={() => (
                 <div className="follow-button">
-                  {this.followButton() ? <button
+                  {this.state.followButton ?  <button className="follow-btn" onClick={()=> this.toggleFollowUser()}
+                  >follow</button>:<button
                     className="unfollow-btn" onClick={()=> this.toggleFollowUser()}
-                  >unfollow</button> : <button className="follow-btn" onClick={()=> this.toggleFollowUser()}
-                  >follow</button>}
+                  >unfollow</button>}
                </div> )}/>
               
             

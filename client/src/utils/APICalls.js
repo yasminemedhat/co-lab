@@ -101,6 +101,11 @@ export const getCollaborations = (jwt, userId) => {
         return res.data;
     })
 }
+export const getCollaboration = (jwt, colabId) => {
+    return axiosInstance.get('collaboration/'+colabId, {headers: { Authorization: jwt } }).then(res => {
+        return res.data;
+    })
+}
 
 export const getInterestsList=() => {
     return axiosInstance.get('user/interestsList')

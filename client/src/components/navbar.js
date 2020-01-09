@@ -19,10 +19,11 @@ class Navbar extends Component {
     this.context.logout();
   }
   goToProfile(){
-    let path = "/users/"+this.context.user.id;
+    let path = "/users/"+this.context.user._id;
     this.props.history.push({
       pathname : path
       });
+      window.location.reload();
   }
  
   
@@ -34,7 +35,7 @@ class Navbar extends Component {
           <Row><Col tag='a'
             onClick={() => {this.goToProfile()}}>
           {this.context.user.avatar ? (
-                <Image className="navbarAvatar" src={this.context.user.avatar} style={{width: 45, height: 45}} roundedCircle ></Image>
+                <Image className="navbarAvatar" src={this.context.user.avatar} style={{width: 45, height: 45, margin:"5px"}} roundedCircle ></Image>
               ) : (
                 <Image className="navbarAvatar" src={require("../images/profile.png")} style={{width: 45, height: 45}} roundedCircle></Image>
               )}

@@ -4,14 +4,25 @@ import "../css/createProject.css";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
 import Img from "react-image";
+import { Row, Col , Table} from "react-bootstrap";
+import Image from 'react-bootstrap/Image';
+import Linkify from "react-linkify";
 
-const ColabDetails = ({location}) => {
+
+const ColabDetails = (props) => {
     const [colab, setColab] = useState({name: '', description: '', members: [], images: []});
 
     useEffect(() => {
-        let images = location.state.collaboration.images ? location.state.collaboration.images : [];
-        setColab({...location.state.collaboration, images});
+        let images = props.location.state.collaboration.images ? props.location.state.collaboration.images : [];
+        setColab({...props.location.state.collaboration, images});
     },[]);
+    
+    const gotToMemberProfile = memberId => {
+        let path = "/users/"+memberId;
+        props.history.push({
+        pathname : path
+        });
+    }
 
     var content='';
     if(colab.name === ''){
@@ -35,16 +46,44 @@ const ColabDetails = ({location}) => {
                     </div>  
                 </div>
         }    
-        content =(<div className="ProjectContainer">
-                    <div className="row">
+        // let members = [];
+        // for(let i=0;i<colab.members.length; i++){
+        // members[i] = <div key={i}><h3>{colab.members[i].firstName} {colab.members[i].lastName}</h3></div>
+        // }
+        let table = (<Table striped bordered hover style={{backgroundColor: "white", width: "30%"}}>
+                        <tbody>
+                            {colab.members.map(member => {
+                                return (
+                                <tr>
+                                <td tag='a' onClick={gotToMemberProfile.bind(null, member._id)} style={{cursor: "pointer"}} >
+                                {member.avatar ? (<Image className="navbarAvatar" src={member.avatar} style={{width: 45, height: 45, margin:"5px"}} roundedCircle ></Image>) : (
+                                <Image className="navbarAvatar" src={require("../images/profile.png")} style={{width: 45, height: 45, margin:"5px"}} roundedCircle></Image>)}
+              
+                                    {member.firstName} {member.lastName}</td>
+                                </tr>)})}
+                            
+                            
+                        </tbody>
+                        </Table>);
+        content =(<Row>
+                    <div className="ProjectContainer">
+                    <div>
                         <div className="col"></div>
-                        <div className="col">
+                        <Col style={{width: "50%"}} >
                             <h1>{colab.name}</h1>
                             <p>{colab.description}</p>
-                            <p>{colab.link}</p>
-                        </div>
+                            <Linkify>{colab.link}</Linkify>
+                        </Col>
+                        
+                        <Col>
+                        <h1>Members</h1><br></br>
+                        <div><p>{table}</p></div>
+                        </Col>
+                        
                         <div className="col"></div>
-                    </div>{row}</div>)
+                    </div>
+                    <Row style={{marginTop: "30px"}}>{row}</Row>
+                </div></Row>)
     
     }
     
