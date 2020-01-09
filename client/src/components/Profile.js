@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
-import Img from "react-image";
 import Image from 'react-bootstrap/Image'
+import Can from "./Can";
 
 import "../css/profile.css";
 import ProjectPopup from "./ProjectPopup";
@@ -82,8 +82,7 @@ class Profile extends Component {
 
   componentDidMount() {
     console.log("profile: props: ", this.props.match);
-    if(!this.state.user){
-      getUser(this.context.accessToken, this.props.match.params.id)
+   getUser(this.context.accessToken, this.props.match.params.id)
         .then(data => {
           this.setState({
             user: data.user
@@ -94,7 +93,7 @@ class Profile extends Component {
             alert("User not found: " + err.message);
           }
         })
-    }
+    
     // this.setState({
     //   user: this.context.user,
     //   authenticated: this.context.authenticated
@@ -206,25 +205,33 @@ class Profile extends Component {
             </div>
           </Col>
         </Row>
-
-        <Row style={{ width: "100%" }}>
-          <Col>
-            <button
-              style={{ float: "right", width: "180px" }}
-              className="profile-btn"
-              onClick={this.togglePopup.bind(this)}
-            >
-              Add project
-            </button>
-            {this.state.showPopup ? (
-              <ProjectPopup
-                text='Click "Close Button" to hide popup'
-                closePopup={this.togglePopup.bind(this)}
-                createProject={this.createProject}
-              />
-            ) : null}
-          </Col>
-        </Row>
+        <Can role={this.context.user.userType} perform="projects:create" 
+              data={{
+                    userId: this.context.user.id,
+                    profileOwnerId: this.props.match.params.id
+                  }}
+          yes={() => (
+            <Row style={{ width: "100%" }}>
+            <Col>
+              <button
+                style={{ float: "right", width: "180px" }}
+                className="profile-btn"
+                onClick={this.togglePopup.bind(this)}
+              >
+                Add project
+              </button>
+              {this.state.showPopup ? (
+                <ProjectPopup
+                  text='Click "Close Button" to hide popup'
+                  closePopup={this.togglePopup.bind(this)}
+                  createProject={this.createProject}
+                />
+              ) : null}
+            </Col>
+          </Row>
+          )}
+      />
+        
         <h4 style={{ fontStyle: "bold", margin: "10px" }}>Projects </h4>
         <Row
           style={{
@@ -273,24 +280,32 @@ class Profile extends Component {
         </HorizontalScroll>
         </div>
         </Row>
-        <Row style={{ width: "100%" , marginTop: "20px"}}>
-          <Col>
-            <button
-              style={{ float: "right", width: "180px" }}
-              className="profile-btn"
-              onClick={this.togglePopup2.bind(this)}
-            >
-              Add Co-Laboration
-            </button>
-            {this.state.showPopup2 ? (
-              <CollaborationPopup
-                text='Click "Close Button" to hide popup'
-                closePopup2={this.togglePopup2.bind(this)}
-                createCollaboration={this.createCollaboration}
-              />
-            ) : null}
-          </Col>
-        </Row>
+        <Row style={{height: "30px"}}></Row>
+        <Can role={this.context.user.userType} perform="collaborations:create" 
+              data={{
+                    userId: this.context.user.id,
+                    profileOwnerId: this.props.match.params.id
+                  }}
+          yes={() => (
+          <Row style={{ width: "100%" , marginTop: "20px"}}>
+            <Col>
+              <button
+                style={{ float: "right", width: "180px" }}
+                className="profile-btn"
+                onClick={this.togglePopup2.bind(this)}
+              >
+                Add Co-Laboration
+              </button>
+              {this.state.showPopup2 ? (
+                <CollaborationPopup
+                  text='Click "Close Button" to hide popup'
+                  closePopup2={this.togglePopup2.bind(this)}
+                  createCollaboration={this.createCollaboration}
+                />
+              ) : null}
+            </Col>
+          </Row>)}/>
+
         <h4 style={{ fontStyle: "bold", margin: "10px" }}>Collaborations </h4>
         <Row
       

@@ -6,7 +6,6 @@ import "../fonts/Linearicons-Free-v1.0.0/icon-font.min.css";
 import UserBasicForm from "./UserBasicForm.js";
 import UserAdditionalInformation from "./UserAdditionalInfo.js";
 import PropTypes from 'prop-types';
-import HomeNavbar from "./home-navbar";
 import { getInterestsList, signup } from '../utils/APICalls';
 
 
@@ -112,7 +111,6 @@ class RegistrationForm extends Component {
             case 1:
                 return ( 
                     <div>
-                    <HomeNavbar />
                     <UserBasicForm
                         nextStep = {this.nextStep}
                         handleChange= {this.handleChange}
@@ -125,7 +123,6 @@ class RegistrationForm extends Component {
             case 2:
                 return(
                     <div>
-                    <HomeNavbar />
                     <UserAdditionalInformation
                         nextStep = {this.nextStep}
                         handleChange= {this.handleChange}

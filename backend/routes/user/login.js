@@ -39,7 +39,7 @@ module.exports=async (req,res)=>{
             }
         };
         //to return user's data:
-        var filter = 'id, email, firstName, lastName, isSponsor, isPremium, biography, interests, projects, job, workingField, avatar';
+        var filter = 'userType, id, email, firstName, lastName, isSponsor, isPremium, biography, interests, projects, job, workingField, avatar';
         var profile=_.pick(user,filter.split(', '));
     
         //create auth token

@@ -3,7 +3,6 @@ import "../css/home.css";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
 import "../fonts/Linearicons-Free-v1.0.0/icon-font.min.css";
-import HomeNavbar from "./home-navbar";
 import Gallery from "react-grid-gallery";
 import {
   getProjects,
@@ -40,7 +39,6 @@ class Home extends React.Component {
 
     return (
       <div>
-        {/* <HomeNavbar /> */}
         <div className="Limiter">
           <div className="gallery_container">
             <Gallery images={IMAGES} backdropClosesModal ={true}  enableLightbox={true}
