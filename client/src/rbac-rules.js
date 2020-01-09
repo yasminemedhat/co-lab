@@ -29,6 +29,11 @@ const rules = {
             if (!userId || !profileOwnerId) return false;
             return userId === profileOwnerId;
         },
+        "users:follow": ({userId, profileOwnerId}) => {
+          if (!userId || !profileOwnerId) return false;
+          console.log("follow rule: ",userId !== profileOwnerId)
+          return userId !== profileOwnerId;
+        },
       }
     },
     admin: {

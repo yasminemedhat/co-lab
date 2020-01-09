@@ -18,18 +18,17 @@
     margin-top: 15%;
 }
 
-.profile-btn {
+.profile-btn, .follow-btn, .unfollow-btn {
     font-family: Raleway-Bold;
     font-size: 12px;
     line-height: 1.5;
     color: #fff;
     text-transform: uppercase;
     margin: 1%;
-    margin-left: 7%;
-    width: 43%;
+    width: 200px;
     height: 30px;
     border-radius: 3px;
-    background: #d33f8d;
+    background: #bd2580;
     display: -webkit-box;
     display: -webkit-flex;
     display: -moz-box;
@@ -44,8 +43,9 @@
     -moz-transition: all 0.4s;
     transition: all 0.4s;
   }
+ 
   
-  .profile-btn:hover {
+  .profile-btn:hover,  .follow-btn:hover ,.unfollow-btn:hover {
     background: #333333;
   }
   

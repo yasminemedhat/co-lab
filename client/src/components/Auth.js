@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {getJwt, getUserStored} from "../helpers/jwt";
-import { logout } from '../utils/APICalls';
+import { logout, getUser } from '../utils/APICalls';
 import {AuthProvider} from "../authContext";
 
 class Auth extends Component{
@@ -43,6 +43,24 @@ class Auth extends Component{
         this.setSession(data);
       };
     
+      updateUser = () => {
+        const jwt = getJwt();
+        getUser(jwt, this.state.user._id)
+        .then(data => {
+          localStorage.setItem('colab-user',JSON.stringify(data.user));
+          const user = data.user;
+          this.setState({
+            authenticated: true,
+            accessToken: jwt,
+            user
+          });
+        }).catch(err => {
+          if (err && err.status) {
+            alert("could not update user: " + err.message);
+          }
+        })
+      }
+
       logout = () => {
         console.log("logging outss");
         logout(this.state.accessToken,this.state.user).then(res => {
@@ -150,7 +168,8 @@ class Auth extends Component{
           ...this.state,
           initiateLogin: this.initiateLogin,
           handleAuthentication: this.handleAuthentication,
-          logout: this.logout
+          logout: this.logout,
+          updateUser: this.updateUser,
         };
         return (
           <AuthProvider value={authProviderValue}>

@@ -108,7 +108,13 @@ export const getInterestsList=() => {
             return res.data;
         });	
 }
+export const followUser = (jwt, userId) =>{
+    console.log("started follow: ", userId);
+    console.log(jwt);
+    return axiosInstance.put('user/follow/'+userId, userId,{headers: { Authorization: jwt } }).then(res => {
+        //the followed/unfollowed user
+        return res.data;
+    });
 
-
-
+}
 
