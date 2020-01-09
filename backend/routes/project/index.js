@@ -30,6 +30,11 @@ project.post('/add', [
 //@access       auth needed 
 project.delete('/delete/:proj_id', auth, require('./delete'));
 
+//@route PATCH  project/update
+//@description  update project
+//@access       auth needed  
+project.patch('/update/:proj_id', auth, require('./update'));
+
 
 //DEVELOPMENT ROUTE -> drive cleanup
 project.delete('/folder',async(req,res)=>{
