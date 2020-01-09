@@ -90,7 +90,13 @@ user.post('/changePassword', [
 //@TODO:    delete an account
 
 
-//@route PATCH    user/updateAccount
+//@route PUT    user/follow
+//@description  follow other user
+//@access       auth needed
+user.put('/follow/:user_id', auth, require('./follow'));
+
+
+//@route PATCH  user/updateAccount
 //@description  update an account's data
 //@access       auth needed
 user.patch('/update',[

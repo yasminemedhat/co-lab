@@ -6,6 +6,8 @@ const ColaberSchema=new mongoose.Schema({
     lastName:   { type: String, required: true},
     avatar:     { type: String},
     phone:      { type: Number},
+    followers:  [{type: mongoose.Schema.Types.ObjectId, ref: 'Colaber'}],
+    following:  [{type: mongoose.Schema.Types.ObjectId, ref: 'Colaber'}],
     projects:   [{type: mongoose.Schema.Types.ObjectId, ref: 'Project' }],
     collaborations:      [{type: mongoose.Schema.Types.ObjectId, ref: 'Colaboration' }],
     workingField:        { type: String},
@@ -19,6 +21,5 @@ const ColaberSchema=new mongoose.Schema({
 });
 
 const Colaber=Account.discriminator('Colaber',ColaberSchema);
-
 
 module.exports=mongoose.model('Colaber');
