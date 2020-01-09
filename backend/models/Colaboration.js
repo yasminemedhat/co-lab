@@ -7,4 +7,4 @@ const ColaborationSchema=new mongoose.Schema({
 
 const Colaboration = Project.discriminator('Colaboration',ColaborationSchema);
 
-module.exports  = mongoose.model('Colaboration');
+module.exports  = Colaboration;
