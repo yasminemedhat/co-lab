@@ -15,6 +15,7 @@ const ProjectSchema = new Schema({
     creator:        {  type: Schema.Types.ObjectId, ref: 'Colaber'},
     images:         [{ type: String}],
     link:           {  type: String},
+    createdAt:      {  type: Date, default: Date.now},
     updatedAt:      {  type: Date, default: Date.now}
 }, options,
 );

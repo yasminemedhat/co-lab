@@ -27,8 +27,6 @@ module.exports = async (req, res) => {
         console.log(error);
         return res.status(500).json({ message: 'Server Error' })
     }
-    const session= await mongoose.startSession()
-    session.startTransaction();
 
     try {
         //create new project and save to database
@@ -36,7 +34,8 @@ module.exports = async (req, res) => {
             name,
             description,
             creator: req.user.id,
-            link
+            link,
+            members: req.user.id
         });        
 
         //save images to google drive
@@ -64,20 +63,14 @@ module.exports = async (req, res) => {
         await user.save();
         await collaboration.save();
         // commit the changes if everything was successful
-        await session.commitTransaction();
         return res.json(collaboration);
 
 
     } catch (error) {
         console.log(error);
-        await session.abortTransaction();
         //TODO -> Delete images;
         return res.status(500).json({ message: 'Server Error' });
 
         //TODO: remove collaboration from user and from project db;
-    }finally {
-        // ending the session
-        session.endSession();
-
-      }
+    }
 }
