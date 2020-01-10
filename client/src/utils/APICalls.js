@@ -112,6 +112,14 @@ export const getCollaboration = (jwt, colabId) => {
     })
 }
 
+export const addColabMember = (jwt,colabId, email) => {
+    console.log(email);
+    return axiosInstance.patch('collaboration/'+colabId+'/addColaber', email,{headers: { Authorization: jwt } })
+    .then(res => {
+        return res.data;
+    })
+}
+
 export const getInterestsList=() => {
     return axiosInstance.get('user/interestsList')
         .then(res => {
@@ -131,3 +139,5 @@ export const getHomePage = (jwt) => {
         return res;
     })
 }
+
+

@@ -7,15 +7,29 @@ import Img from "react-image";
 import { Row, Col , Table} from "react-bootstrap";
 import Image from 'react-bootstrap/Image';
 import Linkify from "react-linkify";
+import {AuthConsumer} from "../authContext";
+import Can from "./Can";
+import AddMemberPopup from "./AddMemberPopUp";
+import { getJwt } from "../helpers/jwt";
+import { addColabMember, getCollaboration } from "../utils/APICalls";
 
 
 const ColabDetails = (props) => {
     const [colab, setColab] = useState({name: '', description: '', members: [], images: []});
+    const [popUp, setPopUp] = useState({showPopUp: false});
+    const [newMemberEmail, setNewMemberEmail] = useState('');
+    const [update, setUpdate]= useState(false);
 
     useEffect(() => {
-        let images = props.location.state.collaboration.images ? props.location.state.collaboration.images : [];
-        setColab({...props.location.state.collaboration, images});
-    },[]);
+        const jwt = getJwt();
+        getCollaboration(jwt,props.match.params.id).then(collaboration => {
+            let images = collaboration.images ? collaboration.images : [];
+            setColab({...collaboration, images});
+          }).catch(err => {
+              alert("could not find colab");
+          })
+        
+    },[update]);
     
     const gotToMemberProfile = memberId => {
         let path = "/users/"+memberId;
@@ -23,6 +37,34 @@ const ColabDetails = (props) => {
         pathname : path
         });
     }
+    const togglePopup = () =>{
+        setPopUp({showPopUp: !popUp.showPopUp});
+    }
+    const addMember =() => {
+        const jwt = getJwt();
+        const emailObj = {email: newMemberEmail};
+        addColabMember(jwt, colab._id, emailObj).then(data => {
+            if(data === "Colaber not found"){
+                alert("There is no co-laber with that email");
+            }
+            else if(data === "Colaber already a member of this Collaboration."){
+                alert("This Colaber already a member of this Collaboration.");
+            }
+            else{
+                setUpdate(!update);
+            }
+            
+        }).catch(err => {
+            alert(err.message);
+        });
+        setPopUp({showPopUp: false});
+    }
+    const onEmailChange= (event)=> {  
+        // console.log("on change",event.target.value); 
+        const email = event.target.value;
+        console.log(email);
+        setNewMemberEmail(email);
+      }
 
     var content='';
     if(colab.name === ''){
@@ -65,8 +107,38 @@ const ColabDetails = (props) => {
                             
                         </tbody>
                         </Table>);
-        content =(<Row>
+        content =(
+                <AuthConsumer>
+                    {({user}) => {
+                return(<Row>
                     <div className="ProjectContainer">
+                    <Can role={user.userType} perform="collaborations:addMember" 
+                            data={{
+                                    userId: user._id,
+                                    members: colab.members
+                                }}
+                        yes={() => (
+                            <Row style={{ width: "100%" }}>
+                            <Col>
+                            <button
+                                style={{ float: "right", width: "180px" }}
+                                className="profile-btn"
+                                onClick={togglePopup.bind(null)}
+                            >
+                                Add Member
+                            </button>
+                            {popUp.showPopUp ? (
+                                <AddMemberPopup
+                                    closePopup={togglePopup.bind(null)}
+                                    handleSubmit={addMember.bind(null,newMemberEmail)}
+                                    handleChange={onEmailChange.bind(null)}
+                                    email = {newMemberEmail}
+                                    closePopUp = {togglePopup.bind(null)}
+                                />
+                            ) : null}
+                            </Col>
+                        </Row>
+                        )}/>
                     <div>
                         <div className="col"></div>
                         <Col style={{width: "50%"}} >
@@ -83,7 +155,7 @@ const ColabDetails = (props) => {
                         <div className="col"></div>
                     </div>
                     <Row style={{marginTop: "30px"}}>{row}</Row>
-                </div></Row>)
+                </div></Row>)}}</AuthConsumer>)
     
     }
     
