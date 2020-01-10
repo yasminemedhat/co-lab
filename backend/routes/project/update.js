@@ -18,6 +18,7 @@ module.exports=async(req,res)=>{
         if (name) project.name = name;
         if (description) project.description = description;
         if (link) project.link = link;
+        project.updatedAt=Date.now;
 
         await project.save();
 

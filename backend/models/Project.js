@@ -14,7 +14,8 @@ const ProjectSchema = new Schema({
     followers:      [{ type: Schema.Types.ObjectId, ref: 'Colaber'}],
     creator:        {  type: Schema.Types.ObjectId, ref: 'Colaber'},
     images:         [{ type: String}],
-    link:           {  type: String}
+    link:           {  type: String},
+    updatedAt:      {  type: Date, default: Date.now}
 }, options,
 );
 
