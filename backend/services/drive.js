@@ -46,7 +46,6 @@ module.exports = {
     
     const destination=(option===1)? projectFolderID:colabFolderID;
     console.log(destination);
-    var links = []; //return array of urls
     //in case of an error -> return undefined
 
     if (projectID == null) {
@@ -77,52 +76,55 @@ module.exports = {
     //get new parent folder id:
     const folderID = response.data.id;
 
+    var links=await this.uploadImagesToFolder(folderID,images);
 
-    //upload images:
-    try {
-      for (var i = 0; i < images.length; i++) {
-        let bufferStream = new stream.PassThrough();
-        bufferStream.end(images[i].buffer);
-
-        var imageMetadata = {
-          'name': `${i + 1}.jpg`,
-          parents: [folderID]
-        };
-        var media = {
-          mimeType: 'image/jpeg',
-          body: bufferStream
-        };
-
-        response = await drive.files.create({
-          auth: jwtClient,
-          resource: imageMetadata,
-          media: media,
-          fields: 'id, webContentLink'
-        });
-        var { id, webContentLink } = response.data;
-
-        links.push(webContentLink);
-        //set permissions:
-        setPermissions(id);
-
-      }
-
-    } catch (error) {//failed to upload
-      console.log(error);
-      //rollback -> delete folder;
-      var check = module.exports.deleteFolder(folderID);
-      if (!check)//try again
-      {
-        module.exports.deleteFolder(folderID);
-      }
-      return undefined;
-
-    }
     return links;
+  },
 
+  uploadImagesToFolder: async function(parent,images){
+    const folderID =parent;
+    var links=[];
 
-
-
+       //upload images:
+       try {
+        for (var i = 0; i < images.length; i++) {
+          let bufferStream = new stream.PassThrough();
+          bufferStream.end(images[i].buffer);
+          var name=Math.floor(Math.random() * Math.floor(100000));
+          var imageMetadata = {
+            'name': `${name}.jpg`,
+            parents: [folderID]
+          };
+          var media = {
+            mimeType: 'image/jpeg',
+            body: bufferStream
+          };
+  
+          response = await drive.files.create({
+            auth: jwtClient,
+            resource: imageMetadata,
+            media: media,
+            fields: 'id, webContentLink'
+          });
+          var { id, webContentLink } = response.data;
+  
+          links.push(webContentLink);
+          //set permissions:
+          setPermissions(id);
+  
+        }
+        return links;
+      } catch (error) {//failed to upload
+        console.log(error);
+        //rollback -> delete folder;
+        var check = module.exports.deleteFolder(folderID);
+        if (!check)//try again
+        {
+          module.exports.deleteFolder(folderID);
+        }
+        return undefined;
+  
+      }
   },
 
 

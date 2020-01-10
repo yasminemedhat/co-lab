@@ -1,7 +1,7 @@
 const project = require('express').Router();
 const multer = require('multer');
 const upload = multer(); //multer handles images because json doesn't support binary files
-const drive=require('../../services/drive');
+const drive = require('../../services/drive');
 
 //checks req.body for missing fields
 const { check } = require('express-validator');
@@ -19,7 +19,7 @@ project.get('/:proj_id', require('./view'));
 //@description  add project to user 
 //@access       auth needed 
 project.post('/add', [
-    upload.array('photos',10),//max number of pics->10
+    upload.array('photos', 10),//max number of pics->10
     check('name', 'Please enter project name').not().isEmpty(),
     auth
 ], require('./add'));
@@ -33,15 +33,18 @@ project.delete('/delete/:proj_id', auth, require('./delete'));
 //@route PATCH  project/update
 //@description  update project
 //@access       auth needed  
-project.patch('/update/:proj_id', auth, require('./update'));
+project.patch('/update/:proj_id',
+                 [upload.array('photos'),//max number of pics->10
+                  auth],
+                 require('./update'));
 
 
 //DEVELOPMENT ROUTE -> drive cleanup
-project.delete('/folder',async(req,res)=>{
-    if(await drive.driveCleanUp()==true){
+project.delete('/folder', async (req, res) => {
+    if (await drive.driveCleanUp() == true) {
         res.send('Deleted successfully');
     }
-    else{
+    else {
         res.send('No folders were found');
     }
 

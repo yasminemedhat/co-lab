@@ -33,7 +33,7 @@ module.exports = async (req, res) => {
 
         colab.members.pull(colaber.id);
         colaber.collaborations.pull(collaborationID);
-
+        colab.updatedAt=Date.now();
         await colab.save();
         await colaber.save();
 

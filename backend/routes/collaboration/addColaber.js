@@ -45,7 +45,7 @@ module.exports = async  (req, res) => {
         if(added.length===0)
             return res.send('Colaber already a member of this Collaboration.');
 
-        
+        colab.updatedAt=Date.now();
         await user.save();
         await colab.save();
         res.send(colab);
