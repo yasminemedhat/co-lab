@@ -13,7 +13,7 @@ const jwt = require('jsonwebtoken');
 //@route GET    project/view
 //@description  view project page
 //@access       public 
-project.get('/view/:proj_id', require('./view'));
+project.get('/:proj_id', require('./view'));
 
 //@route POST   project/add
 //@description  add project to user 

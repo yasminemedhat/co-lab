@@ -62,7 +62,7 @@ class Profile extends Component {
   }
 
   showColabDetails = colab => {
-    const path = "/collaborations/"+colab._id;
+    const path = "/collaboration/"+colab._id;
     getCollaboration(this.context.accessToken,colab._id).then(data => {
       this.props.history.push({
         pathname: path,

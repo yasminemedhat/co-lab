@@ -19,7 +19,7 @@ class ProjectLink extends Component {
         this.showProjectDetails = this.showProjectDetails.bind(this);
     }
     showProjectDetails = () => {
-        const path = "/projects/"+ this.state.id;
+        const path = "/project/"+ this.state.id;
         const project = this.props.project;
         this.props.history.push({
           pathname : path,
