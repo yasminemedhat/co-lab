@@ -54,7 +54,7 @@ const ColabDetails = (props) => {
                         <tbody>
                             {colab.members.map(member => {
                                 return (
-                                <tr>
+                                <tr key={member._id}>
                                 <td tag='a' onClick={gotToMemberProfile.bind(null, member._id)} style={{cursor: "pointer"}} >
                                 {member.avatar ? (<Image className="navbarAvatar" src={member.avatar} style={{width: 45, height: 45, margin:"5px"}} roundedCircle ></Image>) : (
                                 <Image className="navbarAvatar" src={require("../images/profile.png")} style={{width: 45, height: 45, margin:"5px"}} roundedCircle></Image>)}
@@ -77,7 +77,7 @@ const ColabDetails = (props) => {
                         
                         <Col>
                         <h1>Members</h1><br></br>
-                        <div><p>{table}</p></div>
+                        <div>{table}</div>
                         </Col>
                         
                         <div className="col"></div>
