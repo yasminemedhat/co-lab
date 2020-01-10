@@ -128,7 +128,6 @@ export const followUser = (jwt, userId) =>{
 
 export const getHomePage = (jwt) => {
     return axiosInstance.get('homepage',{headers: { Authorization: jwt } }).then(res => {
-        console.log("whasss wrong???", res);
         return res;
     })
 }

@@ -39,8 +39,8 @@ class Header extends React.Component {
               </Route>
               <Route path="/" exact strict  component ={Home} ></Route>
               <Route path="/editUser" exact strict component ={editUser} />
-              <Route path="/project/:id" exact strict component ={ProjectPage} />
-              <Route path="/collaboration/:id" exact strict component ={ColabDetails} />
+              <Route path="/projects/:id" exact strict component ={ProjectPage} />
+              <Route path="/collaborations/:id" exact strict component ={ColabDetails} />
               </AuthenticatedComponent>
 
           </Switch>

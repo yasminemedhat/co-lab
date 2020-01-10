@@ -32,7 +32,7 @@ showProjectDetails = project => {
   let path = '';
   const jwt = getJwt();
   if(project.projectType && project.projectType === "Colaboration"){
-      path = "/collaboration/"+project._id;
+      path = "/collaborations/"+project._id;
       getCollaboration(this.context.accessToken,project._id).then(data => {
         this.props.history.push({
           pathname: path,
@@ -42,7 +42,7 @@ showProjectDetails = project => {
         });
       })
   }else{
-    path = "/project/"+project._id;
+    path = "/projects/"+project._id;
     getProject(this.context.accessToken,project._id).then(data => {
       this.props.history.push({
         pathname: path,
