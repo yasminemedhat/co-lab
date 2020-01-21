@@ -1,8 +1,8 @@
 const user = require('express').Router();
 //checks req.body for missing fields
 const { check } = require('express-validator');
-const redis=require('redis');
-const redisClient=redis.createClient();
+// const redis=require('redis');
+// const redisClient=redis.createClient();
 const multer = require('multer');//image
 const upload = multer(); 
 
@@ -132,17 +132,17 @@ user.get('/getCollaborations/:id', auth, require('./getCollaborations'));
 user.post('/logout', auth, async (req, res) => {
     console.log('logout route ');
     //get expiration and creation times
-    const exp =   req.exp;
-    const token = req.token;
-    const now = Date.now() / 1000;
-    const timeLeft = exp - now; //in seconds
-    console.log(timeLeft);
-   try {//save in blacklist.
-    redisClient.set(token, true, 'EX', Math.trunc(timeLeft),redis.print);
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({message: 'Server Error'});       
-    }
+//     const exp =   req.exp;
+//     const token = req.token;
+//     const now = Date.now() / 1000;
+//     const timeLeft = exp - now; //in seconds
+//     console.log(timeLeft);
+//    try {//save in blacklist.
+//     redisClient.set(token, true, 'EX', Math.trunc(timeLeft),redis.print);
+//     } catch (error) {
+//         console.log(error);
+//         res.status(500).json({message: 'Server Error'});       
+//     }
     res.send('Logged out.');
 });
 

@@ -5,7 +5,7 @@ const ColaberSchema=new mongoose.Schema({
     firstName:  { type: String, required: true},
     lastName:   { type: String, required: true},
     avatar:     { type: String},
-    phone:      { type: Number},
+    phone:      { type: String},
     followers:  [{type: mongoose.Schema.Types.ObjectId, ref: 'Colaber'}],
     following:  [{type: mongoose.Schema.Types.ObjectId, ref: 'Colaber'}],
     projects:   [{type: mongoose.Schema.Types.ObjectId, ref: 'Project' }],
