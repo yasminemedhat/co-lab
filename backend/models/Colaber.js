@@ -9,8 +9,9 @@ const ColaberSchema=new mongoose.Schema({
     followers:  [{type: mongoose.Schema.Types.ObjectId, ref: 'Colaber'}],
     following:  [{type: mongoose.Schema.Types.ObjectId, ref: 'Colaber'}],
     projects:   [{type: mongoose.Schema.Types.ObjectId, ref: 'Project' }],
-    collaborations:      [{type: mongoose.Schema.Types.ObjectId, ref: 'Colaboration' }],
-    workingField:        { type: String},
+    followedProjects:   [{type: mongoose.Schema.Types.ObjectId, ref: 'Project' }],
+    collaborations:     [{type: mongoose.Schema.Types.ObjectId, ref: 'Colaboration' }],
+    workingField:       { type: String},
     interests: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "interestList"

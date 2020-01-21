@@ -53,6 +53,11 @@ collaboration.get('/:id', [
 
 });
 
+//@route PUT    Collaboration/follow
+//@description  follow other user
+//@access       auth needed
+collaboration.put('/follow/:proj_id', auth, require('./follow'));
+
 //@route DELETE     collaboration/:id/removeColaber
 //@description      creator can remove collaber, and colaber can leave collaboration   
 //@access           auth needed 
