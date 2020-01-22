@@ -3,18 +3,20 @@ import "../css/ProjectPage.css";
 import "../css/createProject.css";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
-import Img from "react-image";
 import { getProject, getUser } from "../utils/APICalls";
 import { getJwt } from "../helpers/jwt";
 import "../css/header.css";
 import Image from 'react-bootstrap/Image'
-import Can from "./Can";
 import Gallery from "react-grid-gallery";
+import Can from "./Can";
+import { Row, Col } from "react-bootstrap";
+import { AuthContext } from "../authContext";
 
 
 
 class ProjectPage extends Component {
-  
+  static contextType = AuthContext;
+
   constructor(props){
     super(props);
     this.state={
@@ -81,11 +83,10 @@ class ProjectPage extends Component {
     }
     let images = project.images ? project.images : []
     
-    let len = 0;
     let IMAGES = [{}]
 
     for (let i = 0; i <images.length; i ++) {
-     len = IMAGES.push({src:images[i], thumbnail:images[i],
+     let len = IMAGES.push({src:images[i], thumbnail:images[i],
        
       thumbnailWidth: 250,
       thumbnailHeight: 212,})
@@ -107,15 +108,26 @@ class ProjectPage extends Component {
           <p>{project.link}</p>
           </div>
           <div className="col">
-         
-                  <button
-                    style={{ float: "right", width: "180px" }}
-                    className="profile-btn"
-                    onClick={this.editProject.bind(null,project)}
-                  
-                  >
-                    Edit Project
-                  </button>
+          <Can role={this.context.user.userType} perform="projects:edit" 
+              data={{
+                    userId: this.context.user._id,
+                    projectCreatorId: this.state.project.creator
+                  }}
+          yes={() => (
+            <Row style={{ width: "100%" }}>
+            <Col>
+              <button
+                style={{ float: "right", width: "180px" }}
+                className="profile-btn"
+                onClick={this.editProject.bind(this)}
+              >
+                Edit Project
+              </button>
+              
+            </Col>
+          </Row>
+            )}/>
+                
                   </div>
       
           

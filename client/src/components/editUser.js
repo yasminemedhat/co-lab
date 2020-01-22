@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { getUser, updateUser } from "../utils/APICalls";
+import { updateUser } from "../utils/APICalls";
 import { getJwt } from "../helpers/jwt";
 import "../css/login.css";
 import "../bootstrap/css/bootstrap.min.css";
@@ -93,7 +93,7 @@ class editUser extends Component {
 
   componentDidMount() {
     
-    this.state.user = this.context.user; 
+    this.setState({user: this.context.user}); 
     getInterestsList().then(data => {
       let  interestsList = data.map(Interests => { return {value: Interests, display: Interests, label: Interests} })
         this.setState({ interestsList:(interestsList) });

@@ -16,7 +16,7 @@ import ProjectPage from "./ProjectPage";
 import ColabDetails from "./ColabDetails";
 import AuthenticatedComponent from "./AuthenticatedComponent";
 import NavBar from './navbar';
-import { AuthContext } from "../authContext";
+// import { AuthContext } from "../authContext";
 
 
 class Header extends React.Component {

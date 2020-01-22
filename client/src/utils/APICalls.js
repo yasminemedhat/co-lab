@@ -1,6 +1,4 @@
-import axios from 'axios'
-import { Redirect } from 'react-router-dom';
-import React from "react";
+import axios from 'axios';
 const axiosInstance = axios.create({
     baseURL: process.env.REACT_APP_baseAPIURL,
     withCredentials: false,

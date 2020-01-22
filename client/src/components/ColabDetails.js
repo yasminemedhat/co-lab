@@ -3,7 +3,6 @@ import "../css/ProjectPage.css";
 import "../css/createProject.css";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
-import Img from "react-image";
 import { Row, Col, Table } from "react-bootstrap";
 import Image from "react-bootstrap/Image";
 import Linkify from "react-linkify";
@@ -101,10 +100,10 @@ const ColabDetails = props => {
       </div>
     );
   } else {
-    let len = 0;
+    
 
     for (let i = 0; i < colab.images.length; i = i + 1) {
-     len = IMAGES.push({src:colab.images[i], thumbnail:colab.images[i],
+      IMAGES.push({src:colab.images[i], thumbnail:colab.images[i],
        
       thumbnailWidth: 250,
       thumbnailHeight: 212,})

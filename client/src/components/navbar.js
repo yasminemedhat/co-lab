@@ -3,7 +3,6 @@ import { NavLink } from "react-router-dom";
 import "../css/header.css";
 import { withRouter } from "react-router-dom";
 import { AuthContext } from "../authContext";
-import Img from "react-image";
 import Image from 'react-bootstrap/Image'
 import { Row, Col } from "react-bootstrap";
 

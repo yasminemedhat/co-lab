@@ -8,7 +8,7 @@ import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
 import "../css/login.css";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
-import React, { useState, useEffect} from "react";
+import React, { useState} from "react";
 
 
 const AddMemberPopUp =({email, handleChange, handleSubmit, closePopUp}) => {
