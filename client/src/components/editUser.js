@@ -125,7 +125,9 @@ class editUser extends Component {
       biography
     } = this.state.user;
     return (
-      <div className="wrap-login100 p-l-50 p-r-50 p-t-77 p-b-30">
+      <div className ="profile_container" >
+       
+      <div className="wrap-login100 p-l-50 p-r-50 p-t-77 p-b-30"  style={{ marginLeft: "30%" }}>
         <form className="login100-form validate-form">
           <span className="login100-form-title p-b-55">Edit Information</span>
 
@@ -134,6 +136,7 @@ class editUser extends Component {
             data-validate="Valid email is required: ex@abc.xyz"
           >
             <p>Email: {email}</p>
+          
           </div>
           <Img className="profile" src={avatar}></Img>
           <input
@@ -249,6 +252,7 @@ class editUser extends Component {
             />
           </div>
         </form>
+      </div>
       </div>
     );
   }

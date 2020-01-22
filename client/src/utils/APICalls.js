@@ -87,6 +87,29 @@ export const updateUser = (jwt, formData) => {
             return res;
       });
 }
+
+export const updateCollaboration = (jwt, formData) => {
+    const headers = {
+        'Content-Type': "multipart/form-data",
+        'Authorization': jwt
+      }
+      return axiosInstance.patch('collaboration/update', formData,{headers:headers }).then((res) => {
+            return res;
+      });
+}
+
+
+export const updateProject = (jwt, formData,projectId) => {
+    const headers = {
+        'Content-Type': "multipart/form-data",
+        'Authorization': jwt
+      }
+      console.log("formData")
+      console.log(formData)
+      return axiosInstance.patch('project/update/'+projectId, formData,{headers:headers }).then((res) => {
+            return res;
+      });
+}
 export const getProjects = (jwt, userId) => {
     return axiosInstance.get('user/viewProjects/'+userId, {headers: { Authorization: jwt } }).then(res => {
         // axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${user.data.token}`;

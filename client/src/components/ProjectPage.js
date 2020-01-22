@@ -9,6 +9,8 @@ import { getJwt } from "../helpers/jwt";
 import "../css/header.css";
 import Image from 'react-bootstrap/Image'
 import Can from "./Can";
+import Gallery from "react-grid-gallery";
+
 
 
 class ProjectPage extends Component {
@@ -19,6 +21,7 @@ class ProjectPage extends Component {
       loadingProject: true
     }
     this.componentDidMount = this.componentDidMount.bind(this);
+    this.editProject = this.editProject.bind(this);
   }
 
   gotToCreatorProfile(){
@@ -27,6 +30,19 @@ class ProjectPage extends Component {
         pathname : path
         });
   }
+
+  editProject = project =>{
+
+    let path = "/Projects/" + project._id + "/EditProject" ;
+    this.props.history.push({
+      pathname: path,
+      state: {
+        project: project
+      }
+     
+    });
+ }
+
   componentDidMount() {
     const jwt = getJwt();
     console.log("params: ",this.props.match.params);
@@ -53,6 +69,8 @@ class ProjectPage extends Component {
  
   render() {
     const { loadingProject, project, creator } = this.state;
+
+ 
     
     if (loadingProject === true) {
       return (
@@ -62,25 +80,20 @@ class ProjectPage extends Component {
       );
     }
     let images = project.images ? project.images : []
-    let row= [];
-    let rowIndex = -1
-    for (let i=0;i<images.length;i= i+3){
-        rowIndex++
-        row[rowIndex] = <div className="row imageRow" key={i}>
-            <div className = "col imagecol">
-            <Img className="project_pictures"  style={{ float: 'right'}} src={images[i]}></Img>
-            </div>
-            <div className = "col imagecol">
-            <Img className="project_pictures" src={images[i+1]}></Img>
-            </div>
-            <div className = "col imagecol">
-            <Img className="project_pictures" style={{ float: 'left'}} src={images[i+2]}></Img>
-            </div>  
-            </div>
+    
+    let len = 0;
+    let IMAGES = [{}]
 
+    for (let i = 0; i <images.length; i ++) {
+     len = IMAGES.push({src:images[i], thumbnail:images[i],
+       
+      thumbnailWidth: 250,
+      thumbnailHeight: 212,})
     }
     
+    
   return(<div className="ProjectContainer">
+     
         <div >
           <div></div>
           <div>
@@ -94,14 +107,21 @@ class ProjectPage extends Component {
           <p>{project.link}</p>
           </div>
           <div className="col">
-           
-          </div>
+         
+                  <button
+                    style={{ float: "right", width: "180px" }}
+                    className="profile-btn"
+                    onClick={this.editProject.bind(null,project)}
+                  
+                  >
+                    Edit Project
+                  </button>
+                  </div>
+      
           
         </div>
-        {
-          row
-        }
-        
+        <Gallery images={IMAGES} backdropClosesModal ={true}  enableLightbox={true}
+                    enableImageSelection={false} />
          
          
       </div>

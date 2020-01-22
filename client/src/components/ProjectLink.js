@@ -19,7 +19,7 @@ class ProjectLink extends Component {
         this.showProjectDetails = this.showProjectDetails.bind(this);
     }
     showProjectDetails = () => {
-        const path = "/project/"+ this.state.id;
+        const path = "/projects/"+ this.state.id;
         const project = this.props.project;
         this.props.history.push({
           pathname : path,
@@ -39,8 +39,8 @@ class ProjectLink extends Component {
         return (
                 <Card tag='a'
                 onClick={() => {this.showProjectDetails()}} 
-                style={{  cursor: "pointer",width: '18rem', height: '25rem', margin: "10px"  }}>
-                    <Card.Img style={{ width: '18rem', height: '15rem'}} variant="top" src={this.state.image} />
+                style={{  cursor: "pointer",width: '15rem', height: '20rem', margin: "10px"  }}>
+                    <Card.Img style={{ width: '15rem', height: '15rem'}} variant="top" src={this.state.image} />
                     <Card.Body>
                         <Card.Title>{this.props.project.name}</Card.Title>
                         <Card.Text>{this.props.project.description}</Card.Text>

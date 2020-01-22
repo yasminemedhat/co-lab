@@ -91,6 +91,7 @@ updateUser = () =>{
     const {email,avatar, firstName, lastName, isSponsor, phone, biography } = this.props.user;
     return (
       <div className="wrap-login100 p-l-50 p-r-50 p-t-77 p-b-30">
+     
           <form className="login100-form validate-form">
             <span className="login100-form-title p-b-55">
               Edit Information
@@ -101,6 +102,7 @@ updateUser = () =>{
               data-validate="Valid email is required: ex@abc.xyz"
             >
             <p>Email: {email}</p>
+            <h1>hello</h1>
             </div>
             <Img className="profile" src={avatar}></Img>
             <input
