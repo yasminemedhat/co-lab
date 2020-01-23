@@ -2,6 +2,7 @@ const project = require('express').Router();
 const multer = require('multer');
 const upload = multer(); //multer handles images because json doesn't support binary files
 const drive = require('../../services/drive');
+const Project= require('../../models/Project');
 
 //checks req.body for missing fields
 const { check } = require('express-validator');
@@ -37,6 +38,27 @@ project.patch('/update/:proj_id',
                  [upload.array('photos'),//max number of pics->10
                   auth],
                  require('./update'));
+
+//@route Delete  project/deleteImage
+//@description   delete image from project
+//@access        auth needed
+project.delete('/deleteImage',auth,async(req,res)=>{
+    const url=req.body.url;
+    try {
+        var imageID = url.match('id=(.*?)&')[1];//get image id for deletion
+        await drive.deleteFileByID(imageID);
+        let project=await Project.findOneAndUpdate({images: url},
+             { $pull: { images: url} },
+             { new: true });
+        
+        if(!project)return res.status(400).json({message: 'Image not found'});
+        
+        return res.json(project);
+    } catch (error) {
+        res.status(500).json({messsage: 'Server Error'});
+        
+    }
+})
 
 
 //DEVELOPMENT ROUTE -> drive cleanup

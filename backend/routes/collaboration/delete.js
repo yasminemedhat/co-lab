@@ -27,17 +27,6 @@ module.exports=async (req, res) => {
             { $pull: { collaborations: colabID } },
         );
 
-
-        //remove images
-        if (colab.images) {
-            var imageID = (colab.images[0]).match('id=(.*?)&')[1];
-            var parentID = await drive.getParentFolder(imageID);
-
-            await drive.deleteFolder(parentID);
-        }
-
-
-
         res.send('Collaboration deleted.');
     } catch (error) {
         console.log(error);
