@@ -2,7 +2,7 @@ import axios from 'axios'
 import { Redirect } from 'react-router-dom';
 import React from "react";
 const axiosInstance = axios.create({
-    baseURL: process.env.REACT_APP_baseAPIURL,
+    baseURL: "",
     withCredentials: false,
     timeout: 30000,
 });

@@ -1,35 +1,31 @@
 version: "3"
 services:
     client:
-        build: ./client/       
-        restart: always        
-        ports:            
-        - "3000:3000"        
-        volumes:            
-        - ./client:/client/src/app            
-        links:            
-            - backend
+        container_name: docker-frontend
+        build: ./client
+        restart: always
+        ports: 
+        - '80:3000'
+        depends_on:
+        - backend
         networks:            
-            - webappnetwork
+        - webappnetwork
     backend:        
-        build: ./backend/       
-        restart: always       
-        ports:            
-            - "5000:5000"        
-        volumes:            
-            - ./backend:/backend           
-        depends_on:            
-            - mongodb       
+        container_name: docker-backend
+        build: ./backend
+        restart: always
+        ports: 
+        - '3000:5000'
+        links:
+        - mongo     
         networks:            
-            - webappnetwork
-    mongodb:        
-        image: mongo        
-        restart: always        
-        container_name: mongodb          
-        command: mongod --noauth         
-        networks:            
-            - webappnetwork
+        - webappnetwork
+    mongo:   
+        container_name: mongo
+        image: mongo
+        restart: always
+        ports: 
+        - '27017:27017'     
 networks:    
     webappnetwork:        
         driver: bridge
-

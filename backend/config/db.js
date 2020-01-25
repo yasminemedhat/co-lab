@@ -6,6 +6,7 @@ mongoose.set('useFindAndModify', false);
 //use config package
 const config=require('config');
 const db=config.get('mongoURI');
+const dbDocker='mongodb://mongo:27017/todos'
 
 //connect DB
 const connectDB = async()=>{
