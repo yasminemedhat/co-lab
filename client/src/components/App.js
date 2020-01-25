@@ -26,7 +26,7 @@ class Header extends React.Component {
         <Router>
         <NavBar></NavBar>
           <Switch>
-            {/* <Route path="/" exact strict  component ={Login} ></Route> */}
+            <Route path="/" exact strict  component ={Login} ></Route>
             <Route path="/about" exact strict component = {About}></Route>
             <Route path="/login" exact strict  component = {Login}></Route>
             <Route path="/forgotPassword" exact strict  component = {ForgotPassword}></Route>
@@ -37,7 +37,7 @@ class Header extends React.Component {
               <Route path="/users/:id" exact strict component ={Profile} >
                 
               </Route>
-              <Route path="/" exact strict  component ={Home} ></Route>
+              <Route path="/home" exact strict  component ={Home} ></Route>
               <Route path="/editUser" exact strict component ={editUser} />
               <Route path="/projects/:id" exact strict component ={ProjectPage} />
               <Route path="/collaborations/:id" exact strict component ={ColabDetails} />

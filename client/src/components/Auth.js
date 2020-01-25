@@ -129,15 +129,27 @@ class Auth extends Component{
           });
         }
         else{
-          console.log("did mount auth tamam");
-            this.setState({
-              authenticated: true,
-              accessToken: jwt,
-              user
-            });
+          getUser(jwt, this.state.user._id)
+          .then(data => {
+              console.log("did mount auth tamam");
+              this.setState({
+                authenticated: true,
+                accessToken: jwt,
+                user: data.user
+              });
 
+          }).catch(err => {
+            this.setState({
+              authenticated: false,
+              user: {
+                role: "visitor"
+              },
+              accessToken: ""
+            });
+            localStorage.removeItem('token');
+            localStorage.removeItem('colab-user');
+          })
         }
-        
         
     }
 

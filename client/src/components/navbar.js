@@ -49,7 +49,7 @@ class Navbar extends Component {
               <NavLink
                 exact
                 activeClassName="selectedLink"
-                to="/"
+                to="/home"
               >
                 Home
               </NavLink>
