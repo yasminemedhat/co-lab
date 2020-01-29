@@ -29,8 +29,8 @@ const ColabLink = props => {
         content = (
         <Card tag='a'
             onClick={() => {props.showDetails(state.collaboration)}} 
-            style={{ cursor: "pointer", width: '18rem', height: '25rem', margin: "10px"  }}>
-                    <Card.Img  style={{ width: '18rem', height: '15rem'}} variant="top" src={state.image} />
+            style={{ cursor: "pointer", width: '15rem', height: '25rem', margin: "10px"  }}>
+                    <Card.Img  style={{ width: '15rem', height: '15rem'}} variant="top" src={state.image} />
                     <Card.Body>
                         <Card.Title>{state.name}</Card.Title>
                         <Card.Text>{state.description}</Card.Text>

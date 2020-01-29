@@ -3,6 +3,7 @@ import "../css/ProjectPage.css";
 import "../css/createProject.css";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
+import Img from "react-image";
 import { Row, Col, Table } from "react-bootstrap";
 import Image from "react-bootstrap/Image";
 import Linkify from "react-linkify";
@@ -13,10 +14,7 @@ import { getJwt } from "../helpers/jwt";
 import { addColabMember, getCollaboration } from "../utils/APICalls";
 import Gallery from "react-grid-gallery";
 
-
-
 const ColabDetails = props => {
-
   const [colab, setColab] = useState({
     name: "",
     description: "",
@@ -24,13 +22,10 @@ const ColabDetails = props => {
     images: []
   });
 
-
-
   const [popUp, setPopUp] = useState({ showPopUp: false });
   const [newMemberEmail, setNewMemberEmail] = useState("");
   const [update, setUpdate] = useState(false);
-  const IMAGES = [{}]
-
+  const IMAGES = [{}];
 
   useEffect(() => {
     const jwt = getJwt();
@@ -51,18 +46,15 @@ const ColabDetails = props => {
     });
   };
 
- const editColaboration = colab =>{
-
-    let path = "/collaborations/" + colab._id + "/EditCollaboration" ;
+  const editColaboration = colab => {
+    let path = "/collaborations/" + colab._id + "/EditCollaboration";
     props.history.push({
       pathname: path,
       state: {
         collaboration: colab
       }
-     
     });
- }
-
+  };
 
   const togglePopup = () => {
     setPopUp({ showPopUp: !popUp.showPopUp });
@@ -100,13 +92,16 @@ const ColabDetails = props => {
       </div>
     );
   } else {
-    
+    let len = 0;
 
     for (let i = 0; i < colab.images.length; i = i + 1) {
-      IMAGES.push({src:colab.images[i], thumbnail:colab.images[i],
-       
-      thumbnailWidth: 250,
-      thumbnailHeight: 212,})
+      len = IMAGES.push({
+        src: colab.images[i],
+        thumbnail: colab.images[i],
+
+        thumbnailWidth: 250,
+        thumbnailHeight: 212
+      });
     }
     // let members = [];
     // for(let i=0;i<colab.members.length; i++){
@@ -117,12 +112,12 @@ const ColabDetails = props => {
         striped
         bordered
         hover
-        style={{ backgroundColor: "white", width: "30%" }}
+        style={{ backgroundColor: "white", width: "100%" }}
       >
         <tbody>
           {colab.members.map(member => {
             return (
-              <tr key={member._id}>
+              <tr key={member._id}    style={{ height: 50}}>
                 <td
                   tag="a"
                   onClick={gotToMemberProfile.bind(null, member._id)}
@@ -155,72 +150,83 @@ const ColabDetails = props => {
       <AuthConsumer>
         {({ user }) => {
           return (
-            <Row>
-              <div className="ProjectContainer">
-                <Can
-                  role={user.userType}
-                  perform="collaborations:addMember"
-                  data={{
-                    userId: user._id,
-                    members: colab.members
-                  }}
-                  yes={() => (
-                    <Row style={{ width: "100%" }}>
-                      <Col>
-                        <button
-                          style={{ float: "right", width: "180px" }}
-                          className="profile-btn"
-                          onClick={togglePopup.bind(null)}
-                        >
-                          Add Member
-                        </button>
-                        {popUp.showPopUp ? (
-                          <AddMemberPopup
-                            closePopup={togglePopup.bind(null)}
-                            handleSubmit={addMember.bind(null, newMemberEmail)}
-                            handleChange={onEmailChange.bind(null)}
-                            email={newMemberEmail}
-                            closePopUp={togglePopup.bind(null)}
-                          />
-                        ) : null}
-                      </Col>
-                    </Row>
-                  )}
-                />
-            
-                <div>
-             
+            <div className="ProjectContainer">
+              <Row>
+                <div style={{ width: "80%", padding:"1%"}}>
+                  <h1>{colab.name}</h1>
+                  <p>{colab.description}</p>
+                  <Linkify>{colab.link}</Linkify>
+                </div>
                 
-               
-                  <div className="col">
+                <div  style={{ float: "right", width: "20%" , padding:"1%"}}>
+                <Row  style={{width: "100%" }}>
                   <button
                     style={{ float: "right", width: "180px" }}
                     className="profile-btn"
                     onClick={editColaboration.bind(null, colab)}
-                  
                   >
                     Edit Co-Laboration
                   </button>
-                  </div>
-
-                  <Col style={{ width: "50%" }}>
-                    <h1>{colab.name}</h1>
-                    <p>{colab.description}</p>
-                    <Linkify>{colab.link}</Linkify>
-                  </Col>
-
-                  <Col>
-                    <h1>Members</h1>
-                    <br></br>
-                    <div>{table}</div>
-                  </Col>
-
-                  <div className="col"></div>
+                  </Row>
+                  <Can
+                role={user.userType}
+                perform="collaborations:addMember"
+                data={{
+                  userId: user._id,
+                  members: colab.members
+                }}
+                yes={() => (
+                  <Row style={{width: "100%" }}>
+                 
+                      <button
+                        style={{ float: "right", width: "180px" }}
+                        className="profile-btn"
+                        onClick={togglePopup.bind(null)}
+                      >
+                        Add Member
+                      </button>
+                      {popUp.showPopUp ? (
+                        <AddMemberPopup
+                          closePopup={togglePopup.bind(null)}
+                          handleSubmit={addMember.bind(null, newMemberEmail)}
+                          handleChange={onEmailChange.bind(null)}
+                          email={newMemberEmail}
+                          closePopUp={togglePopup.bind(null)}
+                        />
+                      ) : null}
+             
+                  </Row>
+                )}
+              />
                 </div>
-                <Gallery images={IMAGES} backdropClosesModal ={true}  enableLightbox={true}
-                    enableImageSelection={false} />
-              </div>
-            </Row>
+              
+              </Row>
+
+              <Row>
+              <div style={{ float: "left", width: "75%" }}></div>
+              <h3 style={{ float: "right", width: "25%" , padding:"2%" }} >Members</h3>
+              </Row>
+             
+
+              <Row>
+                <div style={{ float: "left", width: "75%" }}>
+                <Gallery
+                images={IMAGES}
+                backdropClosesModal={true}
+                enableLightbox={true}
+                enableImageSelection={false}
+              />
+                </div>
+             
+               
+                <div  style={{ float: "right", width: "25%" , paddingRight:"2%", paddingLeft:"2%" }} >
+                 
+                
+                  <div>{table}</div>
+                </div>
+              </Row>
+              
+            </div>
           );
         }}
       </AuthConsumer>

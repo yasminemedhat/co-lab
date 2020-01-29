@@ -70,11 +70,14 @@ class CollaborationPopup extends Component {
   handleCreateCollaboration() {
     
     const { images } = this.state;
+    console.log(this.state.chosenfields.length)
 
     const formData = new FormData();
     formData.append('name', this.state.projectName);
     formData.append('description', this.state.description);
+    if(this.state.chosenfields.length > 0){
     formData.append('fields', this.state.chosenfields);
+    }
     if(this.state.collaborationLink.length > 0){
         formData.append('link', this.state.collaborationLink);
     }

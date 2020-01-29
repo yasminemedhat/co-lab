@@ -3,6 +3,7 @@ import "../css/home.css";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
 import "../fonts/Linearicons-Free-v1.0.0/icon-font.min.css";
+import Gallery from "react-grid-gallery";
 import { getHomePage, getCollaboration, getProject } from "../utils/APICalls";
 import { getJwt } from "../helpers/jwt";
 import { Row, Col } from "react-bootstrap";
@@ -29,6 +30,7 @@ class Home extends React.Component {
 
 showProjectDetails = project => {
   let path = '';
+  const jwt = getJwt();
   if(project.projectType && project.projectType === "Colaboration"){
       path = "/collaborations/"+project._id;
       getCollaboration(this.context.accessToken,project._id).then(data => {
@@ -85,12 +87,9 @@ showProjectDetails = project => {
     }
     else if(projects.length > 0){
       return(
+        <div className="gallery_container">
         <Row
-        style={{
-          width: "100%",
-          height: "430px",
-          marginLeft: "20px"
-        }}>
+       >
           {this.state.projects.map((project, i) => {
         // Return the element. Also pass key
         return (
@@ -107,7 +106,8 @@ showProjectDetails = project => {
             /></Col>
         );
       })}
-      </Row>)
+      </Row>
+      </div>)
     }else{
       return(<div><h2>Not following anyone yet? Go to the disvover page and start Co-Labing NOW ;)</h2></div>)
     }
