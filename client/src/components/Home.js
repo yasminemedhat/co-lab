@@ -12,6 +12,7 @@ import { withRouter } from "react-router-dom";
 import { AuthContext } from "../authContext";
 
 
+
 class Home extends React.Component {
   
   
@@ -23,12 +24,19 @@ class Home extends React.Component {
     this.state = {
       loadingProjects: true,
       projects: [{}],
+      currentImage: 0
     };
     this.showProjectDetails = this.showProjectDetails.bind(this);
+    this.onCurrentImageChange = this.onCurrentImageChange.bind(this);
 }
 
+onCurrentImageChange(index) {
+  this.setState({ currentImage: index });
+}
 
-showProjectDetails = project => {
+showProjectDetails (){
+  let index = this.state.currentImage -1
+  let project = this.state.projects[index]
   let path = '';
   const jwt = getJwt();
   if(project.projectType && project.projectType === "Colaboration"){
@@ -86,28 +94,36 @@ showProjectDetails = project => {
       );
     }
     else if(projects.length > 0){
+      let len = 0;
+      let IMAGES = [{}]
+      
       return(
         <div className="gallery_container">
-        <Row
-       >
+ 
           {this.state.projects.map((project, i) => {
         // Return the element. Also pass key
-        return (
-         
-          <Col key={i}
-                style={{
-                  width: "100%",
-                  height: "430px"
-                }}>
-            <HomeProjectLink
-              key={i}
-              project={project}
-              showProjectDetails={this.showProjectDetails}
-            /></Col>
-        );
-      })}
-      </Row>
-      </div>)
+        let image = project.images[0] ? project.images[0] : []  
+        IMAGES.push({src:image, thumbnail:image,
+          tags: [{value: project.name, title: project.name}],
+          caption: project.description,
+
+          thumbnailWidth: 260,
+          thumbnailHeight: 220,})
+
+          })
+
+        }
+         <div className="gallery_div">
+          <Gallery images={IMAGES} enableLightbox={true}
+                    enableImageSelection={false}
+                    currentImageWillChange={this.onCurrentImageChange}
+                    customControls={[
+                      <button className="goto" key="seeProject" onClick={this.showProjectDetails}>see Project</button>
+                  ]} />
+        </div>
+        </div>
+        )
+       
     }else{
       return(<div><h2>Not following anyone yet? Go to the disvover page and start Co-Labing NOW ;)</h2></div>)
     }
