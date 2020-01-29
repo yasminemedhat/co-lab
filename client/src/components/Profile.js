@@ -106,9 +106,12 @@ class Profile extends Component {
             alert("User not found: " + err.message);
           }
         })
-      if(this.context.user.following.includes(this.props.match.params.id)){
-        this.setState({followButton: false});
+      if(this.context.user.following){
+        if(this.context.user.following.includes(this.props.match.params.id)){
+          this.setState({followButton: false});
+        }
       }
+      
     // this.setState({
     //   user: this.context.user,
     //   authenticated: this.context.authenticated
@@ -268,12 +271,7 @@ class Profile extends Component {
             height: "430px"
           }}
         >
-          <div    style={{
-            width: "2000px",
-            height: "430px",
-     
-            
-          }}>
+       
             <HorizontalScroll
             className="horizontal_scroll"
              style={{
@@ -307,7 +305,7 @@ class Profile extends Component {
             
           ) : null}
         </HorizontalScroll>
-        </div>
+       
         </Row>
         <Row style={{height: "30px"}}></Row>
         <Can role={this.context.user.userType} perform="collaborations:create" 
@@ -344,12 +342,7 @@ class Profile extends Component {
             }}
        
         >
-          <div    style={{
-            width: "2000px",
-            height: "430px",
-     
-            
-          }}>
+       
             <HorizontalScroll
             className="horizontal_scroll"
              style={{
@@ -375,7 +368,7 @@ class Profile extends Component {
               })
             : null}
               </HorizontalScroll>
-        </div>
+      
         </Row>
       </div>
     );

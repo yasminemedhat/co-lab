@@ -1,6 +1,4 @@
-import axios from 'axios'
-import { Redirect } from 'react-router-dom';
-import React from "react";
+import axios from 'axios';
 const axiosInstance = axios.create({
     baseURL: process.env.REACT_APP_baseAPIURL,
     withCredentials: false,
@@ -84,6 +82,29 @@ export const updateUser = (jwt, formData) => {
         'Authorization': jwt
       }
       return axiosInstance.patch('user/update', formData,{headers:headers }).then((res) => {
+            return res;
+      });
+}
+
+export const updateCollaboration = (jwt, formData) => {
+    const headers = {
+        'Content-Type': "multipart/form-data",
+        'Authorization': jwt
+      }
+      return axiosInstance.patch('collaboration/update', formData,{headers:headers }).then((res) => {
+            return res;
+      });
+}
+
+
+export const updateProject = (jwt, formData,projectId) => {
+    const headers = {
+        'Content-Type': "multipart/form-data",
+        'Authorization': jwt
+      }
+      console.log("formData")
+      console.log(formData)
+      return axiosInstance.patch('project/update/'+projectId, formData,{headers:headers }).then((res) => {
             return res;
       });
 }

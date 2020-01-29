@@ -13,6 +13,9 @@ const rules = {
       ],
       dynamic: {
         "projects:edit": ({userId, projectCreatorId}) => {
+          console.log("projects edit cannn");
+          console.log(userId);
+          console.log(projectCreatorId);
           if (!userId || !projectCreatorId) return false;
           return userId === projectCreatorId;
         },

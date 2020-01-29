@@ -4,6 +4,8 @@ import {BrowserRouter as Router, Switch } from 'react-router-dom'
 import {Route} from 'react-router-dom'
 import Login from './Login';
 import editUser from './editUser';
+import EditCollaboration from './EditCollaboration'
+import EditProject from './editProject'
 import ForgotPassword from './forgotPassword';
 import Home from "./Home";
 import About from "./About";
@@ -14,7 +16,7 @@ import ProjectPage from "./ProjectPage";
 import ColabDetails from "./ColabDetails";
 import AuthenticatedComponent from "./AuthenticatedComponent";
 import NavBar from './navbar';
-import { AuthContext } from "../authContext";
+// import { AuthContext } from "../authContext";
 
 
 class Header extends React.Component {
@@ -39,6 +41,8 @@ class Header extends React.Component {
               </Route>
               <Route path="/home" exact strict  component ={Home} ></Route>
               <Route path="/editUser" exact strict component ={editUser} />
+              <Route path="/collaborations/:id/EditCollaboration" exact strict component ={EditCollaboration} />
+              <Route path="/projects/:id/EditProject" exact strict component ={EditProject} />
               <Route path="/projects/:id" exact strict component ={ProjectPage} />
               <Route path="/collaborations/:id" exact strict component ={ColabDetails} />
               </AuthenticatedComponent>
