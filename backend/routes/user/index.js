@@ -8,6 +8,8 @@ const upload = multer();
 
 //database 
 const interestList = require('../../models/InterestList');
+const Colaber = require('../../models/Colaber');
+const Account = require('../../models/Account');
 
 //jwt authentication
 const auth = require("../../middleware/auth");
@@ -144,6 +146,21 @@ user.post('/logout', auth, async (req, res) => {
 //         res.status(500).json({message: 'Server Error'});       
 //     }
     res.send('Logged out.');
+});
+
+//@route DELETE     /user/
+//@description      delete a colaber's account
+//@access           requires authentication
+user.delete('/',auth,async (req,res)=>{
+    try {
+        let colaber=await Colaber.findByIdAndDelete(req.user.id);
+        if(!colaber)return res.status(400).json({message: 'Colaber not found.'});
+        //@TODO: remove followed projects?
+        res.send('Colaber Deleted');
+    } catch (error) {
+        return res.status(500).json({message: 'Server Error'});   
+    }
+    
 });
 
 

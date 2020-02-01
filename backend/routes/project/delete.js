@@ -35,14 +35,6 @@ module.exports=async(req,res)=>{
         user.projects = updatedProjects;
         await user.save();
         await project.remove();
-        //remove images
-        if (images) {
-            var imageID = (images[0]).match('id=(.*?)&')[1];
-            var parentID = await drive.getParentFolder(imageID);
-
-            await drive.deleteFolder(parentID);
-        }
-
         res.json({user});       
 
     } catch (error) {
