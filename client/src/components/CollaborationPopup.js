@@ -10,18 +10,17 @@ import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
 
 
 class CollaborationPopup extends Component {
-  state = {
-    collaborationName: "",
-    description: "",
-    collaborationLink: "",
-    images: [],
-    chosenfields: [],
-    fieldsList: []
-  };
+
   constructor(props) {
     super(props);
     this.state = {
-      visible: true};
+      visible: true,
+      collaborationName: "",
+      description: "",
+      collaborationLink: "",
+      images: [],
+      chosenfields: [],
+      fieldsList: []};
     // this.uploadMultipleFiles = this.uploadMultipleFiles.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleCreateCollaboration = this.handleCreateCollaboration.bind(this);
@@ -73,7 +72,7 @@ class CollaborationPopup extends Component {
     console.log(this.state.chosenfields.length)
 
     const formData = new FormData();
-    formData.append('name', this.state.projectName);
+    formData.append('name', this.state.collaborationName);
     formData.append('description', this.state.description);
     if(this.state.chosenfields.length > 0){
     formData.append('fields', this.state.chosenfields);

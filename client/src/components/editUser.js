@@ -55,7 +55,7 @@ class editUser extends Component {
 
   updateUser = e => {
     e.preventDefault();
-    let path = "/users/"+this.context.user.id;
+    let path = "/users/"+this.context.user._id;
     const jwt = getJwt();
     const formData = new FormData();
     if (this.state.profilePicture) {

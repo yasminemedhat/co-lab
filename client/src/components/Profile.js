@@ -120,7 +120,7 @@ class Profile extends Component {
         .then(data => {
           const projects = data;
           this.setState({ projects });
-          this.setState({ loadingProjects: false });
+          this.setState({ loadingProjects: false, projectsNumber: projects.length});
         })
         .catch(err => {
           if (err && err.status) {
@@ -132,7 +132,7 @@ class Profile extends Component {
         .then(data => {
           const collaborations = data;
           this.setState({ collaborations });
-          this.setState({ loadingCollaborations: false });
+          this.setState({ loadingCollaborations: false,colabsNumber: collaborations.length });
         })
         .catch(err => {
           if (err && err.status) {
@@ -170,9 +170,10 @@ class Profile extends Component {
     createCollaboration(jwt, formData)
       .then(res => {
         alert("Collaboration created successfully!");
-        let collaborations = this.state.collaborations;
-        collaborations.unshift(res.data);
+        let collaborations = this.state.collaborations.concat(res.data);
         this.setState({ collaborations });
+        this.setState({ loadingCollaborations: false });
+         this.forceUpdate();
       })
       .catch(err => {
         if (err && err.status) {
