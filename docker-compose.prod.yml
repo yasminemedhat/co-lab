@@ -1,0 +1,18 @@
+version: "3"
+services:
+    backend:
+        container_name: docker-backend
+        build: ./backend
+        restart: always
+        ports: 
+            - '5000:5000'
+    client:
+        container_name: docker-frontend
+        build: ./client
+        restart: always
+        expose:
+            - "80"
+        ports:
+            - "80:80"
+        links:
+            - backend
