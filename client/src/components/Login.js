@@ -7,15 +7,14 @@ import "../fonts/Linearicons-Free-v1.0.0/icon-font.min.css"
 import LoginForm from './LoginForm.js';
 import { Link }  from "react-router-dom";
 import { withRouter } from "react-router-dom";
-import HomeNavbar from "./home-navbar";
 
 import { login } from '../utils/APICalls';
-
+import {AuthContext} from '../authContext';
 
 
 
 class Login extends React.Component {
-
+  static contextType = AuthContext;
   state={
     username: '',
     password: '',
@@ -23,6 +22,7 @@ class Login extends React.Component {
   }
   //Handle fields change
   handleChange = input => e => {
+    e.preventDefault();
     this.setState({ [input]: e.target.value});
 }
   constuctor(props) {
@@ -37,10 +37,14 @@ class Login extends React.Component {
 
   loginUser = () =>{
     const { email, password} = this.state;
-    let path = "/profile";
+    
     login(email, password)
           .then(data => {
-              localStorage.setItem('token',data.token);
+              // localStorage.setItem('token',data.token);
+              console.log("after login: ", data.user);
+              this.context.initiateLogin(data);
+
+              let path = "/users/"+data.user._id;
               this.props.history.push({
                 pathname : path,
                 state :{
@@ -80,7 +84,6 @@ class Login extends React.Component {
 
     return (
       <div>
-        <HomeNavbar />
         <div className="Limiter">
           <div className="main_container">
              <LoginForm
@@ -105,15 +108,12 @@ class Login extends React.Component {
       </div>
 
 
-
-
     )
 
   }
 
 
 }
-
 
 
 export default withRouter(Login);

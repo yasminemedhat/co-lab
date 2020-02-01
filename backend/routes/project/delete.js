@@ -10,6 +10,7 @@ module.exports=async(req,res)=>{
         if(!project){
             return res.status(404).json({message:'Project not found'});
         }
+        var images=project.images;
 
         console.log(project);
 
@@ -34,7 +35,6 @@ module.exports=async(req,res)=>{
         user.projects = updatedProjects;
         await user.save();
         await project.remove();
-
         res.json({user});       
 
     } catch (error) {

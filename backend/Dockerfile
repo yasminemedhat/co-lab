@@ -1,20 +1,21 @@
 # Use a lighter version of Node as a parent image
-FROM mhart/alpine-node:8.11.4
+FROM node
 
 # Set the working directory to /backend
-WORKDIR /backend
+RUN mkdir -p /usr/src/app/server
+WORKDIR /usr/src/app/server
 
 # copy package.json into the container at /backend
-COPY package*.json /backend/
+COPY package*.json /usr/src/app/server/
 
 # install dependencies
-RUN npm install -g npm@5
-
+RUN npm install
+RUN npm audit fix --force
 # Copy the current directory contents into the container at /backend
-COPY . /backend/
+COPY . /usr/src/app/server/
 
 # Make port 80 available to the world outside this container
-EXPOSE 80
+EXPOSE 3000
 
 # Run the app when the container launches
 CMD ["npm", "start"]

@@ -88,7 +88,8 @@ module.exports = async (req, res) => {
         transport.sendMail(mailOptions, function (error, response) {
             if (error) {
                 console.log(error);
-                return res.status(500).json({ message: 'Server Error. Please try again.' });
+                // return res.status(500).json({ message: 'Server Error. Please try again.' });
+                return res.status(500).json({error});
             } else {
                 console.log('Email sent');
                 res.send('To reset your password, please check your email');

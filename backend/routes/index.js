@@ -12,6 +12,8 @@ routes.get('/',(req,res)=>{
 
 routes.use('/user',require('./user'));
 routes.use('/project',require('./project'));
+routes.use('/collaboration',require('./collaboration'));
+routes.use('/homepage',require('./homepage'));
 
 
 

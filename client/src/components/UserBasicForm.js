@@ -121,8 +121,8 @@ class UserBasicForm extends Component {
             </div>
 
             <div>
-              <select defaultValue={values.selectedWorkingField} onChange={this.props.handleChange("workingField")} >
-                {values.Interests.map(interest => (
+              <select defaultValue={values.workingField} onChange={this.props.handleChange("workingField")} >
+                {values.interestsList.map(interest => (
                   <option key={interest.value} value={interest.value}>
                     {interest.display}
                   </option>

@@ -6,7 +6,6 @@ import "../fonts/Linearicons-Free-v1.0.0/icon-font.min.css";
 import UserBasicForm from "./UserBasicForm.js";
 import UserAdditionalInformation from "./UserAdditionalInfo.js";
 import PropTypes from 'prop-types';
-import HomeNavbar from "./home-navbar";
 import { getInterestsList, signup } from '../utils/APICalls';
 
 
@@ -20,8 +19,8 @@ class RegistrationForm extends Component {
         password: '',
         phone: '',
         biography: '',
-        Interests:[],
-        selectedInterests:[],
+        interests:[],
+        interestsList:[],
         workingField:'',
         isSponsor: false,
      }
@@ -47,20 +46,35 @@ class RegistrationForm extends Component {
 
     //Handle fields change
     handleChange = input => e => {
+       
         this.setState({ [input]: e.target.value});
+        console.log(e.target.value);
     }
 
     //handle isSponsor field change
     handleIsSponsor = () => {
         this.setState({ isSponsor: !this.state.isSponsor});
     }
+   
+    handleChosenInterests =selectedOption=>{
+       
+          
+        this.setState({
+        interests:selectedOption
+        
+        
+    });
+   
+      
+     }
 
     createUser = () =>{
-        const { email, firstname, lastname,phone, password, biography, isSponsor, workingField } = this.state;
-        const user = { email, firstname, lastname, password, phone,biography, isSponsor, workingField };
-        const path = '/profile';
+       
+        const { email, username, firstname, lastname,phone, password, biography, isSponsor, workingField, interests } = this.state;
+        const user = { email, username, firstname, lastname, password, phone,biography, isSponsor, workingField, interests };
         signup(user).then((data) => {
             localStorage.setItem('token',data.token);
+            const path = '/users/'+data.user.id;
             this.props.history.push({pathname : path,
                 state :{
                 user: data.user,
@@ -73,11 +87,14 @@ class RegistrationForm extends Component {
             
     }
 
-      // get interestsList
-      componentDidMount() {
+
+
+
+    // get interestsList
+    componentDidMount() {
 		getInterestsList().then(data => {
 	        let  interestsList = data.map(Interests => { return {value: Interests, display: Interests, label: Interests} })
-            this.setState({ Interests: [{value: '', display: '(Select your working Field)'}].concat(interestsList) });
+            this.setState({ interestsList: [{value: '', display: '(Select your working Field)'}].concat(interestsList) });
           }).catch(err => {
               if(err && err.data){
                 alert("Could not find interests: ",err.data.message);
@@ -87,33 +104,32 @@ class RegistrationForm extends Component {
 
     render() { 
         const { step } = this.state;
-        const { email, firstname, lastname,phone, password, biography,Interests,isSponsor, workingField } = this.state;
-        const values = { email,firstname, lastname, password, phone,biography,Interests, isSponsor, workingField };
-        
+        const { email, username, firstname, lastname,phone, password, biography,interests,isSponsor, workingField,interestsList } = this.state;
+        const values = { email, username, firstname, lastname, password, phone,biography,interests, isSponsor, workingField, interestsList };
+       
         switch(step){
             case 1:
                 return ( 
                     <div>
-                    <HomeNavbar />
                     <UserBasicForm
                         nextStep = {this.nextStep}
                         handleChange= {this.handleChange}
                         values = {values}
-                        interests = {this.componentDidMount}
-                        handleWorkingField = {this.handleWorkingField}
+                        interestsList = {this.componentDidMount}
+                     
                     />
                     </div>
                  );
             case 2:
                 return(
                     <div>
-                    <HomeNavbar />
                     <UserAdditionalInformation
                         nextStep = {this.nextStep}
                         handleChange= {this.handleChange}
                         handleSponsorship = {this.handleIsSponsor}
                         sumbit = {this.createUser}
                         values = {values}
+                        handleChosenInterests = {this.handleChosenInterests}
                     />
                     </div>
                     

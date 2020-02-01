@@ -1,8 +1,8 @@
- import axios from 'axios'
-
+import axios from 'axios';
 const axiosInstance = axios.create({
     baseURL: process.env.REACT_APP_baseAPIURL,
     withCredentials: false,
+    timeout: 30000,
 });
 
 axiosInstance.interceptors.response.use(
@@ -30,11 +30,18 @@ export const login = (email, password) => {
         return res.data;
     })
 }
+export const changePassword = (email) =>{
+    return axiosInstance.post('/user/resetPasswordRequest', {email: email})
+    .then((res) => {
+        return res.data
+    })
+}
 
-export const getUser = (jwt) => {
-    return axiosInstance.get('user/profile', {headers: { Authorization: jwt } }).then(res => {
+
+export const getUser = (jwt, id) => {
+    return axiosInstance.get('user/profile/'+id, {headers: { Authorization: jwt } }).then(res => {
         // axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${user.data.token}`;
-        console.log('form api ', res.data);
+        console.log('form api 2', res);
         return res.data;
     })
 }
@@ -53,22 +60,83 @@ export const createProject = (jwt, formData)=> {
         'Content-Type': "multipart/form-data",
         'Authorization': jwt
       }
-//   axios({
-//     method: "post", 
-//     url: '${process.env.REACT_APP_baseAPIURL}/project/add',
-//     data,
-//     config: { headers: headers }
-//   });
     return axiosInstance.post('project/add', formData,{headers:headers })
+        .then((res) => {
+            return res.data;
+      });
+}
+export const createCollaboration = (jwt, formData)=> {
+    const headers = {
+        'Content-Type': "multipart/form-data",
+        'Authorization': jwt
+      }
+    return axiosInstance.post('collaboration/create', formData,{headers:headers })
         .then((res) => {
             return res;
       });
 }
-export const getProjects = (jwt) => {
-    console.log("deen om el tokens ", jwt);
-    return axiosInstance.get('user/viewProjects', {headers: { Authorization: jwt } }).then(res => {
+
+export const updateUser = (jwt, formData) => {
+    const headers = {
+        'Content-Type': "multipart/form-data",
+        'Authorization': jwt
+      }
+      return axiosInstance.patch('user/update', formData,{headers:headers }).then((res) => {
+            return res;
+      });
+}
+
+export const updateCollaboration = (jwt, formData) => {
+    const headers = {
+        'Content-Type': "multipart/form-data",
+        'Authorization': jwt
+      }
+      return axiosInstance.patch('collaboration/update', formData,{headers:headers }).then((res) => {
+            return res;
+      });
+}
+
+
+export const updateProject = (jwt, formData,projectId) => {
+    const headers = {
+        'Content-Type': "multipart/form-data",
+        'Authorization': jwt
+      }
+      console.log("formData")
+      console.log(formData)
+      return axiosInstance.patch('project/update/'+projectId, formData,{headers:headers }).then((res) => {
+            return res;
+      });
+}
+export const getProjects = (jwt, userId) => {
+    return axiosInstance.get('user/viewProjects/'+userId, {headers: { Authorization: jwt } }).then(res => {
         // axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${user.data.token}`;
         console.log('form api getting projs ', res.data);
+        return res.data;
+    })
+}
+export const getProject = (jwt, projectId) => {
+    return axiosInstance.get('project/'+projectId, {headers: { Authorization: jwt } }).then(res => {
+        return res.data;
+    })
+}
+export const getCollaborations = (jwt, userId) => {
+    return axiosInstance.get('user/getCollaborations/'+userId, {headers: { Authorization: jwt } }).then(res => {
+        // axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${user.data.token}`;
+        console.log('form api getting colabs ', res.data);
+        return res.data;
+    })
+}
+export const getCollaboration = (jwt, colabId) => {
+    return axiosInstance.get('collaboration/'+colabId, {headers: { Authorization: jwt } }).then(res => {
+        return res.data;
+    })
+}
+
+export const addColabMember = (jwt,colabId, email) => {
+    console.log(email);
+    return axiosInstance.patch('collaboration/'+colabId+'/addColaber', email,{headers: { Authorization: jwt } })
+    .then(res => {
         return res.data;
     })
 }
@@ -79,43 +147,18 @@ export const getInterestsList=() => {
             return res.data;
         });	
 }
-// axios.post('http://localhost:5000/user/login', credentials)
-// .then((res) => {
-//     localStorage.setItem('token',res.data.token);
-//     this.props.history.push({
-//       pathname : path,
-//       state :{
-//       user: res.data.user,
-//       }
-//       });
-//     // this.props.history.push(path);
-//   })
-// .catch((e)=> {
-//     if (e.response && e.response.data) {
-//         alert("Error: "+ e.response.data.message);
-//     }
-// });
+export const followUser = (jwt, userId) =>{
+    return axiosInstance.put('user/follow/'+userId, userId,{headers: { Authorization: jwt } }).then(res => {
+        //the followed/unfollowed user
+        return res.data;
+    });
 
-// export const APIURL = process.env.REACT_APP_baseAPIURL;
-export const getPhotos = (jwt) => axiosInstance.get(`/photos`);
-
-export const addPhoto = (jwt,data) => {
-    const headers = {
-        'Content-Type': "multipart/form-data",
-        'Authorization': jwt
-      }
-  axios({
-    method: "post", 
-    url: '${process.env.REACT_APP_baseAPIURL}/project/add',
-    data,
-    config: { headers: headers }
-  });
 }
-export const editPhoto = data =>
-  axios({
-    method: "put",
-    url: `photos/edit`,
-    data,
-    config: { headers: { "Content-Type": "multipart/form-data" } }
-  });
-export const deletePhoto = id => axios.delete(`/photos/delete/${id}`);
+
+export const getHomePage = (jwt) => {
+    return axiosInstance.get('homepage',{headers: { Authorization: jwt } }).then(res => {
+        return res;
+    })
+}
+
+

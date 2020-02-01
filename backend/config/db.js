@@ -1,4 +1,6 @@
 mongoose=require('mongoose');
+mongoose.set('useFindAndModify', false);
+
 
 //use default.json string to connect to db
 //use config package

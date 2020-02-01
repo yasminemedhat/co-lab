@@ -2,6 +2,7 @@
 const { google } = require('googleapis');
 const credentials = require('../config/credentials.json');
 const projectFolderID = '1surIZv3i1tH1m_rMzmvUGiZi1ctVLlih';
+const colabFolderID   = '1H9fbcCPtcpZJyyAwtiCaXd8AuWnY_MdK';
 const stream = require('stream');
 const fs = require('fs-extra');
 
@@ -24,7 +25,7 @@ module.exports = {
       } else {
         console.log("Google autorization complete");
         //console.log(jwtClient);
-      
+
       }
     });
     try {
@@ -40,9 +41,11 @@ module.exports = {
 
   },
 
-  uploadImages: async function (projectID, images) {
-    refreshToken();
-    var links = []; //return array of urls
+  uploadImages: async function (projectID, images,option) {//option 1 -> project, option 2-> colaboration
+    await refreshToken();
+    
+    const destination=(option===1)? projectFolderID:colabFolderID;
+    console.log(destination);
     //in case of an error -> return undefined
 
     if (projectID == null) {
@@ -52,7 +55,7 @@ module.exports = {
     var fileMetadata = {
       'name': projectID,
       'mimeType': 'application/vnd.google-apps.folder',
-      'parents': [projectFolderID]
+      'parents': [destination]
 
     };
     var response;
@@ -73,67 +76,71 @@ module.exports = {
     //get new parent folder id:
     const folderID = response.data.id;
 
+    var links=await this.uploadImagesToFolder(folderID,images);
 
-    //upload images:
-    try {
-      for (var i = 0; i < images.length; i++) {
-        let bufferStream = new stream.PassThrough();
-        bufferStream.end(images[i].buffer);
-
-        var imageMetadata = {
-          'name': `${i + 1}.jpg`,
-          parents: [folderID]
-        };
-        var media = {
-          mimeType: 'image/jpeg',
-          body: bufferStream
-        };
-
-        response = await drive.files.create({
-          auth: jwtClient,
-          resource: imageMetadata,
-          media: media,
-          fields: 'id, webContentLink'
-        });
-        var { id, webContentLink } = response.data;
-
-        links.push(webContentLink);
-        //set permissions:
-        setPermissions(id);
-
-      }
-
-    } catch (error) {//failed to upload
-      console.log(error);
-      //rollback -> delete folder;
-      var check = module.exports.deleteFolder(folderID);
-      if (!check)//try again
-      {
-        module.exports.deleteFolder(folderID);
-      }
-      return undefined;
-
-    }
     return links;
+  },
 
+  uploadImagesToFolder: async function(parent,images){
+    const folderID =parent;
+    var links=[];
 
-
-
+       //upload images:
+       try {
+        for (var i = 0; i < images.length; i++) {
+          let bufferStream = new stream.PassThrough();
+          bufferStream.end(images[i].buffer);
+          var name=Math.floor(Math.random() * Math.floor(100000));
+          var imageMetadata = {
+            'name': `${name}.jpg`,
+            parents: [folderID]
+          };
+          var media = {
+            mimeType: 'image/jpeg',
+            body: bufferStream
+          };
+  
+          response = await drive.files.create({
+            auth: jwtClient,
+            resource: imageMetadata,
+            media: media,
+            fields: 'id, webContentLink'
+          });
+          var { id, webContentLink } = response.data;
+  
+          links.push(webContentLink);
+          //set permissions:
+          setPermissions(id);
+  
+        }
+        return links;
+      } catch (error) {//failed to upload
+        console.log(error);
+        //rollback -> delete folder;
+        var check = module.exports.deleteFolder(folderID);
+        if (!check)//try again
+        {
+          module.exports.deleteFolder(folderID);
+        }
+        return undefined;
+  
+      }
   },
 
 
   driveCleanUp: async function () {
-    refreshToken();
-    var res,files;
+    //var id='1dajgPmhX3diuvFRM1OJW0YB7TjzKKAkj'
+    await refreshToken();
+    var res, files;
     try {
 
       res = await drive.files.list({
         auth: jwtClient,
         fields: 'files(id, name)',
-        q: `parents='${projectFolderID}'`
+       // q: `parents='${id}'`
 
       });
-       files = res.data.files;
+      files = res.data.files;
       for (var i = 0; i < files.length; i++) {
         await drive.files.delete({
           auth: jwtClient,
@@ -142,13 +149,13 @@ module.exports = {
         });
       }
       console.log(`Deleted ${files.length} files`);
-    return true;
+      return true;
 
     } catch (error) {
       console.log('The API returned an error: ' + error);
       return false;
     }
-    
+
 
   },
 
@@ -158,7 +165,7 @@ module.exports = {
       auth: jwtClient,
       "fileId": folderID
     }).then(function (response) {
-      console.log('Folder deleted');
+      console.log(' deleted');
       return true;
     },
       function (err) {
@@ -169,44 +176,123 @@ module.exports = {
 
 
 
+  },
+
+  uploadAvatar: async function (image,id) {
+    await refreshToken();
+    const folderID = '1dajgPmhX3diuvFRM1OJW0YB7TjzKKAkj';
+    
+
+    var response;
+    try {
+      let bufferStream = new stream.PassThrough();
+        bufferStream.end(image.buffer);
+
+        var imageMetadata = {
+          'name': `${id}.jpg`,
+          parents: [folderID]
+        };
+        var media = {
+          mimeType: 'image/jpeg',
+          body: bufferStream
+        };
+      response = await drive.files.create({
+        auth: jwtClient,
+        resource: imageMetadata,
+        media: media,
+        fields: 'id, webContentLink'
+      });
+      console.log(response.status);
+      var { id, webContentLink } = response.data;
+
+      //set permissions:
+      setPermissions(id);
+
+
+    } catch (error) {
+       //rollback -> delete file;
+       console.log(error);
+       var check = module.exports.deleteFolder(id);
+       if (!check)//try again
+       {
+         module.exports.deleteFolder(folderID);
+       }
+       return undefined;
+
+    }
+    return webContentLink;
+
+  },
+
+  deleteFileByID: async function(id){
+    await refreshToken();
+    var res;
+    try {
+        res=await drive.files.delete({
+              auth: jwtClient,
+              "fileId": id
+            });
+            console.log(res.status);
+
+     return true;
+
+    } catch (error) {
+      console.log('The API returned an error: ' + error);
+      return false;
+    }
+      
+
+   
+
+
+  },
+
+getParentFolder: async function(id){
+  await refreshToken();
+  try {
+    var response=await drive.files.get({
+      "fileId": id,
+      fields: 'parents'
+    });
+    return response.data.parents[0];
+  } catch (error) {
+    console.log(error);
+    return undefined;
   }
-
-
-  
-
+  }
 }
 
 function setPermissions(id) {
   refreshToken();
   drive.permissions.create({
     "fileId": id,
+    auth: jwtClient,
     "resource": {
-      auth: jwtClient,
       "type": "anyone",
       "role": "reader",
       "allowFileDiscovery": false,//cannot search for it
     }
-  }).then(function (res,err) {
+  }).then(function (res, err) {
     if (err) {
+      console.log('ERROR in Permissions');
       console.log(err.status);
       console.log(res.status);
-      if(res.status !=200){
+      if (res.status != 200) {
         console.error(err);
         return false
       }
-      
+
     }
     else return true;
   });
 }
 
-async function refreshToken(){//check if token expired
-  const info=await jwtClient.getTokenInfo(jwtClient.credentials.access_token);
-  const exp=info.exp;
+async function refreshToken() {//check if token expired
+  const info = await jwtClient.getTokenInfo(jwtClient.credentials.access_token);
+  const exp = info.exp;
   const now = Date.now() / 1000;
   const timeLeft = exp - now; //in seconds
-  if(timeLeft<=20)
-  {
+  if (timeLeft <= 20) {
     module.exports.connectDrive();
   }
 

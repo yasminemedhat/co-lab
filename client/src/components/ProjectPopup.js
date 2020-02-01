@@ -1,19 +1,22 @@
 import React, { Component } from "react";
 import Modal from "react-awesome-modal";
-import Img from "react-image";
 import "../css/projectPopup.css";
 import "../css/profile.css";
 import Linkify from "react-linkify";
-import { photosStore } from "./store";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
+import { getInterestsList} from '../utils/APICalls';
+import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
+
 
 class ProjectPopup extends Component {
   state = {
     projectName: "",
     description: "",
     projectLink: "",
-    images: []
+    images: [],
+    chosenfields: [],
+    fieldsList: []
   };
   // fileObj = [];
   // fileArray = [];
@@ -23,8 +26,10 @@ class ProjectPopup extends Component {
       visible: true};
     // this.uploadMultipleFiles = this.uploadMultipleFiles.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleChosenfields = this.handleChosenfields.bind(this)
     this.handleCreateProject = this.handleCreateProject.bind(this);
     this.onChangeImages = this.onChangeImages.bind(this);
+    this.closeModal = this.closeModal.bind(this);
   }
 
   // uploadMultipleFiles(e) {
@@ -42,6 +47,16 @@ class ProjectPopup extends Component {
     this.setState({ [input]: e.target.value });
   };
 
+  handleChosenfields =selectedOption=>{
+       
+          
+    this.setState({
+   chosenfields:selectedOption
+    
+    
+});
+  }
+
   closeModal() {
     this.setState({
       visible: false
@@ -52,21 +67,32 @@ class ProjectPopup extends Component {
     this.setState({ images: e.target.files })
   };
 
+  componentDidMount(){
+    getInterestsList().then(data => {
+      let  interestsList = data.map(Interests => { return {value: Interests, display: Interests, label: Interests} })
+        this.setState({ fieldsList:(interestsList) });
+      }).catch(err => {
+          if(err && err.data){
+            alert("Could not find project fields: ",err.data.message);
+          }
+    })
+
+  }
   handleCreateProject() {
-    const project = {
-      name: this.state.projectName,
-      description: this.state.description,
-      images: this.state.images,
-      link: this.state.link
-    };
+    
     const { images } = this.state;
 
     const formData = new FormData();
     formData.append('name', this.state.projectName);
     formData.append('description', this.state.description);
-    for (let i = 0 ; i < images.length ; i++) {
-      formData.append("photos", images[i]);
-   }
+    formData.append('projectlink', this.state.projectLink);
+    formData.append('fields', this.state.chosenfields);
+    if(images){
+      for (let i = 0 ; i < images.length ; i++) {
+        formData.append("photos", images[i]);
+     }
+    }
+    
 
     this.props.createProject(formData);
     this.closeModal();
@@ -81,12 +107,15 @@ class ProjectPopup extends Component {
       link = <div>{this.state.projectLink}</div>;
     } else {
       link = (
-        <input
+        <div>
+           <input
           type="text"
           placeholder="add link to your project"
           value={this.state.projectLink}
           onChange={this.handleChange("projectLink")}
         ></input>
+        </div>
+       
       );
     }
 
@@ -97,8 +126,12 @@ class ProjectPopup extends Component {
           width="600"
           height="600"
           effect="fadeInUp"
-          onClickAway={() => this.closeModal()}
+          onClickAway={this.closeModal}
         >
+          <button  onClick={this.closeModal}
+                    className="btn float-right">
+              Close
+            </button>
           <div className="popup">
             <h1>Add Project</h1>
             <div className="row">
@@ -124,6 +157,9 @@ class ProjectPopup extends Component {
                   placeholder="* Project Description"
                 />
               </div>
+              <div className="row" style = {{    width: "100%" ,padding: "5%"}}>
+              <ReactMultiSelectCheckboxes options={this.state.fieldsList}   onChange={this.handleChosenfields} placeholderButtonLabel='Choose Project Field(s)' />
+              </div>
               <div className="col">
               <input
                 onChange={this.onChangeImages}
@@ -144,9 +180,7 @@ class ProjectPopup extends Component {
             >
               Create
             </button>
-            <a href="javascript:void(0);" onClick={() => this.closeModal()}>
-              Close
-            </a>
+            
           </div>
         </Modal>
       </section>

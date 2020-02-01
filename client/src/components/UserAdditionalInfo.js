@@ -2,6 +2,8 @@ import React, {Component} from "react";
 import "../css/registration.css";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
+// import Dropdown from 'react-dropdown'
+import 'react-dropdown/style.css'
 import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
 
 class UserAdditionalInformation extends Component {
@@ -11,8 +13,8 @@ class UserAdditionalInformation extends Component {
         
           this.props.sumbit();
         }
-        
-      
+
+ 
               
     render() {
         const { values } = this.props;
@@ -55,11 +57,10 @@ class UserAdditionalInformation extends Component {
                     </span>
                 </div>
 
-                <div className="wrap-input100  m-b-16">
-                 <ReactMultiSelectCheckboxes options={values.Interests} placeholderButtonLabel="select your interests"/>
-                </div>
 
 
+             
+                <ReactMultiSelectCheckboxes options={values.interestsList} onChange={this.props.handleChosenInterests} placeholder='Choose your Interests'/>
 
                 
 

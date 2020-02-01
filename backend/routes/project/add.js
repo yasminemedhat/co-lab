@@ -24,6 +24,7 @@ module.exports = async (req, res) => {
     var files;
     try {
         files = req.files;
+        console.log(`files =${files}`);
     } catch (error) {
         console.log(error);
         return res.status(500).json({ message: 'Server Error' })
@@ -36,31 +37,24 @@ module.exports = async (req, res) => {
             description,
             creator: req.user.id
         });
-        await project.save();
+        //console.log(project.id);
+        
 
         //save images to google drive
         var urls;
         if (files && files.length > 0) {
-             urls = await drive.uploadImages(project._id, files);
+             urls = await drive.uploadImages(project._id, files,1);
             if (urls == null)
                {
-                //remove from DB
-               await Project.remove({ _id: project.id })
+                console.log('Error in image uploading');
                 return res.status(500).json({ message: 'Server Error' });
-
                } 
 
-               //push images urls to the DB->
-               
-               await Project.updateOne(
-                { "_id": project.id }, 
-                { "$push": { "images": { "$each": urls } } },
-               ) 
+               //push images urls to the mongoose document->
+               project.images=urls;
 
         }
         
-
-
         //get user and add project to the user's project list
         let user = await Colaber.findOne({ _id: req.user.id }).select('-password');
         if (user) {
@@ -68,10 +62,12 @@ module.exports = async (req, res) => {
         }
 
         await user.save();
-        res.json(await Project.findOne({_id:project.id}));
+        await project.save();
+        res.json(project);
 
     } catch (error) {
         console.log(error.message);
         res.status(500).json({ message: 'Server Error' });
+        //TODO: remove project from user and from project db;
     }
 }

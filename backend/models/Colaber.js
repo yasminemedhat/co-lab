@@ -1,24 +1,64 @@
 const mongoose=require('mongoose');
 const Account=require('./Account');
-const interestList=require('./InterestList');
+const drive=require('../services/drive');
 
 const ColaberSchema=new mongoose.Schema({
     firstName:  { type: String, required: true},
     lastName:   { type: String, required: true},
     avatar:     { type: String},
-    phone:      { type: Number},
+    phone:      { type: String},
+    followers:  [{type: mongoose.Schema.Types.ObjectId, ref: 'Colaber'}],
+    following:  [{type: mongoose.Schema.Types.ObjectId, ref: 'Colaber'}],
     projects:   [{type: mongoose.Schema.Types.ObjectId, ref: 'Project' }],
-    job:        { type: String},
+    followedProjects:   [{type: mongoose.Schema.Types.ObjectId, ref: 'Project' }],
+    collaborations:     [{type: mongoose.Schema.Types.ObjectId, ref: 'Colaboration' }],
+    workingField:       { type: String},
     interests: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "interestList"
     }],
-    bio:        { type: String},
+    biography:  { type: String},
     isSponsor:  { type: Boolean},
     isPremium:  { type: Boolean},
 });
 
-const Colaber2=Account.discriminator('Colaber',ColaberSchema);
+//remove from followings and followers
+ColaberSchema.post('findOneAndDelete', async function (doc) {
+    console.log('Account Deleted. Removing follows/followings from other accounts..');
+    if (doc) {
+        try {
+            const following = await Colaber.updateMany({ following: doc._id },
+                { $pull: { following: doc._id } },
+                { new: true }
+            );
+            if(following)
+            console.log(`removed following from ${following.n} users`);
 
+            const followers = await Colaber.updateMany({ followers: doc._id },
+                { $pull: { followers: doc._id } },
+                { new: true }
+            );
+            if(followers)
+            console.log(`removed followers from ${followers.n} users`);
 
-module.exports=Colaber=mongoose.model('colaber',ColaberSchema);
+        } catch (error) {
+            console.log(error);
+
+        }
+
+    }
+});
+
+//remove avatar from drive
+ColaberSchema.post('findOneAndDelete', async function (doc) {
+    if(doc.avatar){
+        var imageID = doc.avatar.match('id=(.*?)&')[1];//get image id for deletion
+        await drive.deleteFileByID(imageID);
+        console.log('Deleted avatar');
+    }
+    else   console.log('no avatar to delete');
+});
+
+const Colaber=Account.discriminator('Colaber',ColaberSchema);
+
+module.exports=mongoose.model('Colaber');

@@ -41,12 +41,12 @@ if (process.env.NODE_ENV === 'production') {
 
 //listen
 const PORT = process.env.PORT || 5000;
-const REDIS_PORT=process.env.PORT || 6379;
+//const REDIS_PORT=process.env.PORT || 6379;
 
 
 //for token blacklisting
 //must start redis-server in another terminal
-module.exports=require('redis').createClient();
+//module.exports=require('redis').createClient();
 
 
 

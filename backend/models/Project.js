@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const drive = require('../services/drive');
 
 const options = {
     discriminatorKey: 'projectType', //for inheritance purposes
@@ -11,10 +12,29 @@ const ProjectSchema = new Schema({
     description:    {  type: String},
     rating:         {  type: Number},
     likes:          [{ type: Schema.Types.ObjectId, ref: 'Colaber'}],
-    followers:      [{ type: Schema.Types.ObjectId, ref: 'Colaber'}],
     creator:        {  type: Schema.Types.ObjectId, ref: 'Colaber'},
-    images:         [{type: String}]
+    images:         [{ type: String}],
+    link:           {  type: String},
+    createdAt:      {  type: Date, default: Date.now},
+    updatedAt:      {  type: Date, default: Date.now}
 }, options,
 );
+
+
+//post delete middlewares
+
+//remove images
+ProjectSchema.post(['remove','findOneAndDelete'],async function (doc){
+     //remove images
+     if (doc.images) {
+        var imageID = (doc.images[0]).match('id=(.*?)&')[1];
+        var parentID = await drive.getParentFolder(imageID);
+
+        await drive.deleteFolder(parentID);
+        console.log(`Deleted ${doc.images.length} images`);
+    }
+    else console.log('No images to delete');
+
+});
 
 module.exports = Project = mongoose.model('Project', ProjectSchema);

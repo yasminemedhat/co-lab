@@ -21,7 +21,7 @@ module.exports=async (req,res)=>{
     //we do not specify which one of them is wrong
     //to not reveal an existing user's email 
     try{
-        let user=await Account.findOne({email});
+        let user=await Account.findOne({email}).select('-collaborations -projects').lean();
 
         if(!user){
             return res.status(400).json({message:'Invalid Credentials'});
@@ -35,13 +35,13 @@ module.exports=async (req,res)=>{
 
         const payload = {
             user: {
-                id: user.id,
+                id: user._id,
             }
         };
-        //to return user's data:
-        var filter='email, firstName, lastName, isSponsor, isPremium';
-        var profile=_.pick(user,filter.split(', '));
-        console.log(profile);
+        
+        //remove password before returning a response
+        delete user.password;
+        console.log(user);
     
         //create auth token
         jwt.sign(

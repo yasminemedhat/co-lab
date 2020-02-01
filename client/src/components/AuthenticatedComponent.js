@@ -1,81 +1,41 @@
 import React, {Component} from "react";
-import {getJwt} from "../helpers/jwt";
-import Axios from "axios";
-import { withRouter } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
 import Navbar from "./navbar";
-import { logout } from '../utils/APICalls';
+import {AuthContext} from '../authContext';
 
 class AuthenticateComponent extends Component{
-    
-
+    static contextType = AuthContext;
     constructor(props){
         super(props);
-        this.state = {
-            user: undefined,
-        }
-        this.logout = this.logout.bind(this);
-        
+        this.state= {isLoading: true};
     }
-
-    // logout (){
-    //     const jwt = getJwt();
-    //     const headers = {
-    //         Authorization: jwt
-    //       }
-    //     Axios.post('http://localhost:5000/user/logout', this.state.user, {headers: headers})
-    //     .then((res)=> {
-    //         this.setState({user: undefined});
-    //         localStorage.removeItem('token');
-    //         this.props.history.push('/login');
-    //     })
+    // logout(){
+    //     this.context.logout();
+        
     // }
-    logout(){
-        const jwt = getJwt();
-        logout(jwt,this.state.user).then(res => {
-            this.setState({user: undefined});
-            localStorage.removeItem('token');
-            this.props.history.push('/login');
-        })
-    }
-
     componentDidMount(){
-        const jwt = getJwt();
-        if(!jwt){
-            this.props.history.push('/login');
-        }
-        Axios.get(process.env.REACT_APP_baseAPIURL+'/user/profile', {headers: { Authorization: jwt } })
-        .then( (res) => {
-            console.log("tamam")
-            this.setState({user: res.data.user});
+       this.setState({isLoading: false});
+    }
+    render(){
 
-        }).catch(err => {
-            localStorage.removeItem('token');
-            this.props.history.push('/login');
-        })
+        var content;
+        if(this.state.isLoading){
+            content =  (<div><h1>loading...</h1></div>)
+        }
+        else if(this.context.authenticated) {
+            content =<div>
+            <div>
+               {this.props.children}
+              
+           </div></div>}
+        else{
+            window.location="/login";
+        }
+        
+                 
+            return <div>{content}</div>
+                       
         
     }
-
-    render(){
-        const childrenWithProps = React.Children.map(this.props.children, child =>
-            React.cloneElement(child, { user: this.state.user })
-          );
-        if(this.state.user === undefined){
-            return(
-            <div><h1>loading...</h1></div>
-            );
-        }
-        return(
-            <div>
-                <Navbar logout={this.logout}/>
-                <div>
-                    {/* {this.props.children} */}
-                    {childrenWithProps}
-                </div> 
-            </div>
-                       
-        );
-    }
-
-
-} 
+}
 export default withRouter(AuthenticateComponent);
