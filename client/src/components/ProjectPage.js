@@ -3,20 +3,18 @@ import "../css/ProjectPage.css";
 import "../css/createProject.css";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
+import Img from "react-image";
 import { getProject, getUser } from "../utils/APICalls";
 import { getJwt } from "../helpers/jwt";
 import "../css/header.css";
 import Image from 'react-bootstrap/Image'
-import Gallery from "react-grid-gallery";
 import Can from "./Can";
-import { Row, Col } from "react-bootstrap";
-import { AuthContext } from "../authContext";
+import Gallery from "react-grid-gallery";
 
 
 
 class ProjectPage extends Component {
-  static contextType = AuthContext;
-
+  
   constructor(props){
     super(props);
     this.state={
@@ -83,10 +81,11 @@ class ProjectPage extends Component {
     }
     let images = project.images ? project.images : []
     
+    let len = 0;
     let IMAGES = [{}]
 
     for (let i = 0; i <images.length; i ++) {
-     let len = IMAGES.push({src:images[i], thumbnail:images[i],
+     len = IMAGES.push({src:images[i], thumbnail:images[i],
        
       thumbnailWidth: 250,
       thumbnailHeight: 212,})
@@ -96,7 +95,17 @@ class ProjectPage extends Component {
   return(<div className="ProjectContainer">
      
         <div >
-          <div></div>
+        <div className="col">
+         
+         <button
+           style={{ float: "right", width: "180px" }}
+           className="profile-btn"
+           onClick={this.editProject.bind(null,project)}
+         
+         >
+           Edit Project
+         </button>
+         </div>
           <div>
             <div>
             {creator.avatar ? (<Image tag='a' onClick={()=>this.gotToCreatorProfile()} className="navbarAvatar" src={creator.avatar} style={{cursor: "pointer", width: 45, height: 45, margin:"5px"}} roundedCircle ></Image>) : (
@@ -107,28 +116,7 @@ class ProjectPage extends Component {
           <p>{project.description}</p>
           <p>{project.link}</p>
           </div>
-          <div className="col">
-          <Can role={this.context.user.userType} perform="projects:edit" 
-              data={{
-                    userId: this.context.user._id,
-                    projectCreatorId: this.state.project.creator
-                  }}
-          yes={() => (
-            <Row style={{ width: "100%" }}>
-            <Col>
-              <button
-                style={{ float: "right", width: "180px" }}
-                className="profile-btn"
-                onClick={this.editProject.bind(this)}
-              >
-                Edit Project
-              </button>
-              
-            </Col>
-          </Row>
-            )}/>
-                
-                  </div>
+    
       
           
         </div>

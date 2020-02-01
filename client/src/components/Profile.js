@@ -225,9 +225,7 @@ class Profile extends Component {
               </h4>
 
               <p>Email: {this.state.user.email}</p>
-              {this.state.user.phone ? (
-                <p>Phone: {this.state.user.phone}</p>
-              ) : null}
+        
               {this.state.user.biography ? (
                 <p>biography: {this.state.user.biography}</p>
               ) : null}
@@ -357,7 +355,11 @@ class Profile extends Component {
             ? this.state.collaborations.map((colab, i) => {
                 // Return the element. Also pass key
                 return (
-                  <Col key={i}>
+                  <Col key={i}
+                  style={{
+                    width: "100%",
+                    height: "430px"
+                  }}>
                     <ColabLink
                       key={i}
                       collaboration={colab}

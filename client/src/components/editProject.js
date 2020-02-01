@@ -1,10 +1,12 @@
-import React, { Component } from "react";
+import React, { useState, useEffect, Component } from "react";
 import { updateProject, getProject } from "../utils/APICalls";
 import { getJwt } from "../helpers/jwt";
 import "../css/login.css";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
 import Img from "react-image";
+import { getInterestsList } from "../utils/APICalls";
+import ReactMultiSelectCheckboxes from "react-multiselect-checkboxes";
 import { AuthContext } from "../authContext";
 
 
@@ -44,6 +46,9 @@ class EditProject extends Component {
     const { images } = this.state
     
     if (images) {
+       console.log("in if statement")
+       console.log(images)
+      
         for (let i = 0 ; i < images.length ; i++) {
             formData.append("photos", images[i]);
          }
@@ -51,22 +56,26 @@ class EditProject extends Component {
       }
     if (this.state.name) {
       formData.append("name", this.state.name);
+      console.log(this.state.name)
     }
  
     if (this.state.description) {
     
       formData.append("description", this.state.description);
+      console.log(this.state.description)
     }
     if (this.state.link) {
       formData.append("link", this.state.link);
+      console.log(this.state.link)
     }
   
     updateProject(jwt, formData,this.state.project._id)
       .then(data => {
-        alert("Your project was updated successfully");
+        alert("Your project was updated succeffully");
         this.props.history.push(path);
       })
       .catch(error => {
+        console.log("not updatedddd");
         alert("something went wrong!", error.message);
       });
   };
@@ -108,7 +117,7 @@ class EditProject extends Component {
 
     
     let editimages = []
-    if(images !==undefined){
+    if(images !=undefined){
         editimages = images.map((image , i)=>{
             return(
                 <Img key = {i} style={{ float: 'right' , width: '40px' , height: '40px'}} src={image}></Img>
