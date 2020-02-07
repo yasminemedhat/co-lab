@@ -7,6 +7,7 @@ const stream = require('stream');
 const fs = require('fs-extra');
 
 var drive, jwtClient;
+var expiry_date;
 
 module.exports = {
   connectDrive: async function () {
@@ -24,8 +25,7 @@ module.exports = {
         return;
       } else {
         console.log("Google autorization complete");
-        //console.log(jwtClient);
-
+        expiry_date=tokens.expiry_date;
       }
     });
     try {
@@ -82,6 +82,7 @@ module.exports = {
   },
 
   uploadImagesToFolder: async function(parent,images){
+    await refreshToken();
     const folderID =parent;
     var links=[];
 
@@ -288,11 +289,13 @@ function setPermissions(id) {
 }
 
 async function refreshToken() {//check if token expired
-  const info = await jwtClient.getTokenInfo(jwtClient.credentials.access_token);
-  const exp = info.exp;
-  const now = Date.now() / 1000;
-  const timeLeft = exp - now; //in seconds
-  if (timeLeft <= 20) {
+
+  const now = Date.now();
+  console.log(now);
+  console.log(expiry_date);
+  const timeLeft = expiry_date - now; //in seconds
+  console.log(timeLeft);
+  if (timeLeft <= 5000) {
     module.exports.connectDrive();
   }
 
