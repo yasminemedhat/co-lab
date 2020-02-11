@@ -151,17 +151,19 @@ class Profile extends Component {
     createProject(jwt, formData)
       .then(res => {
         alert("Project created successfully!");
-        // window.location.reload();
         let projects = this.state.projects;
         projects.unshift(res.data);
-        this.setState({ projects });
+        this.setState({ projects: projects });
+        this.setState({ loadingProjects: false });
+
+        this.forceUpdate();
+
       })
       .catch(err => {
         if (err && err.status) {
           alert("Could not create project: " + err.message);
         }
       });
-    this.setState({ loadingProjects: false });
   }
   createCollaboration(formData) {
     this.setState({ loadingCollaborations: true });
@@ -170,7 +172,8 @@ class Profile extends Component {
     createCollaboration(jwt, formData)
       .then(res => {
         alert("Collaboration created successfully!");
-        let collaborations = this.state.collaborations.concat(res.data);
+        let collaborations = this.state.collaborations;
+        collaborations.unshift(res.data);
         this.setState({ collaborations });
         this.setState({ loadingCollaborations: false });
          this.forceUpdate();

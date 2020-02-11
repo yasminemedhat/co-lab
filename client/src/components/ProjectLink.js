@@ -7,15 +7,16 @@ import Button from "react-bootstrap/Button";
 import { withRouter} from 'react-router-dom';
 
 class ProjectLink extends Component {
-    state={
-        name: "",
-        description: "",
-        link: "",
-        imageUrl: "",
-        id: ''
-    };
+    
     constructor(props){
         super(props);
+        this.state={
+            name: "",
+            description: "",
+            link: "",
+            imageUrl: "",
+            id: ''
+        };
         this.showProjectDetails = this.showProjectDetails.bind(this);
     }
     showProjectDetails = () => {
@@ -36,6 +37,9 @@ class ProjectLink extends Component {
         this.setState({name,description,link,image, id: _id});
     }
     render() { 
+        if(this.state.name === ''){
+            return(<div><h1>loading...</h1></div>);
+        }
         return (
                 <Card tag='a'
                 onClick={() => {this.showProjectDetails()}} 

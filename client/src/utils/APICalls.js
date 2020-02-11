@@ -62,7 +62,7 @@ export const createProject = (jwt, formData)=> {
       }
     return axiosInstance.post('project/add', formData,{headers:headers })
         .then((res) => {
-            return res.data;
+            return res;
       });
 }
 export const createCollaboration = (jwt, formData)=> {
