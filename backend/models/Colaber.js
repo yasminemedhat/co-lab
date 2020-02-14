@@ -11,6 +11,7 @@ const ColaberSchema=new mongoose.Schema({
     following:  [{type: mongoose.Schema.Types.ObjectId, ref: 'Colaber'}],
     projects:   [{type: mongoose.Schema.Types.ObjectId, ref: 'Project' }],
     followedProjects:   [{type: mongoose.Schema.Types.ObjectId, ref: 'Project' }],
+    likedProjects:      [{type: mongoose.Schema.Types.ObjectId, ref: 'Project' }],
     collaborations:     [{type: mongoose.Schema.Types.ObjectId, ref: 'Colaboration' }],
     workingField:       { type: String},
     interests: [{
