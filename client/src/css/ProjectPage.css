@@ -1,8 +1,9 @@
 .ProjectContainer{
     width: 100%;
-    
+    flex-grow : 1;
+    height: 100%;
     padding: 15px;
-    background: linear-gradient(45deg, #912064, #0c28efb8);
+    background: #3d28468c;
     position: absolute;  left: 0;
 }
 
@@ -10,4 +11,11 @@
     width:200px;
     height: 200px;
     padding: 1%;
+}
+.ColabContainer{
+    width: 100%;
+ 
+    padding: 15px;
+    background: #3d28468c;
+    position: absolute;  left: 0;
 }
