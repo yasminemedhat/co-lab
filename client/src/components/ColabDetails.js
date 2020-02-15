@@ -176,7 +176,7 @@ const ColabDetails = props => {
       <AuthConsumer>
         {({ user }) => {
           return (
-            <div className="ProjectContainer">
+            <div className="ColabContainer">
               <Row>
                 <div style={{ width: "80%", padding:"1%"}}>
                   <h1>{colab.name}</h1>
