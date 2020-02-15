@@ -11,3 +11,21 @@
     height: 200px;
     padding: 1%;
 }
+
+.unlike-button{
+    background-color: #cfc7c749 ;
+}
+
+.like__icon {
+    font-size: 1.2rem;
+    margin-right: 0.3rem;
+}
+.liked__icon {
+    font-size: 1.2rem;
+    margin-right: 0.3rem;
+    color: #912064;
+}
+
+.like__number {
+    font-size: 0.8rem;
+}

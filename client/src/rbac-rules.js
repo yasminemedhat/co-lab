@@ -13,9 +13,6 @@ const rules = {
       ],
       dynamic: {
         "projects:edit": ({userId, projectCreatorId}) => {
-          console.log("projects edit cannn");
-          console.log(userId);
-          console.log(projectCreatorId);
           if (!userId || !projectCreatorId) return false;
           return userId === projectCreatorId;
         },
@@ -34,10 +31,7 @@ const rules = {
         },
         "collaborations:addMember": ({userId, members}) => {
           if (!userId || !members) return false;
-          console.log("add member cannn");
-          console.log(userId);
           const ids = members.map(member => member._id);
-          console.log(ids);
           return ids.includes(userId);
         },
         "users:follow": ({userId, profileOwnerId}) => {
