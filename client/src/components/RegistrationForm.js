@@ -70,8 +70,15 @@ class RegistrationForm extends Component {
 
     createUser = () =>{
        
+
         const { email, username, firstname, lastname,phone, password, biography, isSponsor, workingField, interests } = this.state;
-        const user = { email, username, firstname, lastname, password, phone,biography, isSponsor, workingField, interests };
+        let i = 0;
+        let myInterests = {};
+        for (i =0 ;i<interests.length;i++){
+            myInterests = interests[i].value
+        };
+       
+        const user = { email, username, firstname, lastname, password, phone,biography, isSponsor, workingField, myInterests };
         signup(user).then((data) => {
             localStorage.setItem('token',data.token);
             const path = '/users/'+data.user.id;

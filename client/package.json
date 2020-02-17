@@ -9,6 +9,7 @@
     "font-awesome": "^4.7.0",
     "formik": "^2.0.8",
     "is-url": "^1.2.4",
+    "light-toast": "^0.2.3",
     "mobx": "^5.15.0",
     "mobx-react": "^6.1.4",
     "react": "^16.11.0",

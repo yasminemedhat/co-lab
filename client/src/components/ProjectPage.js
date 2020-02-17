@@ -10,8 +10,9 @@ import Image from 'react-bootstrap/Image'
 import Gallery from "react-grid-gallery";
 import { AuthContext } from "../authContext";
 import Can from "./Can";
+import Toast from 'light-toast';
 
-import 'font-awesome/css/font-awesome.min.css';
+//import 'font-awesome/css/font-awesome.min.css';
 
 
 
@@ -97,19 +98,24 @@ class ProjectPage extends Component {
  
   render() {
     const { loadingProject, project, creator } = this.state;
-
- 
-    
-    if (loadingProject === true) {
-      return (
+     
+    if(loadingProject === true)
+    {
+      return(
         <div>
-          <h1>loading...</h1>
+         <h1>loading....</h1>
         </div>
-      );
-    }
-    else{
-      let images = project.images ? project.images : []
+      )
       
+    }
+
+   
+
+  
+   if (loadingProject === false)
+   {
+     Toast.hide()
+     let images = project.images ? project.images : []
       let len = 0;
       let IMAGES = [{}]
 
@@ -121,7 +127,13 @@ class ProjectPage extends Component {
       }
       
       
-    return(<div className="ProjectContainer">
+    return(
+       
+    
+          <div className="ProjectContainer">
+           {
+             Toast.hide()
+           }
       
           <div >
           <div className="col">

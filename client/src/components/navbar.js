@@ -28,17 +28,26 @@ class Navbar extends Component {
  
   
   render() {
+    let image
+    let source = this.context.user && this.context.user.avatar ? this.context.user.avatar :"../images/profile.png";
+    if(source == null ) {
+      image =  <Image className="navbarAvatar" src={require("../images/profile.png")} style={{width: 45, height: 45}} roundedCircle></Image>
+    } 
+    else {
+      
+     image = <Image className="navbarAvatar" src={this.context.user && this.context.user.avatar ? this.context.user.avatar : require("../images/profile.png")} style={{width: 45, height: 45, margin:"5px"}} roundedCircle ></Image>
+    }
     if(this.context.authenticated){
       return (
         <div className="topnav">
           <div className="logo_avatar_div">
           <Row><Col tag='a'
             onClick={() => {this.goToProfile()}}>
-          {this.context.user.avatar ? (
-                <Image className="navbarAvatar" src={this.context.user.avatar} style={{width: 45, height: 45, margin:"5px"}} roundedCircle ></Image>
-              ) : (
-                <Image className="navbarAvatar" src={require("../images/profile.png")} style={{width: 45, height: 45}} roundedCircle></Image>
-              )}
+             {
+                image
+              }
+              
+
               </Col>
             </Row></div>
           <div className="logo_div">
