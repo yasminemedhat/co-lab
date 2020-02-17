@@ -3,7 +3,6 @@ import { NavLink } from "react-router-dom";
 import "../css/header.css";
 import { withRouter } from "react-router-dom";
 import { AuthContext } from "../authContext";
-import Img from "react-image";
 import Image from 'react-bootstrap/Image'
 import { Row, Col } from "react-bootstrap";
 
@@ -43,9 +42,11 @@ class Navbar extends Component {
           <div className="logo_avatar_div">
           <Row><Col tag='a'
             onClick={() => {this.goToProfile()}}>
-             {
-                image
-              }
+             {this.context.user.avatar ? (
+                <Image className="navbarAvatar" src={this.context.user.avatar} style={{width: 45, height: 45, margin:"5px"}} roundedCircle ></Image>
+              ) : (
+                <Image className="navbarAvatar" src={require("../images/profile.png")} style={{width: 45, height: 45}} roundedCircle></Image>
+              )}
               
 
               </Col>
