@@ -108,15 +108,9 @@ module.exports = async (req, res) => {
         console.log('saved user in database');
         id=colaber.id;
 
+        //remove password
+        colaber= colaber.toObject();
         delete colaber.password;
-        
-
-        //to return user's data:
-        // var filter = 'email, firstName, lastName, isSponsor, isPremium, biography, interests, projects, job, workingField, avatar';
-        // var profile = _.pick(colaber, filter.split(', '));
-        // console.log(profile);
-
-        
 
 
         //jwt token:
@@ -147,7 +141,11 @@ module.exports = async (req, res) => {
         console.log(error.message);
         //ROLLBACK
         Colaber.findOneAndDelete({_id: id});
-        drive.deleteAvatar(Email);
+        if(url)
+        {
+            var id  = url.match('id=(.*?)&')[1];
+            await drive.deleteFileByID(id);
+        }
         res.status(500).json({ message: 'Server Error' });
     }
 
