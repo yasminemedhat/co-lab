@@ -1,9 +1,8 @@
 .gallery_container{
     width: 100%;
-    padding-left: 20%;
-    padding-right: 5%;
+   
     padding-top: 3%;
-    background: linear-gradient(45deg, #912064, #0c28efb8);
+    background:#3d28468c;
     position: absolute;  left: 0;
     
 }
@@ -14,8 +13,8 @@
 }
 
 .gallery_div{
-    width: 85%;
-    padding-left: 5%;
+    width: 100%;
+    padding-left: 10%;
     padding-right: 5%
 }
 

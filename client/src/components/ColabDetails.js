@@ -3,15 +3,14 @@ import "../css/ProjectPage.css";
 import "../css/createProject.css";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
-import Img from "react-image";
-import { Row, Col, Table } from "react-bootstrap";
+import { Row, Table } from "react-bootstrap";
 import Image from "react-bootstrap/Image";
 import Linkify from "react-linkify";
 import { AuthConsumer } from "../authContext";
 import Can from "./Can";
 import AddMemberPopup from "./AddMemberPopUp";
-import { getJwt } from "../helpers/jwt";
-import { addColabMember, getCollaboration } from "../utils/APICalls";
+import { getJwt , getUserStored} from "../helpers/jwt";
+import { addColabMember, getCollaboration,likeProject } from "../utils/APICalls";
 import Gallery from "react-grid-gallery";
 
 const ColabDetails = props => {
@@ -25,14 +24,22 @@ const ColabDetails = props => {
   const [popUp, setPopUp] = useState({ showPopUp: false });
   const [newMemberEmail, setNewMemberEmail] = useState("");
   const [update, setUpdate] = useState(false);
+  const [likes , setLikes] = useState({likeButton: true,likesCount: 0});
   const IMAGES = [{}];
 
   useEffect(() => {
     const jwt = getJwt();
+    const user = getUserStored();
     getCollaboration(jwt, props.match.params.id)
       .then(collaboration => {
         let images = collaboration.images ? collaboration.images : [];
         setColab({ ...collaboration, images });
+        if(collaboration.likes.length> 0 && collaboration.likes.includes(user._id)) {
+          setLikes({likeButton:false,likesCount: collaboration.likes.length});
+        }
+        else{
+          setLikes({likeButton:true,likesCount: collaboration.likes.length});
+        }
       })
       .catch(err => {
         alert("could not find colab");
@@ -55,6 +62,26 @@ const ColabDetails = props => {
       }
     });
   };
+
+  const toggleLikeProject =() => {
+    const jwt = getJwt();
+   likeProject(jwt, props.match.params.id)
+   .then(colab => {
+     var liked = !likes.likeButton;
+     var count = likes.likesCount;
+     setLikes({likeButton: liked,likesCount: count});
+     if(liked){
+       setLikes({likeButton: liked,likesCount: count -1})
+     }else{
+      setLikes({likeButton: liked,likesCount: count +1})
+     }
+   })
+   .catch(err => {
+     if(err && err.status){
+       alert("something went wrong: " + err.message);
+     }
+   })
+ }
 
   const togglePopup = () => {
     setPopUp({ showPopUp: !popUp.showPopUp });
@@ -80,7 +107,6 @@ const ColabDetails = props => {
   const onEmailChange = event => {
     // console.log("on change",event.target.value);
     const email = event.target.value;
-    console.log(email);
     setNewMemberEmail(email);
   };
 
@@ -150,7 +176,7 @@ const ColabDetails = props => {
       <AuthConsumer>
         {({ user }) => {
           return (
-            <div className="ProjectContainer">
+            <div className="ColabContainer">
               <Row>
                 <div style={{ width: "80%", padding:"1%"}}>
                   <h1>{colab.name}</h1>
@@ -167,8 +193,8 @@ const ColabDetails = props => {
                   >
                     Edit Co-Laboration
                   </button>
-                  </Row>
-                  <Can
+              </Row>
+              <Can
                 role={user.userType}
                 perform="collaborations:addMember"
                 data={{
@@ -198,6 +224,23 @@ const ColabDetails = props => {
                   </Row>
                 )}
               />
+              <Row>
+              {likes.likeButton=== true ? <button
+                  style={{ float: "right", width: "180px" }}
+                  className="profile-btn like__btn"
+                  onClick={toggleLikeProject.bind(null)}
+                >
+                    <i className="like__icon fa fa-heart"></i>
+                    <span className="like__number">{likes.likesCount}</span>
+                    </button> : <button
+                    style={{ float: "right", width: "180px" }}
+                    className="profile-btn unlike-button"
+                    onClick={toggleLikeProject.bind(null)}
+                  >
+                  <i className="liked__icon fa fa-heart"></i>
+                  <span className="like__number">{likes.likesCount}</span>
+                  </button>}
+              </Row>
                 </div>
               
               </Row>

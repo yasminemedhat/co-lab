@@ -1,6 +1,7 @@
 .topnav {
     background-color:#3d2846;
     overflow: hidden;
+    height: 53px;
   }
   
   /* Style the links inside the navigation bar */
@@ -20,14 +21,15 @@
   
   /* Change the color of links on hover */
   .topnav a:hover,
-  .logout-link:hover {
-    background-color: #5261ee;
+  .logout-link:hover,
+  .logout-NavLink:hover {
+    background-color:#948999;
     color:white;
   }
   
   /* Add a color to the active/current link */
   .topnav a.active {
-    background-color: #5261ee;
+    background-color:#948999;
     color: white;
   }
 
@@ -52,12 +54,15 @@
 }
 
   .selectedLink {
-    background: #5261ee;
+    background:#948999;
   }
 
   .logout-NavLink{
     color:  white!important;
     padding-top: 4%;
     padding-bottom: 5%;
+    padding-left: 1%;
+  
     margin-right: 8px;
   }
+

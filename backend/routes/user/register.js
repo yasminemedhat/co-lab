@@ -108,16 +108,9 @@ module.exports = async (req, res) => {
         console.log('saved user in database');
         id=colaber.id;
 
-
-       
-        
-
-        //to return user's data:
-        var filter = 'email, firstName, lastName, isSponsor, isPremium, biography, interests, projects, job, workingField, avatar';
-        var profile = _.pick(colaber, filter.split(', '));
-        console.log(profile);
-
-        
+        //remove password
+        colaber= colaber.toObject();
+        delete colaber.password;
 
 
         //jwt token:
@@ -137,8 +130,8 @@ module.exports = async (req, res) => {
                 console.log('token')
                 if (err) throw err;
                 console.log(token);
-                console.log(profile);
-                res.json({ token, user: profile});
+                console.log(colaber);
+                res.json({ token, user: colaber});
             }
         );
 
@@ -148,7 +141,11 @@ module.exports = async (req, res) => {
         console.log(error.message);
         //ROLLBACK
         Colaber.findOneAndDelete({_id: id});
-        drive.deleteAvatar(Email);
+        if(url)
+        {
+            var id  = url.match('id=(.*?)&')[1];
+            await drive.deleteFileByID(id);
+        }
         res.status(500).json({ message: 'Server Error' });
     }
 

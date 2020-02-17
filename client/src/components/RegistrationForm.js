@@ -7,6 +7,7 @@ import UserBasicForm from "./UserBasicForm.js";
 import UserAdditionalInformation from "./UserAdditionalInfo.js";
 import PropTypes from 'prop-types';
 import { getInterestsList, signup } from '../utils/APICalls';
+import { AuthContext } from "../authContext";
 
 
 class RegistrationForm extends Component {
@@ -24,6 +25,7 @@ class RegistrationForm extends Component {
         workingField:'',
         isSponsor: false,
      }
+     static contextType = AuthContext;
 
      static contextTypes = {
         router: PropTypes.object
@@ -70,11 +72,18 @@ class RegistrationForm extends Component {
 
     createUser = () =>{
        
+
         const { email, username, firstname, lastname,phone, password, biography, isSponsor, workingField, interests } = this.state;
-        const user = { email, username, firstname, lastname, password, phone,biography, isSponsor, workingField, interests };
+        let i = 0;
+        let myInterests = {};
+        for (i =0 ;i<interests.length;i++){
+            myInterests = interests[i].value
+        };
+       
+        const user = { email, username, firstname, lastname, password, phone,biography, isSponsor, workingField, myInterests };
         signup(user).then((data) => {
-            localStorage.setItem('token',data.token);
-            const path = '/users/'+data.user.id;
+            this.context.initiateLogin(data);
+            const path = '/users/'+data.user._id;
             this.props.history.push({pathname : path,
                 state :{
                 user: data.user,

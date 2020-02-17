@@ -62,7 +62,7 @@ export const createProject = (jwt, formData)=> {
       }
     return axiosInstance.post('project/add', formData,{headers:headers })
         .then((res) => {
-            return res.data;
+            return res;
       });
 }
 export const createCollaboration = (jwt, formData)=> {
@@ -161,4 +161,11 @@ export const getHomePage = (jwt) => {
     })
 }
 
+export const likeProject = (jwt, projectId) =>{
+    console.log("from api: ", jwt, "id ", projectId);
+    return axiosInstance.put('project/like/'+projectId, projectId,{headers: { Authorization: jwt } }).then(res => {
+        //the followed/unfollowed user
+        return res.data;
+    });
 
+}

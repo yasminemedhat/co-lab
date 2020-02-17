@@ -39,6 +39,11 @@ project.patch('/update/:proj_id',
                   auth],
                  require('./update'));
 
+//@route PUT    project/like
+//@description  like project
+//@access       auth needed
+project.put('/like/:proj_id', auth, require('./like'));
+
 //@route Delete  project/deleteImage
 //@description   delete image from project
 //@access        auth needed

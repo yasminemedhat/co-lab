@@ -35,7 +35,7 @@ onCurrentImageChange(index) {
 }
 
 showProjectDetails (){
-  let index = this.state.currentImage -1
+  let index = this.state.currentImage 
   let project = this.state.projects[index]
   let path = '';
   const jwt = getJwt();
@@ -96,23 +96,27 @@ showProjectDetails (){
     else if(projects.length > 0){
       let len = 0;
       let IMAGES = [{}]
-      
-      return(
-        <div className="gallery_container">
- 
-          {this.state.projects.map((project, i) => {
+
+
+      this.state.projects.map((project) => {
         // Return the element. Also pass key
         let image = project.images[0] ? project.images[0] : []  
         IMAGES.push({src:image, thumbnail:image,
           tags: [{value: project.name, title: project.name}],
           caption: project.description,
-
-          thumbnailWidth: 260,
-          thumbnailHeight: 220,})
-
+          thumbnailWidth: 250,
+          thumbnailHeight: 150,})
+          
           })
 
-        }
+      IMAGES = IMAGES.slice(1,IMAGES.length)
+            
+      
+      return(
+        <div className="gallery_container">
+ 
+       
+      
          <div className="gallery_div">
           <Gallery images={IMAGES} enableLightbox={true}
                     enableImageSelection={false}
