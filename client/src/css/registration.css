@@ -120,7 +120,7 @@
   }
   
   .hov1:hover {
-    border-color: #d33f8d;
+    border-color:#3d2846; 
   }
   
   
@@ -284,7 +284,7 @@
     width: 100%;
     height: 100%;
     box-shadow: 0px 0px 0px 0px;
-    color: rgba(211,63,141, 0.6);
+    color:#3d2846;
   }
   
   .input100:focus + .focus-input100 {
@@ -333,7 +333,7 @@
   }
   
   .input100:focus + .focus-input100 + .symbol-input100 {
-    color: #d33f8d;
+    color: #3d2846;
     padding-left: 18px;
   }
   
@@ -374,7 +374,7 @@
     height: 18px;
     border-radius: 3px;
     background: #fff;
-    border: 2px solid #d33f8d;
+    border: 2px solid #3d2846;
     left: 0;
     top: 48%;
     -webkit-transform: translateY(-50%);
@@ -385,7 +385,7 @@
   }
   
   .input-checkbox100:checked + .label-checkbox100::before {
-    color: #d33f8d;
+    color:#3d2846;
   }
   
   
@@ -413,7 +413,7 @@
     width: 95%;
     height: 50px;
     border-radius: 3px;
-    background: #d33f8d;
+    background:#3d2846;
     display: -webkit-box;
     display: -webkit-flex;
     display: -moz-box;
@@ -481,13 +481,7 @@
     padding-bottom: 1px;
   }
   
-  
-  .btn-face:hover,
-  .btn-google:hover {
-    border-color: #d33f8d;
-  }
-  
-  
+
   
   /*------------------------------------------------------------------
   [ Alert validate ]*/
