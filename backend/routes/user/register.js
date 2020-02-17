@@ -108,14 +108,13 @@ module.exports = async (req, res) => {
         console.log('saved user in database');
         id=colaber.id;
 
-
-       
+        delete colaber.password;
         
 
         //to return user's data:
-        var filter = 'email, firstName, lastName, isSponsor, isPremium, biography, interests, projects, job, workingField, avatar';
-        var profile = _.pick(colaber, filter.split(', '));
-        console.log(profile);
+        // var filter = 'email, firstName, lastName, isSponsor, isPremium, biography, interests, projects, job, workingField, avatar';
+        // var profile = _.pick(colaber, filter.split(', '));
+        // console.log(profile);
 
         
 
@@ -137,8 +136,8 @@ module.exports = async (req, res) => {
                 console.log('token')
                 if (err) throw err;
                 console.log(token);
-                console.log(profile);
-                res.json({ token, user: profile});
+                console.log(colaber);
+                res.json({ token, user: colaber});
             }
         );
 
