@@ -239,6 +239,9 @@ class Profile extends Component {
             </div>
           </Col>
         </Row>
+        <Row>
+        
+        </Row>
         <Can role={this.context.user.userType} perform="projects:create" 
               data={{
                     userId: this.context.user._id,
