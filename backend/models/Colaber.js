@@ -13,6 +13,7 @@ const ColaberSchema=new mongoose.Schema({
     followedProjects:   [{type: mongoose.Schema.Types.ObjectId, ref: 'Project' }],
     likedProjects:      [{type: mongoose.Schema.Types.ObjectId, ref: 'Project' }],
     collaborations:     [{type: mongoose.Schema.Types.ObjectId, ref: 'Colaboration' }],
+    notifications:      [{type: mongoose.Schema.Types.ObjectId, ref: 'Notification' }],
     workingField:       { type: String},
     interests: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -59,6 +60,11 @@ ColaberSchema.post('findOneAndDelete', async function (doc) {
     }
     else   console.log('no avatar to delete');
 });
+
+//get full name
+ColaberSchema.virtual('fullName').get(function() {
+    return this.firstName + ' ' + this.lastName
+  })
 
 const Colaber=Account.discriminator('Colaber',ColaberSchema);
 

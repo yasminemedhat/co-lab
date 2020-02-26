@@ -37,7 +37,7 @@ module.exports = async (req, res) => {
             description,
             creator: req.user.id
         });
-        //console.log(project.id);
+        console.log("User: " + req.user.id );
         
 
         //save images to google drive
