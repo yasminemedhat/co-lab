@@ -9,7 +9,6 @@ class UserBasicForm extends Component {
     e.preventDefault();
 
     const values = this.props.values;
-    console.log(values);
     if (
       values.email.length === 0 ||
       values.workingField.length === 0 ||

@@ -27,9 +27,6 @@ class RegistrationForm extends Component {
      }
      static contextType = AuthContext;
 
-     static contextTypes = {
-        router: PropTypes.object
-      }
      //proceed to next step of registration
      nextStep = () => {
          const {step} = this.state;
@@ -50,7 +47,6 @@ class RegistrationForm extends Component {
     handleChange = input => e => {
        
         this.setState({ [input]: e.target.value});
-        console.log(e.target.value);
     }
 
     //handle isSponsor field change
