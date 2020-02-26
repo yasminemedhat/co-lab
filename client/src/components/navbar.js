@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Switch } from "react-router-dom";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
 import "../fonts/Linearicons-Free-v1.0.0/icon-font.min.css";
@@ -7,7 +7,7 @@ import "../css/header.css";
 import "bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
-
+import { getNotifications, openNotification } from "../utils/APICalls";
 import { withRouter } from "react-router-dom";
 import { AuthContext } from "../authContext";
 import Image from "react-bootstrap/Image";
@@ -18,12 +18,12 @@ import "react-dropdown/style.css";
 class Navbar extends Component {
   static contextType = AuthContext;
   state = {
-    notifications: [],
+    notifications: []
   };
   constuctor(props) {
     this.super(props);
     this.state = {
-      notifications: [],
+      notifications: []
     };
     this.logout = this.logout.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
@@ -33,11 +33,15 @@ class Navbar extends Component {
     this.context.logout();
   }
   componentDidMount() {
-   this.setState({
-     notifications:["notification 1","notification 2","notification 3","notification 4"]
-   })
+    getNotifications(this.context.accessToken).then(data => {
+      console.log("hii");
 
- 
+      this.setState({
+        notifications: data
+      });
+    });
+    console.log(" thissssss notifications");
+    console.log(this.state.notifications);
   }
 
   goToProfile() {
@@ -48,9 +52,45 @@ class Navbar extends Component {
     window.location.reload();
   }
 
+  unseenNotificationCount() {
+    let count = 0;
+    this.state.notifications.forEach(element => {
+      if(element.isOpened == false)
+        count++;
+    }); 
+    return count;
+  }
+
+  getNotificationPath(notification) {
+    console.log(notification);
+    const ObjectsToBeOpened = Object.freeze({
+      SENDER: "sender",
+      PROJECT: "project",
+      COLLABORATION: "co-laboration"
+    });
+     let path;
+    switch (notification.objectToBeOpened) {
+      case ObjectsToBeOpened.SENDER:
+        path =  "/users/"+notification.sender;
+        break;
+      case ObjectsToBeOpened.PROJECT:
+        path =  "/projects/"+notification.project;
+        break;
+      case ObjectsToBeOpened.COLLABORATION:
+       path =  "/collaborations/"+notification.project;
+        break;
+    }
+     return path;
+  }
+
+  openNotification (notification)
+  {
+    openNotification(this.context.accessToken, notification._id);
+  }
+
   render() {
-   console.log("my notifications")
-    console.log(this.state.notifications)
+    console.log("my notifications");
+    console.log(this.state.notifications);
     let image;
     let source =
       this.context.user && this.context.user.avatar
@@ -82,7 +122,6 @@ class Navbar extends Component {
     if (this.context.authenticated) {
       return (
         <div className="topnav ">
-          
           <link
             href="https://fonts.googleapis.com/icon?family=Material+Icons"
             rel="stylesheet"
@@ -116,6 +155,14 @@ class Navbar extends Component {
           <div className="logo_div">
             <h2 className="logo">Co-Lab</h2>
           </div>
+          <div class="search-container">
+            <form action="/action_page.php">
+              <input type="text" placeholder="Search.." name="search" />
+              <button type="submit">
+                <i class="fa fa-search"></i>
+              </button>
+            </form>
+          </div>
           <div className="navigation ">
             <NavLink exact activeClassName="selectedLink" to="/home">
               Home
@@ -127,22 +174,27 @@ class Navbar extends Component {
             <NavLink exact activeClassName="selectedLink" to="/editUser">
               Edit Profile
             </NavLink>
+
             <div className="dropdown">
-              <button
-            
-                className="notification "
-       
-              >
+              <button className="notification ">
                 <span>
                   <i className="material-icons">notifications_active</i>
                 </span>
-                <span className="badge">{this.state.notifications.length}</span>
+                <span className="badge">{this.unseenNotificationCount()}</span>
               </button>
               <div className="dropdown-content">
-                {
-                  this.state.notifications.map(notification =><a href="#">{notification}</a>)
-                }
-               
+                {this.state.notifications.map(notification => (
+                  <div style={{ background: (notification.isOpened ? 'white' : '#ddd') }}>
+                    
+                  <a href={this.getNotificationPath(notification)} 
+                      onClick={() => this.openNotification(notification)}>
+                    <label className="notification-title">{notification.title}</label>
+                    <br/>
+                    {notification.body}
+                  </a>
+                  <hr></hr>
+                  </div>
+                ))}
               </div>
             </div>
             <button className="logout-NavLink" onClick={() => this.logout()}>

@@ -115,11 +115,26 @@ export const getProjects = (jwt, userId) => {
         return res.data;
     })
 }
+export const getNotifications = (jwt) => {
+    return axiosInstance.get('user/pullNotifications', {headers: { Authorization: jwt } }).then(res => {
+  
+        console.log('form api getting notifications ', res.data);
+        return res.data;
+    })
+}
+
+export const openNotification = (jwt, notificationId) => {
+    return axiosInstance.get('user/openNotification/'+notificationId, {headers: { Authorization: jwt } }).then(res => {
+        return res.data;
+    })
+}
+
 export const getProject = (jwt, projectId) => {
     return axiosInstance.get('project/'+projectId, {headers: { Authorization: jwt } }).then(res => {
         return res.data;
     })
 }
+
 export const getCollaborations = (jwt, userId) => {
     return axiosInstance.get('user/getCollaborations/'+userId, {headers: { Authorization: jwt } }).then(res => {
         // axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${user.data.token}`;

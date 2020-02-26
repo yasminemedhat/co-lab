@@ -146,7 +146,7 @@ class Profile extends Component {
 
   createProject(formData) {
     this.setState({ loadingProjects: true });
-    alert("Creating project please wait");
+   
     const jwt = getJwt();
     createProject(jwt, formData)
       .then(res => {

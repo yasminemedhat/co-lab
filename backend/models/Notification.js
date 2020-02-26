@@ -70,8 +70,6 @@ function createNotificationObject(sender, senderFullName,
            break;
    }
    body += ".";
-   console.log("BODY: " + body);
-   console.log("Title: " + title);
 
    //create object
    return new Notification ({
