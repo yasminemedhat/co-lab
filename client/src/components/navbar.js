@@ -39,6 +39,10 @@ class Navbar extends Component {
       this.setState({
         notifications: data
       });
+    }).catch(err => {
+      if(err && err.status){
+        alert("something went wrong: " + err.message);
+      }
     });
     console.log(" thissssss notifications");
     console.log(this.state.notifications);
@@ -85,7 +89,37 @@ class Navbar extends Component {
 
   openNotification (notification)
   {
-    openNotification(this.context.accessToken, notification._id);
+    openNotification(this.context.accessToken, notification._id)
+    .catch(err => {
+      if(err && err.status){
+        alert("something went wrong: " + err.message);
+      }
+    })
+  }
+
+  generateNotificationDropDown()
+  {
+    try
+    {
+      let dropDown = 
+      this.state.notifications.map(notification => (
+        <div style={{ background: (notification.isOpened ? 'white' : '#ddd') }}>
+          
+        <a href={this.getNotificationPath(notification)} 
+            onClick={() => this.openNotification(notification)}>
+          <label className="notification-title">{notification.title}</label>
+          <br/>
+          {notification.body}
+        </a>
+        <hr></hr>
+        </div>
+      ))
+      return dropDown;
+    }catch(error)
+    {
+      console.log(error.message);
+    }
+    
   }
 
   render() {
@@ -155,11 +189,11 @@ class Navbar extends Component {
           <div className="logo_div">
             <h2 className="logo">Co-Lab</h2>
           </div>
-          <div class="search-container">
+          <div className="search-container">
             <form action="/action_page.php">
               <input type="text" placeholder="Search.." name="search" />
               <button type="submit">
-                <i class="fa fa-search"></i>
+                <i className="fa fa-search"></i>
               </button>
             </form>
           </div>
@@ -183,18 +217,7 @@ class Navbar extends Component {
                 <span className="badge">{this.unseenNotificationCount()}</span>
               </button>
               <div className="dropdown-content">
-                {this.state.notifications.map(notification => (
-                  <div style={{ background: (notification.isOpened ? 'white' : '#ddd') }}>
-                    
-                  <a href={this.getNotificationPath(notification)} 
-                      onClick={() => this.openNotification(notification)}>
-                    <label className="notification-title">{notification.title}</label>
-                    <br/>
-                    {notification.body}
-                  </a>
-                  <hr></hr>
-                  </div>
-                ))}
+              {this.generateNotificationDropDown()}
               </div>
             </div>
             <button className="logout-NavLink" onClick={() => this.logout()}>
