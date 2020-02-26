@@ -1,5 +1,8 @@
 const Colaber = require('../../models/Colaber');
 const Colaboration = require('../../models/Colaboration');
+const { ObjectsToBeOpened }= require('../../models/Notification');
+const { Actions }= require('../../models/Notification');
+const { createNotificationObject }= require('../../models/Notification');
 
 module.exports=async(req,res)=>{
     const projectToFollow_id = req.params.proj_id;
@@ -13,6 +16,11 @@ module.exports=async(req,res)=>{
         //get follower
         let follower = await Colaber.findOne({_id: follower_id}).select('-password'); 
         if(!follower)
+            return res.status(404).json({message:'User not found'});
+
+        //get owner of project
+        let projectOwner = await Colaber.findOne({_id: projectToFollow.creator}).select('-password'); 
+        if(!projectOwner)
             return res.status(404).json({message:'User not found'});
 
         //check if already followed -> if yes then unfollow else follow
@@ -29,15 +37,27 @@ module.exports=async(req,res)=>{
             projectToFollow.followers.unshift(follower_id);
             //add to follower following array
             follower.followedProjects.unshift(projectToFollow_id);
+
+            //create notification object
+            notification = createNotificationObject(
+                (Object)(follower_id), follower.fullName, projectOwner, projectToFollow_id, 
+                ObjectsToBeOpened.COLLABORATION, Actions.FOLLOW_COLLABORATION
+                );
+            
+            //add to receiver notifications
+            projectOwner.notifications.unshift(notification.id);
+            await notification.save();
+            await projectOwner.save();
         }
 
         //save user and project to db
         await projectToFollow.save();
         await follower.save();
+
         res.json({projectToFollow});       
 
     } catch (error) {
-        res.status(400).json({message:'Server Error'});
+        res.status(400).json({message:error.message});
         console.log(error);
 
     }

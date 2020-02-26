@@ -128,6 +128,16 @@ user.get('/viewProjects/:id', auth, require('./viewProjects'));
 //@access       requires authentication 
 user.get('/getCollaborations/:id', auth, require('./getCollaborations'));
 
+//@route Get    user/openNotification
+//@description  get clicked notification
+//@access       requires authentication
+user.get('/openNotification/:id', auth, require('./openNotification'));
+
+//@route GET    user/pullNotifications
+//@description  view notifications for certain user
+//@access       requires authentication 
+user.get('/pullNotifications', auth, require('./pullNotifications'));
+
 //@route POST   user/logout ->Post because browser pre-fetches for get requests
 //@description  blacklist jwt using redis
 //@access       requires authentication

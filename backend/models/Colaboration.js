@@ -4,7 +4,8 @@ const Colaber = require('./Colaber');
 
 const ColaborationSchema=new mongoose.Schema({
     members:    [{type: mongoose.Schema.Types.ObjectId, ref: 'Colaber'}],
-    followers:  [{ type: mongoose.Schema.Types.ObjectId, ref: 'Colaber'}]
+    followers:  [{ type: mongoose.Schema.Types.ObjectId, ref: 'Colaber'}],
+    updatedAt:  {  type: Date, default: Date.now}
 });
 
 //Not tested yet
