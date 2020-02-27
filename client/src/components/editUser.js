@@ -78,7 +78,12 @@ class editUser extends Component {
       formData.append("biography", this.state.biography);
     }
     if(this.state.Interests){
-      formData.append("interests", this.state.interests);
+      let i = 0;
+      let myInterests = {};
+      for (i =0 ;i<this.state.Interests.length;i++){
+          myInterests = this.state.Interests[i].value
+      };
+      formData.append("interests", myInterests);
     }
     updateUser(jwt, formData)
       .then(data => {
@@ -87,7 +92,7 @@ class editUser extends Component {
       })
       .catch(error => {
         console.log("not updatedddd");
-        alert("something went wrong!", error.message);
+        alert("project not created"+error.message);
       });
   };
 

@@ -146,7 +146,7 @@ class Profile extends Component {
 
   createProject(formData) {
     this.setState({ loadingProjects: true });
-    alert("Creating project please wait");
+   
     const jwt = getJwt();
     createProject(jwt, formData)
       .then(res => {
@@ -238,6 +238,9 @@ class Profile extends Component {
               ) : null}
             </div>
           </Col>
+        </Row>
+        <Row>
+        
         </Row>
         <Can role={this.context.user.userType} perform="projects:create" 
               data={{
