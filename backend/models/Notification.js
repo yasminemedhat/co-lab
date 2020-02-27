@@ -71,6 +71,7 @@ function createNotificationObject(sender, senderFullName,
    }
    body += ".";
 
+
    //create object
    return new Notification ({
        title,
