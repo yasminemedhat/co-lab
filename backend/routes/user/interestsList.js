@@ -11,7 +11,6 @@ module.exports= async (req, res) => {
                 interests.push(element.interest);
 
             });
-            console.log(interests);
             res.send(interests);
         }
         else {

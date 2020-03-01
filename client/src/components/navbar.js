@@ -15,6 +15,9 @@ import { Row, Col } from "react-bootstrap";
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
 
+import socket from '../../src/utils/notifications';
+
+
 class Navbar extends Component {
   static contextType = AuthContext;
   state = {
@@ -46,6 +49,12 @@ class Navbar extends Component {
     });
     console.log(" thissssss notifications");
     console.log(this.state.notifications);
+    socket.on('notification',()=>{
+      console.log(`+1`);
+      //TODO: update state
+      //note: putting this anywhere else creates multiple listeners instead of one
+      //which ruins the count
+  });
   }
 
   goToProfile() {
@@ -61,7 +70,8 @@ class Navbar extends Component {
     this.state.notifications.forEach(element => {
       if(element.isOpened == false)
         count++;
-    }); 
+    });
+     
     return count;
   }
 
@@ -154,6 +164,7 @@ class Navbar extends Component {
       );
     }
     if (this.context.authenticated) {
+      socket.emit('identify',this.context.user._id);
       return (
         <div className="topnav ">
           <link
