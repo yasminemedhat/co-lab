@@ -34,7 +34,7 @@ const ColabLink = props => {
                     <Card.Body>
                         <Card.Title>{state.name}</Card.Title>
                         <Card.Text>{state.description}</Card.Text>
-                        {state.link? (<Linkify>{state.link}</Linkify>) : null}
+                        {/* {state.link? (<Linkify>{state.link}</Linkify>) : null} */}
                     </Card.Body>
                 </Card>
         );

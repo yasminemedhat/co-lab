@@ -16,7 +16,6 @@ import ProjectPage from "./ProjectPage";
 import ColabDetails from "./ColabDetails";
 import AuthenticatedComponent from "./AuthenticatedComponent";
 import NavBar from './navbar';
-import { AuthContext } from "../authContext";
 
 
 class Header extends React.Component {
@@ -28,7 +27,7 @@ class Header extends React.Component {
         <Router>
         <NavBar></NavBar>
           <Switch>
-            <Route path="/" exact strict  component ={Login} ></Route>
+            {/* <Route path="/" exact strict  component ={Login} ></Route> */}
             <Route path="/about" exact strict component = {About}></Route>
             <Route path="/login" exact strict  component = {Login}></Route>
             <Route path="/forgotPassword" exact strict  component = {ForgotPassword}></Route>
@@ -39,6 +38,7 @@ class Header extends React.Component {
               <Route path="/users/:id" exact strict component ={Profile} >
                 
               </Route>
+              <Route path="/" exact strict  component ={Home} ></Route>
               <Route path="/home" exact strict  component ={Home} ></Route>
               <Route path="/editUser" exact strict component ={editUser} />
               <Route path="/collaborations/:id/EditCollaboration" exact strict component ={EditCollaboration} />

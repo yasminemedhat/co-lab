@@ -36,25 +36,25 @@ class Navbar extends Component {
     this.context.logout();
   }
   componentDidMount() {
-    getNotifications(this.context.accessToken).then(data => {
-      console.log("hii");
-
-      this.setState({
-        notifications: data
+    if(this.context.authenticated){
+      getNotifications(this.context.accessToken).then(data => {
+        this.setState({
+          notifications: data
+        });
+      }).catch(err => {
+        if(err && err.status){
+          alert("something went wrong: " + err.message);
+        }
       });
-    }).catch(err => {
-      if(err && err.status){
-        alert("something went wrong: " + err.message);
-      }
-    });
-    console.log(" thissssss notifications");
-    console.log(this.state.notifications);
-    socket.on('notification',()=>{
-      console.log(`+1`);
-      //TODO: update state
-      //note: putting this anywhere else creates multiple listeners instead of one
-      //which ruins the count
-  });
+      console.log(" thissssss notifications");
+      console.log(this.state.notifications);
+      socket.on('notification',()=>{
+        console.log(`+1`);
+        //TODO: update state
+        //note: putting this anywhere else creates multiple listeners instead of one
+        //which ruins the count
+      });
+    }
   }
 
   goToProfile() {
@@ -113,7 +113,7 @@ class Navbar extends Component {
     {
       let dropDown = 
       this.state.notifications.map(notification => (
-        <div style={{ background: (notification.isOpened ? 'white' : '#ddd') }}>
+        <div key={notification._id} style={{ background: (notification.isOpened ? 'white' : '#ddd') }}>
           
         <a href={this.getNotificationPath(notification)} 
             onClick={() => this.openNotification(notification)}>
@@ -247,9 +247,9 @@ class Navbar extends Component {
           </div>
           <div className="navigation">
             <ul>
-              <NavLink exact activeClassName="selectedLink" to="/">
+              {/* <NavLink exact activeClassName="selectedLink" to="/">
                 Home
-              </NavLink>
+              </NavLink> */}
               <NavLink exact activeClassName="selectedLink" to="/about">
                 About
               </NavLink>

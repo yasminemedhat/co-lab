@@ -6,8 +6,6 @@ import "../fonts/Linearicons-Free-v1.0.0/icon-font.min.css";
 import Gallery from "react-grid-gallery";
 import { getHomePage, getCollaboration, getProject } from "../utils/APICalls";
 import { getJwt } from "../helpers/jwt";
-import { Row, Col } from "react-bootstrap";
-import HomeProjectLink from "./HomeProjectLink";
 import { withRouter } from "react-router-dom";
 import { AuthContext } from "../authContext";
 
