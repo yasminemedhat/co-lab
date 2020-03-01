@@ -3,6 +3,8 @@ const Project = require('../../models/Project');
 const { ObjectsToBeOpened }= require('../../models/Notification');
 const { Actions }= require('../../models/Notification');
 const { createNotificationObject }= require('../../models/Notification');
+
+const server=require('../../server');
 module.exports=async(req,res)=>{
     const projectID = req.params.proj_id;
     const userID = req.user.id;
@@ -49,6 +51,9 @@ module.exports=async(req,res)=>{
             projectOwner.notifications.unshift(notification.id);
             await notification.save();
             await projectOwner.save();
+
+            server.io.to(projectOwner.id).emit('notification');
+
         }
 
         //save user and project to db

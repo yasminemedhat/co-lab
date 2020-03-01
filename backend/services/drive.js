@@ -45,7 +45,6 @@ module.exports = {
     await refreshToken();
     
     const destination=(option===1)? projectFolderID:colabFolderID;
-    console.log(destination);
     //in case of an error -> return undefined
 
     if (projectID == null) {
@@ -291,10 +290,7 @@ function setPermissions(id) {
 async function refreshToken() {//check if token expired
 
   const now = Date.now();
-  console.log(now);
-  console.log(expiry_date);
   const timeLeft = expiry_date - now; //in seconds
-  console.log(timeLeft);
   if (timeLeft <= 5000) {
     module.exports.connectDrive();
   }

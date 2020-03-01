@@ -116,7 +116,6 @@ class ProjectPage extends Component {
    {
      Toast.hide()
      let images = project.images ? project.images : []
-  
       let IMAGES = [{}]
 
       for (let i = 0; i <images.length; i ++) {

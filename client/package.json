@@ -5,13 +5,14 @@
   "dependencies": {
     "axios": "^0.19.0",
     "babel-plugin-transform-export-extensions": "^6.22.0",
-    "bootstrap": "^4.3.1",
+    "bootstrap": "^4.4.1",
     "concurrently": "^5.0.0",
     "enzyme-adapter-react-16": "^1.15.2",
     "font-awesome": "^4.7.0",
     "formik": "^2.0.8",
     "is-url": "^1.2.4",
     "jest-cli": "^24.9.0",
+    "jquery": "^3.4.1",
     "light-toast": "^0.2.3",
     "mobx": "^5.15.0",
     "mobx-react": "^6.1.4",
@@ -33,6 +34,7 @@
     "react-simple-dropdown": "^3.2.3",
     "react-test-renderer": "^16.12.0",
     "reactstrap": "^8.2.0",
+    "socket.io-client": "^2.3.0",
     "yup": "^0.27.0"
   },
   "scripts": {
