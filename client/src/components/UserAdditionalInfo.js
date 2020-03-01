@@ -60,7 +60,7 @@ class UserAdditionalInformation extends Component {
 
 
              
-                <ReactMultiSelectCheckboxes options={values.interestsList} onChange={this.props.handleChosenInterests} placeholder='Choose your Interests'/>
+                <ReactMultiSelectCheckboxes options={values.interestsList} onChange={this.props.handleChosenInterests} placeholderButtonLabel='Choose your Interests'/>
 
                 
 

@@ -31,9 +31,15 @@
     font-size: 0.8rem;
 }
 .ColabContainer{
-    width: 100%;
- 
+    width: 100%;  
+
+    min-height: 100% !important;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
     padding: 15px;
     background: #3d28468c;
-    position: absolute;  left: 0;
+    position: absolute;
+    min-height: fit-content;
+    z-index: 1;
 }

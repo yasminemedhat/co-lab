@@ -86,19 +86,20 @@ class Login extends React.Component {
       <div>
         <div className="Limiter">
           <div className="main_container">
+          <div className="wrap-login100 p-l-50 p-r-50 p-t-77 p-b-30">
              <LoginForm
               sumbit = {this.loginUser}
               handleChange= {this.handleChange}
               values = {values}></LoginForm>
              <div className="otherlogin">
-               <Link to='/forgotPassword'>Forgot password?</Link>
+               <Link className="forgotPassword" to='/forgotPassword'>Forgot password?</Link>
                <br></br>
             <span className="txt1">Not a member?</span>
 
             <button onClick={this.routeChange}>sign up </button>
           </div>
 
-            
+            </div>
 
           </div>
 

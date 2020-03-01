@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "../css/login.css";
+import "../css/registration.css";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
 // import Select from "react-select";
@@ -28,7 +28,7 @@ class UserBasicForm extends Component {
 
     return (
       <div className="main_container">
-        <div className="wrap-login100 p-l-50 p-r-50 p-t-77 p-b-30">
+        <div className="wrap-registration100 p-l-50 p-r-50 p-t-77 p-b-30">
           <form className="login100-form validate-form">
             <span className="login100-form-title p-b-55">
               Basic Information

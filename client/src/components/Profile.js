@@ -236,6 +236,11 @@ class Profile extends Component {
               {this.state.user.phone ? (
                 <p>Phone Number: {this.state.user.phone}</p>
               ) : null}
+              
+              {this.state.user.workingField ? (
+                <p>working Field: {this.state.user.workingField}</p>
+              ) : null}
+             
             </div>
           </Col>
         </Row>
@@ -283,7 +288,7 @@ class Profile extends Component {
             
             
               overflow: "hidden",
-              overflowX: "scroll",
+              overflowX: "auto",
               
             }}>
          
@@ -301,7 +306,7 @@ class Profile extends Component {
                 <Col key={i}
                 style={{
                   width: "100%",
-                  height: "430px"
+                  height: "460px"
                 }}>
                   <ProjectLink key={i} project={project} />
                 </Col>
@@ -354,7 +359,7 @@ class Profile extends Component {
             
             
               overflow: "hidden",
-              overflowX: "scroll",
+              overflowX: "auto",
               
             }}>
           <br></br>
@@ -365,7 +370,7 @@ class Profile extends Component {
                   <Col key={i}
                   style={{
                     width: "100%",
-                    height: "430px"
+                    height: "460px"
                   }}>
                     <ColabLink
                       key={i}
