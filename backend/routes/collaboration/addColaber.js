@@ -5,6 +5,8 @@ const { ObjectsToBeOpened }= require('../../models/Notification');
 const { Actions }= require('../../models/Notification');
 const { createNotificationObject }= require('../../models/Notification');
 
+const server=require('../../server');
+
 module.exports = async  (req, res) => {
     //if there are missing fields
     const errors = validationResult(req);
@@ -74,6 +76,8 @@ module.exports = async  (req, res) => {
 
         await colab.save();
         res.send(colab);
+        server.io.to(newMember.id).emit('notification');
+
 
     } catch (error) {
         console.log(error);

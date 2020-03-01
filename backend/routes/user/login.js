@@ -41,7 +41,6 @@ module.exports=async (req,res)=>{
         
         //remove password before returning a response
         delete user.password;
-        console.log(user);
     
         //create auth token
         jwt.sign(
@@ -49,7 +48,6 @@ module.exports=async (req,res)=>{
             {expiresIn:config.get('jwtExpiration')},
            (err,token) =>{
                if(err)throw err;
-               console.log("JWT auth from login: ", token);
                res.json({token,user});
            }
         );

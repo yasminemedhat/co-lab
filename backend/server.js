@@ -2,6 +2,8 @@ const express = require('express');
 const connectDB = require('./config/db'); //Database
 const path = require('path');
 const drive=require('./services/drive');
+const socket=require('socket.io');
+const http=require('http');
 
 //const initInterests=require('./middleware/initInterests');
 
@@ -29,7 +31,6 @@ drive.connectDrive();
 //connect all routes
 app.use('/', require('./routes'));
 
-
 // Serve static assets if in production
 if (process.env.NODE_ENV === 'production') {
     // Set static folder
@@ -50,4 +51,30 @@ const PORT = process.env.PORT || 5000;
 
 
 
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+var server=app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+//socket.io notifications
+const io=socket.listen(server);
+
+
+
+//socket listener for connections:
+io.on('connection',function(socket){
+    console.log(`${socket.id} connected`);
+
+    socket.on('disconnect',function(){
+        console.log(`${socket.id} disconnected`);
+        
+        //leaves room automatically
+
+    });
+    
+    //map socket.id to user:
+    socket.once('identify',function(data){
+        console.log(`${socket.id} is user ${data}`);
+        //Each user has a "room" with their mongodb id as its name
+        //because we cannot change socket.id :)
+        socket.join(data);    
+    })
+});
+
+exports.io=io;

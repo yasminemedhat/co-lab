@@ -25,7 +25,6 @@ module.exports=function(req,res,next){
 
             //         }
             //         else{
-                        console.log(decoded);
                         req.user=decoded.user;
                         req.exp=decoded.exp;
                         req.token=token;
