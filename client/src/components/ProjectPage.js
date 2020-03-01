@@ -116,15 +116,16 @@ class ProjectPage extends Component {
    {
      Toast.hide()
      let images = project.images ? project.images : []
-      let len = 0;
+  
       let IMAGES = [{}]
 
       for (let i = 0; i <images.length; i ++) {
-      len = IMAGES.push({src:images[i], thumbnail:images[i],
+       IMAGES.push({src:images[i], thumbnail:images[i],
         
         thumbnailWidth: 250,
         thumbnailHeight: 212,})
       }
+      IMAGES = IMAGES.slice(1,IMAGES.length)
       
       
     return(

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../css/ProjectPage.css";
 import "../css/createProject.css";
+import "../css/main.css";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
 import { Row, Table } from "react-bootstrap";
@@ -25,7 +26,7 @@ const ColabDetails = props => {
   const [newMemberEmail, setNewMemberEmail] = useState("");
   const [update, setUpdate] = useState(false);
   const [likes , setLikes] = useState({likeButton: true,likesCount: 0});
-  const IMAGES = [{}];
+  let IMAGES = [{}];
 
   useEffect(() => {
     const jwt = getJwt();
@@ -118,10 +119,10 @@ const ColabDetails = props => {
       </div>
     );
   } else {
-    let len = 0;
+  
 
     for (let i = 0; i < colab.images.length; i = i + 1) {
-      len = IMAGES.push({
+      IMAGES.push({
         src: colab.images[i],
         thumbnail: colab.images[i],
 
@@ -129,6 +130,7 @@ const ColabDetails = props => {
         thumbnailHeight: 212
       });
     }
+    IMAGES = IMAGES.slice(1,IMAGES.length)
     // let members = [];
     // for(let i=0;i<colab.members.length; i++){
     // members[i] = <div key={i}><h3>{colab.members[i].firstName} {colab.members[i].lastName}</h3></div>
