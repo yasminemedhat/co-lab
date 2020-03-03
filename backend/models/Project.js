@@ -36,4 +36,4 @@ ProjectSchema.post(['remove','findOneAndDelete'],async function (doc){
 
 });
 
-module.exports = Project = mongoose.model('Project', ProjectSchema);
+module.exports = mongoose.model('Project', ProjectSchema);

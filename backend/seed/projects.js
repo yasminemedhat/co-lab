@@ -1,7 +1,7 @@
 var Project = require('../models/Project');
+var Colaber = require('../models/Colaber');
 var interestsList = require('../models/InterestList');
 var mongoose = require('mongoose');
-var bcrypt = require('bcryptjs');
 var config = require('config');
 var _ = require('underscore');
 var faker = require('faker');
@@ -10,7 +10,7 @@ var included_interests = ["Painting", "Film Making", "Fashion Design", "Photogra
 var baseURL = config.get('awsS3');
 
 function subset(arr) {
-    return _.sample(arr, _.random(arr.length));
+    return _.sample(arr, _.random(arr.length/5));
 }
 
 async function getInterestsList() {
@@ -25,43 +25,24 @@ async function getInterestsList() {
   return interestsArr;
 }
 async function getUsersWithInterest(interestId) {
-    var usersArray = [];
-    list = await Colaber.find({workingField: interestId}, {_id:1}).limit(50).exec( function (err, colabers) {
-        if (colabers) {
-            usersArray = colabers;
-        }else if(err){
-            console.log(err);
-        }
-
-    });
-  return usersArray;
+    list = await Colaber.find({workingField: interestId}, {_id:1}).limit(50);
+    return list;
 }
 async function getUsers() {
-    var usersArray = [];
-    list = await Colaber.find({}, {_id:1}, function (err, colabers) {
-        if (colabers) {
-           usersArray = colabers
-        }else if(err){
-            console.log(err);
-        }
-    });
-  return usersArray;
+    var list = await Colaber.find({}, {_id:1})
+    return list;
 }
-async function getUser(id) {
-    colaber = await Colaber.findOne({_id:id}, function (err, colaber) {
-        if (colaber) {
-            console.log(colaber);
-        }
-        else if(err){
-            console.log(err);
-        }
 
-    });
-  return colaber;
+async function addProjectToUser(id,projectId) {
+    var colaber = await Colaber.findOne({_id:id});
+    if (colaber) {
+        colaber.projects.unshift(projectId);
+    }
+    await colaber.save();
 }
 
 const likeProject = async (projectId, likers)=>{
-    console.log(userId + " getting liked");
+    console.log("getting liked");
     for(let index=0; index<likers.length; index++){
         liker = await Colaber.findOne({_id: likers[index]}).select('-password');
         if(liker && !liker.likedProjects.includes(projectId)){
@@ -84,23 +65,26 @@ async function createProject(userId, imagesArr, users){
         likes: likers
     });
     await project.save();
-    console.log("saved"); 
+    console.log("saved project "+ project._id);
+    await addProjectToUser(userId, project._id);
     await likeProject(project._id, likers);
     return project;
 }
 
 const forLoop = async ()=> {
-    console.log('Start creating users')
+    console.log('Start creating projects')
     const interests = await getInterestsList();
     console.log(interests);
     var pad = "000";
-    console.log(interests[0].interest);
     for(let j=0;j<interests.length;j++){
         if(included_interests.includes(interests[j].interest)){
+            console.log("\n\n");
             console.log('creating projects for '+ interests[j].interest);
             var interestName = interests[j].interest.split(' ').join('+');
             const colabers = await getUsers();
+            console.log(colabers.length);
             const creators = await getUsersWithInterest(interests[j]._id);
+            console.log(creators.length);
             for (let index = 0; index < creators.length; index++) {
                 console.log("creating user "+ index+ " projects")
                 for(let i=0;i<2;i++){
@@ -111,7 +95,8 @@ const forLoop = async ()=> {
                     var imageURL4 = baseURL + interestName + "/" +(pad.substring(0, pad.length - imagePositions[3].toString().length) + imagePositions[3].toString()) + ".jpg"
                     var imageURL5 = baseURL + interestName + "/" +(pad.substring(0, pad.length - imagePositions[4].toString().length) + imagePositions[4].toString()) + ".jpg"
                     var images = [imageURL1,imageURL2,imageURL3,imageURL4,imageURL5]
-                    await createProject(creators[index],images,colabers);
+                    var project = await createProject(creators[index],images,colabers);
+                    console.log(project.name);
                 }
             }
         }
