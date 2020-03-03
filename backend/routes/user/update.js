@@ -12,6 +12,10 @@ module.exports = async (req, res) => {
 
     let colaber = await Colaber.findOne({ _id: id }).select('-password');
 
+    if(!colaber){
+        return res.status(400).json('User not found')
+    }
+
     const {
         firstname, lastname, phone, isSponsor, interests, biography, workingField } = req.body;
 
@@ -31,6 +35,13 @@ module.exports = async (req, res) => {
             }
         }
 
+        //workingField get id
+        if(workingField){
+        var work=await interestsList.findOne({interest: workingField});
+        }
+        console.log(work);
+
+
 
         //upload avatar
         var url = undefined;
@@ -49,31 +60,13 @@ module.exports = async (req, res) => {
             }
         }
 
-        // //create the updates query:
-        // let params = {
-        //     firstName: firstname,
-        //     lastName: lastname,
-        //     avatar: url,
-        //     phone: phone,
-        //     workingField: workingField,
-        //     interests: list,
-        //     bio: biography,
-        //     isSponsor: isSponsor,
-        // };
-
-        // for(let prop in params) if(!params[prop]) delete params[prop];
-        // console.log(params);
-        // res.send(params);
-
-        // //update
-        // await Colaber.findOneAndUpdate({_id:id},params);
-
+        
         //update:
         if (firstname) colaber.firstName = firstname;
         if (lastname) colaber.lastName = lastname;
         if (url) colaber.avatar = url;
         if (list) colaber.interests = list;
-        if (workingField) colaber.workingField = workingField;
+        if (work != null) colaber.workingField = work._id;
         if (phone) colaber.phone = phone;
         if (biography) colaber.biography = biography;
         if (isSponsor) colaber.isSponsor = isSponsor;

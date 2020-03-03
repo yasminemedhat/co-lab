@@ -57,7 +57,9 @@ module.exports = async (req, res) => {
                 list.push(interest._id);
             }
 
-        console.log(list);
+            //workingField get id
+           var workFieldid=await interestsList.findOne({interest: workingField});
+
 
         var url;
          //upload image
@@ -82,7 +84,7 @@ module.exports = async (req, res) => {
             isPremium: false,
             interests: list,
             biography,
-            workingField,
+            workingField:workFieldid,
             avatar: url
         });
         
@@ -116,7 +118,7 @@ module.exports = async (req, res) => {
         //jwt token:
         const payload = {
             user: {
-                id: colaber.id
+                id: colaber._id
             }
         };
         
