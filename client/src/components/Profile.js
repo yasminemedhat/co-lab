@@ -167,14 +167,13 @@ class Profile extends Component {
   }
   createCollaboration(formData) {
     this.setState({ loadingCollaborations: true });
-    alert("Creating collaboration please wait");
     const jwt = getJwt();
     createCollaboration(jwt, formData)
       .then(res => {
         alert("Collaboration created successfully!");
         let collaborations = this.state.collaborations;
         collaborations.unshift(res.data);
-        this.setState({ collaborations });
+        this.setState({ collaborations: collaborations });
         this.setState({ loadingCollaborations: false });
          this.forceUpdate();
       })
@@ -183,7 +182,7 @@ class Profile extends Component {
           alert("Could not create collaboration: " + err.message);
         }
       });
-    this.setState({ loadingCollaborations: false });
+    // this.setState({ loadingCollaborations: false });
   }
 
   render() {
@@ -363,7 +362,11 @@ class Profile extends Component {
               
             }}>
           <br></br>
-          {this.state.collaborations
+          {this.state.loadingCollaborations ? (
+            <div>
+              <h5>Loading Collaborations...</h5>
+            </div>
+          ) : this.state.collaborations
             ? this.state.collaborations.map((colab, i) => {
                 // Return the element. Also pass key
                 return (

@@ -11,6 +11,7 @@ import Gallery from "react-grid-gallery";
 import { AuthContext } from "../authContext";
 import Can from "./Can";
 import Toast from 'light-toast';
+import { withRouter} from 'react-router-dom';
 
 //import 'font-awesome/css/font-awesome.min.css';
 
@@ -24,7 +25,8 @@ class ProjectPage extends Component {
     this.state={
       loadingProject: true,
       likeButton: true,
-      likesCount: 0
+      likesCount: 0,
+      project: {}
     }
     this.componentDidMount = this.componentDidMount.bind(this);
     this.editProject = this.editProject.bind(this);
@@ -38,13 +40,13 @@ class ProjectPage extends Component {
         });
   }
 
-  editProject = project =>{
+  editProject = () =>{
 
-    let path = "/Projects/" + project._id + "/EditProject" ;
+    var path = "/projects/" + this.state.project._id + "/edit";
     this.props.history.push({
       pathname: path,
       state: {
-        project: project
+        project: this.state.project
       }
      
     });
@@ -193,4 +195,4 @@ class ProjectPage extends Component {
     
   }
 }
-export default ProjectPage;
+export default withRouter(ProjectPage);

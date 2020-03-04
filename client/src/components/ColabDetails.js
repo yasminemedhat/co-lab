@@ -54,8 +54,8 @@ const ColabDetails = props => {
     });
   };
 
-  const editColaboration = colab => {
-    let path = "/collaborations/" + colab._id + "/EditCollaboration";
+  const editColaboration = () => {
+    let path = "/collaborations/" + colab._id + "/edit";
     props.history.push({
       pathname: path,
       state: {
