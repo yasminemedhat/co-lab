@@ -12,7 +12,6 @@ import { withRouter } from "react-router-dom";
 import { AuthContext } from "../authContext";
 import Image from "react-bootstrap/Image";
 import { Row, Col } from "react-bootstrap";
-import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
 
 import socket from '../../src/utils/notifications';
@@ -21,16 +20,23 @@ import socket from '../../src/utils/notifications';
 class Navbar extends Component {
   static contextType = AuthContext;
   state = {
-    notifications: []
+    notifications: [],
+    notificationCount:0
+
+
   };
   constuctor(props) {
     this.super(props);
     this.state = {
-      notifications: []
+      notifications: [],
+      notificationCount:0
+    
     };
     this.logout = this.logout.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
     this.goToProfile = this.goToProfile.bind(this);
+    this.unseenNotificationCount = this.unseenNotificationCount.bind(this)
+    this.getNotificationPath = this.getNotificationPath.bind(this)
   }
   logout() {
     this.context.logout();
@@ -41,15 +47,32 @@ class Navbar extends Component {
         this.setState({
           notifications: data
         });
+        this.unseenNotificationCount()
       }).catch(err => {
         if(err && err.status){
           alert("something went wrong: " + err.message);
         }
       });
-      console.log(" thissssss notifications");
-      console.log(this.state.notifications);
+    
       socket.on('notification',()=>{
         console.log(`+1`);
+        
+       // this.setState({
+       //   notificationCount:this.notificationCount+1
+       // })
+
+       getNotifications(this.context.accessToken).then(data => {
+        this.setState({
+          notifications: data
+        });
+        this.unseenNotificationCount()
+      }).catch(err => {
+        if(err && err.status){
+          alert("something went wrong: " + err.message);
+        }
+      });
+      
+      
         //TODO: update state
         //note: putting this anywhere else creates multiple listeners instead of one
         //which ruins the count
@@ -70,13 +93,20 @@ class Navbar extends Component {
     this.state.notifications.forEach(element => {
       if(element.isOpened == false)
         count++;
+        console.log("count")
     });
-     
+    this.setState({
+      notificationCount: count 
+     });
+  
+    console.log("henaaaaaa")
+    console.log(this.state.notificationCount)
     return count;
   }
 
+
   getNotificationPath(notification) {
-    console.log(notification);
+  
     const ObjectsToBeOpened = Object.freeze({
       SENDER: "sender",
       PROJECT: "project",
@@ -135,6 +165,7 @@ class Navbar extends Component {
   render() {
     console.log("my notifications");
     console.log(this.state.notifications);
+   
     let image;
     let source =
       this.context.user && this.context.user.avatar
@@ -225,7 +256,8 @@ class Navbar extends Component {
                 <span>
                   <i className="material-icons">notifications_active</i>
                 </span>
-                <span className="badge">{this.unseenNotificationCount()}</span>
+                <span className="badge">{this.state.notificationCount}</span>
+            
               </button>
               <div className="dropdown-content">
               {this.generateNotificationDropDown()}

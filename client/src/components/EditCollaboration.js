@@ -103,7 +103,7 @@ class EditCollaboration extends Component {
       <div>
         <div className="profile_container">
           <div
-            className="wrap-login100 p-l-50 p-r-50 p-t-77 p-b-30"
+            className="wrap-edit100 p-l-50 p-r-50 p-t-77 p-b-30"
             style={{ marginLeft: "30%" }}
           >
             <form className="login100-form validate-form">
