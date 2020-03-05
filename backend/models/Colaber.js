@@ -14,10 +14,10 @@ const ColaberSchema=new mongoose.Schema({
     likedProjects:      [{type: mongoose.Schema.Types.ObjectId, ref: 'Project' }],
     collaborations:     [{type: mongoose.Schema.Types.ObjectId, ref: 'Colaboration' }],
     notifications:      [{type: mongoose.Schema.Types.ObjectId, ref: 'Notification' }],
-    workingField:       { type: mongoose.Schema.Types.ObjectId, ref: "interestList"},
+    workingField:       { type: mongoose.Schema.Types.ObjectId, ref: "Interest"},
     interests: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "interestList"
+        ref: "Interest"
     }],
     biography:  { type: String},
     isSponsor:  { type: Boolean},

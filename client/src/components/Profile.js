@@ -237,7 +237,7 @@ class Profile extends Component {
               ) : null}
               
               {this.state.user.workingField ? (
-                <p>working Field: {this.state.user.workingField}</p>
+                <p>working Field: {this.state.user.workingField.interest}</p>
               ) : null}
              
             </div>

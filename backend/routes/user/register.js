@@ -89,14 +89,6 @@ module.exports = async (req, res) => {
         });
         
 
-        console.log(colaber.interests);
-
-
-
-
-
-
-
         //encrypt password:
         const salt = await bcrypt.genSalt(10);
         colaber.password = await bcrypt.hash(password, salt);
@@ -113,6 +105,7 @@ module.exports = async (req, res) => {
         //remove password
         colaber= colaber.toObject();
         delete colaber.password;
+        colaber.workingField=workFieldid;
 
 
         //jwt token:

@@ -21,7 +21,7 @@ module.exports=async (req,res)=>{
     //we do not specify which one of them is wrong
     //to not reveal an existing user's email 
     try{
-        let user=await Account.findOne({email}).select('-collaborations -projects').lean();
+        let user=await Account.findOne({email}).select('-collaborations -projects').populate('workingField').lean();
 
         if(!user){
             return res.status(400).json({message:'Invalid Credentials'});
