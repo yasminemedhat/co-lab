@@ -54,9 +54,9 @@ module.exports = async (req, res) => {
                 console.log('error in avatar');
                 return res.status(500).json({ message: 'Server Error. No changes were made' });
             }
-            newImageid = url.match('id=(.*?)&')[1]; //incase we want to rollback;
+            newImageid = url.match('id=(.*?)$')[1]; //incase we want to rollback;
             if (colaber.avatar) {
-                oldImageid = (colaber.avatar).match('id=(.*?)&')[1];
+                oldImageid = (colaber.avatar).match('id=(.*?)$')[1];
             }
         }
 

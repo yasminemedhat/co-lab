@@ -50,7 +50,7 @@ project.put('/like/:proj_id', auth, require('./like'));
 project.delete('/deleteImage',auth,async(req,res)=>{
     const url=req.body.url;
     try {
-        var imageID = url.match('id=(.*?)&')[1];//get image id for deletion
+        var imageID = url.match('id=(.*?)$')[1];//get image id for deletion
         await drive.deleteFileByID(imageID);
         let project=await Project.findOneAndUpdate({images: url},
              { $pull: { images: url} },

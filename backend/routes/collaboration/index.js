@@ -69,4 +69,12 @@ collaboration.delete('/:id/removeColaber', auth, require('./removeColaber'));
 //@access           auth needed + only the creator can delete collaboration
 collaboration.delete('/:id',auth,require('./delete'));
 
+//@route PATCH     collaboration/update/:id
+//@description     update collaboration
+//@access          auth needed + both creator and colabers can edit projects
+collaboration.patch('/update/:id',
+                 [upload.array('photos'),//max number of pics->10
+                  auth],
+                 require('./update'));
+
 module.exports = collaboration;

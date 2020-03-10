@@ -138,7 +138,7 @@ module.exports = async (req, res) => {
         Colaber.findOneAndDelete({_id: id});
         if(url)
         {
-            var id  = url.match('id=(.*?)&')[1];
+            var id  = url.match('id=(.*?)$')[1];
             await drive.deleteFileByID(id);
         }
         res.status(500).json({ message: 'Server Error' });
