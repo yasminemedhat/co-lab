@@ -202,6 +202,7 @@ module.exports = {
       });
       console.log(response.status);
       var { id, webContentLink } = response.data;
+      webContentLink = webContentLink.replace('&export=download', '');
 
       //set permissions:
       setPermissions(id);

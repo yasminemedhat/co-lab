@@ -28,7 +28,7 @@ module.exports = async (req, res) => {
             var urls;
             if (project.images.length>0) {
                 //get parent folder id
-                var imageID = (project.images[0]).match('id=(.*?)&')[1];
+                var imageID = (project.images[0]).match('id=(.*?)$')[1];
                 var parentID = await drive.getParentFolder(imageID);
                 urls = await drive.uploadImagesToFolder(parentID, files);
             }
@@ -61,7 +61,7 @@ module.exports = async (req, res) => {
         var i = 0;
         if(urls){
         urls.forEach(url => {//delete each image
-            var id = url.match('id=(.*?)&')[1];
+            var id = url.match('id=(.*?)$')[1];
             drive.deleteFileByID(id);
             i++;
         });}

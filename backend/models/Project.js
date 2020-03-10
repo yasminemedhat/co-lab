@@ -26,7 +26,7 @@ const ProjectSchema = new Schema({
 ProjectSchema.post(['remove','findOneAndDelete'],async function (doc){
      //remove images
      if (doc.images) {
-        var imageID = (doc.images[0]).match('id=(.*?)&')[1];
+        var imageID = (doc.images[0]).match('id=(.*?)$')[1];
         var parentID = await drive.getParentFolder(imageID);
 
         await drive.deleteFolder(parentID);

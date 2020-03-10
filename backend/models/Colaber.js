@@ -54,7 +54,7 @@ ColaberSchema.post('findOneAndDelete', async function (doc) {
 //remove avatar from drive
 ColaberSchema.post('findOneAndDelete', async function (doc) {
     if(doc.avatar){
-        var imageID = doc.avatar.match('id=(.*?)&')[1];//get image id for deletion
+        var imageID = doc.avatar.match('id=(.*?)$')[1];//get image id for deletion
         await drive.deleteFileByID(imageID);
         console.log('Deleted avatar');
     }
