@@ -8,7 +8,7 @@ import { getHomePage, getCollaboration, getProject } from "../utils/APICalls";
 import { getJwt } from "../helpers/jwt";
 import { withRouter } from "react-router-dom";
 import { AuthContext } from "../authContext";
-
+import Toast from 'light-toast';
 
 
 class Home extends React.Component {
@@ -87,11 +87,19 @@ showProjectDetails (){
     if (loadingProjects === true || !projects) {
       return (
         <div>
-          <h1>loading...</h1>
+              { Toast.loading("Please wait")
+             }
         </div>
+       
       );
+    
     }
+   
+    
     else if(projects.length > 0){
+      setTimeout(() => {
+        Toast.hide();
+      }, 200);
       let len = 0;
       let IMAGES = [{}]
 

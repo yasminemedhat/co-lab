@@ -243,9 +243,6 @@ class Profile extends Component {
             </div>
           </Col>
         </Row>
-        <Row>
-        
-        </Row>
         <Can role={this.context.user.userType} perform="projects:create" 
               data={{
                     userId: this.context.user._id,
@@ -274,24 +271,22 @@ class Profile extends Component {
       />
         
         <h4 style={{ fontStyle: "bold", margin: "10px" }}>Projects </h4>
+
+      
         <Row
           style={{
             width: "100%",
             height: "430px"
           }}
         >
-       
             <HorizontalScroll
             className="horizontal_scroll"
-             style={{
-            
-            
-              overflow: "hidden",
-              overflowX: "auto",
-              
+             style={{overflow: "hidden", overflowX: "auto",    
             }}>
+       
          
           <br></br>
+          <div className="cardsRow">
         {this.state.loadingProjects ? (
             <div>
               <h5>Loading Projects...</h5>
@@ -313,10 +308,11 @@ class Profile extends Component {
             })
             
           ) : null}
-        </HorizontalScroll>
-       
+      </div>
+      </HorizontalScroll>
         </Row>
-        <Row style={{height: "30px"}}></Row>
+   
+
         <Can role={this.context.user.userType} perform="collaborations:create" 
               data={{
                     userId: this.context.user._id,
@@ -347,7 +343,9 @@ class Profile extends Component {
       
             style={{
               width: "100%",
-              height: "430px"
+              height: "430px",
+              transform:"none",
+              willChange:"none"
             }}
        
         >
@@ -362,6 +360,7 @@ class Profile extends Component {
               
             }}>
           <br></br>
+          <div className="cardsRow">
           {this.state.loadingCollaborations ? (
             <div>
               <h5>Loading Collaborations...</h5>
@@ -384,9 +383,12 @@ class Profile extends Component {
                 );
               })
             : null}
+            </div>
               </HorizontalScroll>
       
         </Row>
+  
+       
       </div>
     );
   }

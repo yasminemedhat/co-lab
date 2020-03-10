@@ -43,3 +43,14 @@
     min-height: fit-content;
     z-index: 1;
 }
+
+.projectCard{
+    float: left !important;
+}
+
+.cardDescription{
+    word-break: break-all;
+    overflow: hidden;
+    text-overflow: ellipsis;
+white-space: nowrap;
+}

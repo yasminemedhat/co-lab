@@ -8,11 +8,12 @@ import Img from "react-image";
 import { getInterestsList} from '../utils/APICalls';
 import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
 import { AuthContext } from "../authContext";
+import Toast from 'light-toast';
 
 
 class editUser extends Component {
   static contextType = AuthContext;
-
+  
   state = {
     user: undefined,
     profilePicture: undefined,
@@ -85,10 +86,19 @@ class editUser extends Component {
       };
       formData.append("interests", myInterests);
     }
+
     updateUser(jwt, formData)
       .then(data => {
-        alert("Your account was updated succeffully");
-        this.props.history.push(path);
+        //alert("Your account was updated succeffully");
+        Toast.success('Your account was updated', 2000, () => {
+          // do something after the toast disappears
+          this.props.history.push(path);
+        });
+      
+        
+       
+        
+        
       })
       .catch(error => {
         console.log("not updatedddd");
@@ -112,6 +122,7 @@ class editUser extends Component {
 
 
   render() {
+
     const user = this.state.user;
     if (user === undefined) {
       return (
@@ -236,7 +247,7 @@ class editUser extends Component {
               Sponsor
             </label>
           </div>
-        
+       
       
           {/* <div className="wrap-input100  m-b-16">
                   <select multiple={true} value={user.interests}  onChange={this.props.handleChosenInterests} >

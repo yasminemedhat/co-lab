@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "../bootstrap/css/bootstrap.min.css";
+import "../css/ProjectPage.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
 import Linkify from "react-linkify";
 import Card from "react-bootstrap/Card";
@@ -42,11 +43,12 @@ class ProjectLink extends Component {
         return (
                 <Card tag='a'
                 onClick={() => {this.showProjectDetails()}} 
-                style={{  cursor: "pointer",width: '15rem', height: '25rem', margin: "10px"  }}>
+                className="projectCard"
+                style={{  cursor: "pointer",width: '15rem', height: '25rem', margin: "10px" ,float:"left"  }}>
                     <Card.Img style={{ width: '15rem', height: '15rem'}} variant="top" src={this.state.image} />
                     <Card.Body>
                         <Card.Title>{this.props.project.name}</Card.Title>
-                        <Card.Text>{this.props.project.description}</Card.Text>
+                        <Card.Text className="cardDescription">{this.props.project.description}</Card.Text>
                         {this.props.project.link? (<Linkify>{this.props.project.link}</Linkify>) : null}
                     </Card.Body>
                 </Card>

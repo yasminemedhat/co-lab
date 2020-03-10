@@ -63,7 +63,8 @@ class ProjectPage extends Component {
   })
   .catch(err => {
     if(err && err.status){
-      alert("something went wrong: " + err.message);
+      Toast.fail("something went wrong",2000);
+     // alert("something went wrong: " + err.message);
     }
   })
 }
@@ -89,12 +90,14 @@ class ProjectPage extends Component {
         })
         .catch(err => {
           if (err && err.status) {
-            alert("Creator not found: " + err.message);
+            Toast.fail("Creator not found",2000);
+           // alert("Creator not found: " + err.message);
           }
         })
     }).catch(err =>
       {
-        alert("could not get project: ", err);
+        //alert("could not get project: ", err);
+        Toast.fail("Could not get project",2000);
       });
 }
  
