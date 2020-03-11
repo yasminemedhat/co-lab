@@ -6,7 +6,7 @@ import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
 import Img from "react-image";
 import axios from "axios";
 import {getJwt} from "../helpers/jwt";
-
+import Toast from 'light-toast';
 
 class CreateProject extends Component {
   state = {
@@ -62,17 +62,22 @@ class CreateProject extends Component {
     }
     axios.post('http://localhost:5000/project/add', project,{headers:headers })
         .then((res) => {
-            alert('Project created successfully!');
-            const user  = this.props.location.state.user;
-            this.props.history.push({
-              pathname : path,
-              state :{
-              user: user,
-              }
-              });
+            //alert('Project created successfully!');
+            Toast.success("Project created successfully!", 2000, () => {
+              const user  = this.props.location.state.user;
+              this.props.history.push({
+                pathname : path,
+                state :{
+                user: user,
+                }
+                });
+
+            })
+          
       }).catch((e)=> {
             if (e.response && e.response.data) {
-                alert("Could not create project: "+ e.response.data.message);
+               // alert("Could not create project: "+ e.response.data.message);
+               Toast.fail("Could not create project", 2000);
             }
         });
   }

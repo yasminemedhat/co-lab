@@ -108,6 +108,7 @@ export const updateProject = (jwt, formData,projectId) => {
             return res;
       });
 }
+
 export const getProjects = (jwt, userId) => {
     return axiosInstance.get('user/viewProjects/'+userId, {headers: { Authorization: jwt } }).then(res => {
         // axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${user.data.token}`;

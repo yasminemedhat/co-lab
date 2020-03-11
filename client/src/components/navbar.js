@@ -14,65 +14,67 @@ import Image from "react-bootstrap/Image";
 import { Row, Col } from "react-bootstrap";
 import "react-dropdown/style.css";
 
-import socket from '../../src/utils/notifications';
-
+import socket from "../../src/utils/notifications";
 
 class Navbar extends Component {
   static contextType = AuthContext;
+
   state = {
     notifications: [],
-    notificationCount:0
-
-
+    notificationCount: 0,
+    searchTerm:""
   };
   constuctor(props) {
     this.super(props);
     this.state = {
       notifications: [],
-      notificationCount:0
-    
+      notificationCount: 0,
+      searchTerm:""
     };
     this.logout = this.logout.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
     this.goToProfile = this.goToProfile.bind(this);
-    this.unseenNotificationCount = this.unseenNotificationCount.bind(this)
-    this.getNotificationPath = this.getNotificationPath.bind(this)
+    this.unseenNotificationCount = this.unseenNotificationCount.bind(this);
+    this.getNotificationPath = this.getNotificationPath.bind(this);
   }
   logout() {
     this.context.logout();
   }
   componentDidMount() {
-    if(this.context.authenticated){
-      getNotifications(this.context.accessToken).then(data => {
-        this.setState({
-          notifications: data
+    if (this.context.authenticated) {
+      getNotifications(this.context.accessToken)
+        .then(data => {
+          this.setState({
+            notifications: data
+          });
+          this.unseenNotificationCount();
+        })
+        .catch(err => {
+          if (err && err.status) {
+            alert("something went wrong: " + err.message);
+          }
         });
-        this.unseenNotificationCount()
-      }).catch(err => {
-        if(err && err.status){
-          alert("something went wrong: " + err.message);
-        }
-      });
-    
-      socket.on('notification',()=>{
-        console.log(`+1`);
-        
-       // this.setState({
-       //   notificationCount:this.notificationCount+1
-       // })
 
-       getNotifications(this.context.accessToken).then(data => {
-        this.setState({
-          notifications: data
-        });
-        this.unseenNotificationCount()
-      }).catch(err => {
-        if(err && err.status){
-          alert("something went wrong: " + err.message);
-        }
-      });
-      
-      
+      socket.on("notification", () => {
+        console.log(`+1`);
+
+        // this.setState({
+        //   notificationCount:this.notificationCount+1
+        // })
+
+        getNotifications(this.context.accessToken)
+          .then(data => {
+            this.setState({
+              notifications: data
+            });
+            this.unseenNotificationCount();
+          })
+          .catch(err => {
+            if (err && err.status) {
+              alert("something went wrong: " + err.message);
+            }
+          });
+
         //TODO: update state
         //note: putting this anywhere else creates multiple listeners instead of one
         //which ruins the count
@@ -91,81 +93,84 @@ class Navbar extends Component {
   unseenNotificationCount() {
     let count = 0;
     this.state.notifications.forEach(element => {
-      if(element.isOpened == false)
-        count++;
-        console.log("count")
+      if (element.isOpened == false) count++;
     });
     this.setState({
-      notificationCount: count 
-     });
-  
-    console.log("henaaaaaa")
-    console.log(this.state.notificationCount)
+      notificationCount: count
+    });
+
     return count;
   }
 
-
   getNotificationPath(notification) {
-  
     const ObjectsToBeOpened = Object.freeze({
       SENDER: "sender",
       PROJECT: "project",
       COLLABORATION: "co-laboration"
     });
-     let path;
+    let path;
     switch (notification.objectToBeOpened) {
       case ObjectsToBeOpened.SENDER:
-        path =  "/users/"+notification.sender;
+        path = "/users/" + notification.sender;
         break;
       case ObjectsToBeOpened.PROJECT:
-        path =  "/projects/"+notification.project;
+        path = "/projects/" + notification.project;
         break;
       case ObjectsToBeOpened.COLLABORATION:
-       path =  "/collaborations/"+notification.project;
+        path = "/collaborations/" + notification.project;
         break;
     }
-     return path;
+    return path;
   }
 
-  openNotification (notification)
-  {
-    openNotification(this.context.accessToken, notification._id)
-    .catch(err => {
-      if(err && err.status){
+  openNotification(notification) {
+    openNotification(this.context.accessToken, notification._id).catch(err => {
+      if (err && err.status) {
         alert("something went wrong: " + err.message);
       }
-    })
+    });
   }
 
-  generateNotificationDropDown()
-  {
-    try
-    {
-      let dropDown = 
-      this.state.notifications.map(notification => (
-        <div key={notification._id} style={{ background: (notification.isOpened ? 'white' : '#ddd') }}>
-          
-        <a href={this.getNotificationPath(notification)} 
-            onClick={() => this.openNotification(notification)}>
-          <label className="notification-title">{notification.title}</label>
-          <br/>
-          {notification.body}
-        </a>
-        <hr></hr>
+  generateNotificationDropDown() {
+    try {
+      let dropDown = this.state.notifications.map(notification => (
+        <div
+          key={notification._id}
+          style={{ background: notification.isOpened ? "white" : "#ddd" }}
+        >
+          <a
+            href={this.getNotificationPath(notification)}
+            onClick={() => this.openNotification(notification)}
+          >
+            <label className="notification-title">{notification.title}</label>
+            <br />
+            {notification.body}
+          </a>
+          <hr></hr>
         </div>
-      ))
+      ));
       return dropDown;
-    }catch(error)
-    {
+    } catch (error) {
       console.log(error.message);
     }
-    
+  }
+
+  handleChange= event => {
+    this.setState({
+      searchTerm:event.target.value
+    })
+  };
+
+  _handleKeyDown = event =>{
+    if (event.key === 'Enter') {
+      const path = "/SearchResults"
+      console.log(this.state.searchTerm);
+    }
   }
 
   render() {
-    console.log("my notifications");
-    console.log(this.state.notifications);
-   
+ 
+    
     let image;
     let source =
       this.context.user && this.context.user.avatar
@@ -195,7 +200,7 @@ class Navbar extends Component {
       );
     }
     if (this.context.authenticated) {
-      socket.emit('identify',this.context.user._id);
+      socket.emit("identify", this.context.user._id);
       return (
         <div className="topnav ">
           <link
@@ -232,11 +237,8 @@ class Navbar extends Component {
             <h2 className="logo">Co-Lab</h2>
           </div>
           <div className="search-container">
-            <form action="/action_page.php">
-              <input type="text" placeholder="Search.." name="search" />
-              <button type="submit">
-                <i className="fa fa-search"></i>
-              </button>
+            <form id="search-form">
+              <input type="search" placeholder="Search" value={this.state.searchTerm}  onChange={this.handleChange} onKeyDown={this._handleKeyDown}/>
             </form>
           </div>
           <div className="navigation ">
@@ -250,17 +252,16 @@ class Navbar extends Component {
             <NavLink exact activeClassName="selectedLink" to="/editUser">
               Edit Profile
             </NavLink>
-
+          
             <div className="dropdown">
               <button className="notification ">
                 <span>
                   <i className="material-icons">notifications_active</i>
                 </span>
                 <span className="badge">{this.state.notificationCount}</span>
-            
               </button>
               <div className="dropdown-content">
-              {this.generateNotificationDropDown()}
+                {this.generateNotificationDropDown()}
               </div>
             </div>
             <button className="logout-NavLink" onClick={() => this.logout()}>

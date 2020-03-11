@@ -3,6 +3,7 @@ import "../css/header.css";
 import {BrowserRouter as Router, Switch } from 'react-router-dom'
 import {Route} from 'react-router-dom'
 import Login from './Login';
+import Search from './SearchResults';
 import editUser from './editUser';
 import EditCollaboration from './EditCollaboration'
 import EditProject from './editProject'
@@ -16,11 +17,14 @@ import ProjectPage from "./ProjectPage";
 import ColabDetails from "./ColabDetails";
 import AuthenticatedComponent from "./AuthenticatedComponent";
 import NavBar from './navbar';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 class Header extends React.Component {
-
+ 
   render() {
+    toast.configure()
     return (
       <Auth>
         
@@ -40,6 +44,7 @@ class Header extends React.Component {
               </Route>
               <Route path="/" exact strict  component ={Home} ></Route>
               <Route path="/home" exact strict  component ={Home} ></Route>
+              <Route path="/SearchResults" exact strict  component ={Search} ></Route>
               <Route path="/editUser" exact strict component ={editUser} />
               <Route path="/collaborations/:id/edit" exact strict component ={EditCollaboration} />
               <Route path="/projects/:id/edit" exact strict component ={EditProject} />
