@@ -13,8 +13,7 @@ module.exports = async (req, res) => {
 
     const {
         firstname, lastname, phone, isSponsor, interests, biography, workingField } = req.body;
-
-    var avatar;
+        var avatar;
     try {
         //pull image:
         avatar = req.file;
