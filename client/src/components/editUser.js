@@ -44,7 +44,6 @@ class editUser extends Component {
 
   handleChosenInterests =selectedOption=>{
        
-          
     this.setState({
     interests:selectedOption
     
@@ -72,19 +71,19 @@ class editUser extends Component {
       formData.append("lastname", this.state.lastname);
     }
     if (this.state.phone) {
-      console.log("phoneee ;)");
       formData.append("phone", this.state.phone);
     }
     if (this.state.biography) {
       formData.append("biography", this.state.biography);
     }
-    if(this.state.Interests){
+    if(this.state.interests){
       let i = 0;
-      let myInterests = {};
-      for (i =0 ;i<this.state.Interests.length;i++){
-          myInterests = this.state.Interests[i].value
+      let myInterests = [];
+      for (i =0 ;i<this.state.interests.length;i++){
+          myInterests[i] = this.state.interests[i].value
+          formData.append("interests", myInterests[i]);
       };
-      formData.append("interests", myInterests);
+      
     }
 
     updateUser(jwt, formData)
@@ -101,7 +100,6 @@ class editUser extends Component {
         
       })
       .catch(error => {
-        console.log("not updatedddd");
         alert("project not created"+error.message);
       });
   };

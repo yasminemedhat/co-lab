@@ -2,6 +2,20 @@ const mongoose=require('mongoose');
 const Account=require('./Account');
 const drive=require('../services/drive');
 
+//enums
+//Interest
+const Interests = Object.freeze({
+    PAINTING: "Painting",
+    COOKING: "Cooking",
+    LITERATURE: "Literature",
+    PHOTOGRAPHY: "Photography",
+    FASHION: "Fashion Design",
+    TUTORING:"Tutoring",
+    FILM:"Film Making",
+    TRANSLATING:"Translating",
+    CRAFTS:"Crafts"
+  });
+
 const ColaberSchema=new mongoose.Schema({
     firstName:  { type: String, required: true},
     lastName:   { type: String, required: true},
@@ -14,11 +28,8 @@ const ColaberSchema=new mongoose.Schema({
     likedProjects:      [{type: mongoose.Schema.Types.ObjectId, ref: 'Project' }],
     collaborations:     [{type: mongoose.Schema.Types.ObjectId, ref: 'Colaboration' }],
     notifications:      [{type: mongoose.Schema.Types.ObjectId, ref: 'Notification' }],
-    workingField:       { type: mongoose.Schema.Types.ObjectId, ref: "Interest"},
-    interests: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Interest"
-    }],
+    workingField:       { type: String, enum: Object.values(Interests)},
+    interests: [{ type: String, enum: Object.values(Interests)}],
     biography:  { type: String},
     isSponsor:  { type: Boolean},
     isPremium:  { type: Boolean},
@@ -65,6 +76,15 @@ ColaberSchema.post('findOneAndDelete', async function (doc) {
 ColaberSchema.virtual('fullName').get(function() {
     return this.firstName + ' ' + this.lastName
   })
+
+//index for search engine
+ColaberSchema
+.index( {"firstName":"text", "lastname":"text", "biography":"text", "workingField":"text", "interests":"text"}, 
+        {"weights": { firstName: 4, lastName:4, workingField: 4, biography:3, interests:1 }});
+
+Object.assign(ColaberSchema.statics, {
+    Interests
+    });
 
 const Colaber=Account.discriminator('Colaber',ColaberSchema);
 

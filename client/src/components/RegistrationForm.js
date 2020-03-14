@@ -70,12 +70,11 @@ class RegistrationForm extends Component {
 
         const { email, username, firstname, lastname,phone, password, biography, isSponsor, workingField, interests } = this.state;
         let i = 0;
-        let myInterests = {};
+        let myInterests = [];
         for (i =0 ;i<interests.length;i++){
-            myInterests = interests[i].value
+            myInterests[i] = interests[i].value
         };
-       
-        const user = { email, username, firstname, lastname, password, phone,biography, isSponsor, workingField, myInterests };
+        const user = { email, username, firstname, lastname, password, phone,biography, isSponsor, workingField, interests:myInterests };
         signup(user).then((data) => {
             this.context.initiateLogin(data);
             const path = '/users/'+data.user._id;

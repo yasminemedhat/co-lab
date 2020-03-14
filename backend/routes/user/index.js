@@ -7,16 +7,14 @@ const multer = require('multer');//image
 const upload = multer(); 
 
 //database 
-const interestList = require('../../models/InterestList');
 const Colaber = require('../../models/Colaber');
-const Account = require('../../models/Account');
+const {Interests} = require('../../models/Colaber');
 
 //jwt authentication
 const auth = require("../../middleware/auth");
 const jwt = require('jsonwebtoken');
 
 const drive=require("../../services/drive");
-
 
 
 //routes 
@@ -44,7 +42,9 @@ user.post('/register', [
 //              the chosen interests are the ones that would be shown in the discover feed
 //              (customized discover)
 //@access        public-> no token needed 
-user.get('/interestsList', require('./interestsList'));
+user.get('/interestsList',(req,res)=>{
+    res.json(Object.values(Interests));
+})
 
 //@route POST   user/login
 //@description  user login using email and password 
@@ -137,6 +137,11 @@ user.get('/openNotification/:id', auth, require('./openNotification'));
 //@description  view notifications for certain user
 //@access       requires authentication 
 user.get('/pullNotifications', auth, require('./pullNotifications'));
+
+//@route GET    user/search
+//@description  search
+//@access       does not require authentication 
+user.get('/search', require('./search'));
 
 //@route POST   user/logout ->Post because browser pre-fetches for get requests
 //@description  blacklist jwt using redis
