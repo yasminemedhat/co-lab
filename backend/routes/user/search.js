@@ -5,24 +5,32 @@ const Project = require('../../models/Project');
 module.exports=async(req,res)=>{
     try {
         const body = req.body.text;
+
+        const limit = 10;
         
         //get users 
-        let colabers = await Colaber.find({$text: {$search: body}}, {score: {$meta: "textScore"}}).sort({score:{$meta:"textScore"}});
+        let colabers = 
+                await Colaber.find({$text: {$search: body}}, {score: {$meta: "textScore"}})     //find colabers containing input string
+                                .select('id firstName lastName avatar')                         //select required fields only
+                                .sort({score:{$meta:"textScore"}})                              //sort based on relevance to input string
+                                .limit(limit);                                                  //get top results
 
-        //get projects collection 
-        let allProjects = await Project.find({$text: {$search: body}}, {score: {$meta: "textScore"}}).sort({score:{$meta:"textScore"}});
-        
-        projects = [];
-        colaborations = [];
-        //separate colaborations and projects
-        for (let index = 0; index < allProjects.length; index++) {
-            const element = allProjects[index];
-            //push element in array based on projectType
-            if(element.projectType == "Colaboration")
-                colaborations.push(element);
-            else                 
-                projects.push(element);
-        }
+        //get projects 
+        let projects = 
+                await Project.find({$text: {$search: body}}, {score: {$meta: "textScore"}})     //find projects containing input string
+                                .where("projectType").equals(null)                              //select solo projects
+                                .select('id name description images')                           //select required fields only
+                                .sort({score:{$meta:"textScore"}})                              //sort based on relevance to input string
+                                .limit(limit);
+
+        //get colaborations
+        let colaborations = 
+                await Project.find({$text: {$search: body}}, {score: {$meta: "textScore"}})     //find colaborations containing input string
+                                .where("projectType").equals("Colaboration")                    //select colaborations
+                                .select('id name description images')                           //select required fields only
+                                .sort({score:{$meta:"textScore"}})                              //sort based on relevance to input string
+                                .limit(limit);                                                  //get top results
+      
         res.json({colabers, projects, colaborations});
             
     } catch (error) {
