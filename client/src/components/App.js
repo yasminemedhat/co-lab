@@ -36,6 +36,7 @@ class Header extends React.Component {
             <Route path="/login" exact strict  component = {Login}></Route>
             <Route path="/forgotPassword" exact strict  component = {ForgotPassword}></Route>
             <Route path="/RegistrationForm" exact strict component ={RegistrationForm} />
+            <Route path="/SearchResults/:searchTerm" exact strict  component ={Search} ></Route>
             
           
             <AuthenticatedComponent>
@@ -44,7 +45,6 @@ class Header extends React.Component {
               </Route>
               <Route path="/" exact strict  component ={Home} ></Route>
               <Route path="/home" exact strict  component ={Home} ></Route>
-              <Route path="/SearchResults" exact strict  component ={Search} ></Route>
               <Route path="/editUser" exact strict component ={editUser} />
               <Route path="/collaborations/:id/edit" exact strict component ={EditCollaboration} />
               <Route path="/projects/:id/edit" exact strict component ={EditProject} />
