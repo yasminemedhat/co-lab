@@ -6,6 +6,21 @@ const options = {
     discriminatorKey: 'projectType', //for inheritance purposes
     collection: 'projects',
 };
+
+//enums
+//Interest
+const Interests = Object.freeze({
+    PAINTING: "Painting",
+    COOKING: "Cooking",
+    LITERATURE: "Literature",
+    PHOTOGRAPHY: "Photography",
+    FASHION: "Fashion Design",
+    TUTORING:"Tutoring",
+    FILM:"Film Making",
+    TRANSLATING:"Translating",
+    CRAFTS:"Crafts"
+  });
+
 //schema
 const ProjectSchema = new Schema({
     name:           {  type: String, required: true, trim: true},
@@ -16,6 +31,7 @@ const ProjectSchema = new Schema({
     images:         [{ type: String}],
     link:           {  type: String},
     createdAt:      {  type: Date, default: Date.now},
+    field:          [{  type: String, enum: Object.values(Interests)}]
 }, options,
 );
 
