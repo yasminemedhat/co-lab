@@ -32,7 +32,7 @@ const ColabLink = props => {
             style={{ cursor: "pointer", width: '15rem', height: '100%', margin: "10px"  }}>
                     <Card.Img  style={{ width: '15rem', height: '15rem'}} variant="top" src={state.image} />
                     <Card.Body>
-                        <Card.Title>{state.name}</Card.Title>
+                        <Card.Title style={{whiteSpace:'normal'}}>{state.name}</Card.Title>
                         <Card.Text className="cardDescription">{state.description}</Card.Text>
                         {/* {state.link? (<Linkify>{state.link}</Linkify>) : null} */}
                     </Card.Body>
