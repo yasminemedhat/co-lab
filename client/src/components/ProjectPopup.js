@@ -51,7 +51,7 @@ class ProjectPopup extends Component {
        
           
     this.setState({
-   chosenfields:selectedOption
+    chosenfields:selectedOption
     
     
 });
@@ -86,7 +86,10 @@ class ProjectPopup extends Component {
     formData.append('name', this.state.projectName);
     formData.append('description', this.state.description);
     formData.append('projectlink', this.state.projectLink);
-    formData.append('fields', this.state.chosenfields);
+    for(let i=0; i<this.state.chosenfields.length ; i++){
+      formData.append('fields', this.state.chosenfields[i].value);
+    }
+   
     if(images){
       for (let i = 0 ; i < images.length ; i++) {
         formData.append("photos", images[i]);

@@ -11,7 +11,7 @@
     "font-awesome": "^4.7.0",
     "formik": "^2.0.8",
     "is-url": "^1.2.4",
-    "jest-cli": "^24.9.0",
+    "jest-cli": "^25.1.0",
     "jquery": "^3.4.1",
     "light-toast": "^0.2.3",
     "mobx": "^5.15.0",

@@ -75,7 +75,10 @@ class CollaborationPopup extends Component {
     formData.append('name', this.state.collaborationName);
     formData.append('description', this.state.description);
     if(this.state.chosenfields.length > 0){
-    formData.append('fields', this.state.chosenfields);
+      for(let i=0; i<this.state.chosenfields.length ; i++)
+      {
+        formData.append('fields', this.state.chosenfields[i].value);
+      }
     }
     if(this.state.collaborationLink.length > 0){
         formData.append('link', this.state.collaborationLink);
