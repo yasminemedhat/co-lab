@@ -47,7 +47,7 @@ class ProjectLink extends Component {
                 style={{  cursor: "pointer",width: '15rem', height: '25rem', margin: "10px"   }}>
                     <Card.Img style={{ width: '15rem', height: '15rem'}} variant="top" src={this.state.image} />
                     <Card.Body>
-                        <Card.Title>{this.props.project.name}</Card.Title>
+                        <Card.Title style={{whiteSpace:"normal"}}>{this.props.project.name}</Card.Title>
                         <Card.Text className="cardDescription">{this.props.project.description}</Card.Text>
                         {this.props.project.link? (<Linkify>{this.props.project.link}</Linkify>) : null}
                     </Card.Body>

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
-import Image from 'react-bootstrap/Image'
+import Image from "react-bootstrap/Image";
 import Can from "./Can";
 
 import "../css/profile.css";
@@ -14,14 +14,15 @@ import {
   createProject,
   getProjects,
   createCollaboration,
-  getCollaborations, getCollaboration,
-  getUser, followUser
+  getCollaborations,
+  getCollaboration,
+  getUser,
+  followUser
 } from "../utils/APICalls";
 import { Row, Col } from "react-bootstrap";
 import { withRouter } from "react-router-dom";
 import { AuthContext } from "../authContext";
-import HorizontalScroll from 'react-scroll-horizontal'
-
+import HorizontalScroll from "react-scroll-horizontal";
 
 class Profile extends Component {
   static contextType = AuthContext;
@@ -39,7 +40,7 @@ class Profile extends Component {
       showPopup2: false,
       loadingProjects: true,
       loadingCollaborations: true,
-      user: '',
+      user: "",
       projects: [],
       collaborations: [],
       followButton: true
@@ -62,91 +63,96 @@ class Profile extends Component {
   }
 
   showColabDetails = colab => {
-    const path = "/collaborations/"+colab._id;
-    getCollaboration(this.context.accessToken,colab._id).then(data => {
+    const path = "/collaborations/" + colab._id;
+    getCollaboration(this.context.accessToken, colab._id).then(data => {
       this.props.history.push({
         pathname: path,
         state: {
           collaboration: data
         }
       });
-    })
-    
+    });
   };
-  
-  toggleFollowUser(){
+
+  toggleFollowUser() {
     followUser(this.context.accessToken, this.props.match.params.id)
-    .then(data => {
-      this.setState({followButton: !this.state.followButton})
-      this.context.updateUser();
-    })
-    .catch(err => {
-      if(err && err.status){
-        alert("something went wrong: " + err.message);
-      }
-    })
+      .then(data => {
+        this.setState({ followButton: !this.state.followButton });
+        this.context.updateUser();
+      })
+      .catch(err => {
+        if (err && err.status) {
+          alert("something went wrong: " + err.message);
+        }
+      });
   }
 
-  followButton(){
-    if(this.context.user.following.includes(this.props.match.params.id)){
+  followButton() {
+    if (this.context.user.following.includes(this.props.match.params.id)) {
       return true;
     }
-      return false;
+    return false;
   }
 
   componentDidMount() {
-   getUser(this.context.accessToken, this.props.match.params.id)
-        .then(data => {
-          this.setState({
-            user: data.user
-          })
-        })
-        .catch(err => {
-          if (err && err.status) {
-            alert("User not found: " + err.message);
-          }
-        })
-      if(this.context.user.following){
-        if(this.context.user.following.includes(this.props.match.params.id)){
-          this.setState({followButton: false});
+    getUser(this.context.accessToken, this.props.match.params.id)
+      .then(data => {
+        this.setState({
+          user: data.user
+        });
+      })
+      .catch(err => {
+        if (err && err.status) {
+          alert("User not found: " + err.message);
         }
+      });
+    if (this.context.user.following) {
+      if (this.context.user.following.includes(this.props.match.params.id)) {
+        this.setState({ followButton: false });
       }
-      
+    }
+
     // this.setState({
     //   user: this.context.user,
     //   authenticated: this.context.authenticated
     // });
-      getProjects(this.context.accessToken,this.props.match.params.id)
-        .then(data => {
-          const projects = data;
-          this.setState({ projects });
-          this.setState({ loadingProjects: false, projectsNumber: projects.length});
-        })
-        .catch(err => {
-          if (err && err.status) {
-            alert("Couldn't get project: " + err.message);
-          }
+    getProjects(this.context.accessToken, this.props.match.params.id)
+      .then(data => {
+        const projects = data;
+        this.setState({ projects });
+        this.setState({
+          loadingProjects: false,
+          projectsNumber: projects.length
         });
-    
-      getCollaborations(this.context.accessToken,this.props.match.params.id)
-        .then(data => {
-          const collaborations = data;
-          this.setState({ collaborations });
-          this.setState({ loadingCollaborations: false,colabsNumber: collaborations.length });
-        })
-        .catch(err => {
-          if (err && err.status) {
-            alert("Could get collaborations: " + err.message);
-          }
+      })
+      .catch(err => {
+        if (err && err.status) {
+          alert("Couldn't get project: " + err.message);
+        }
+      });
+
+    getCollaborations(this.context.accessToken, this.props.match.params.id)
+      .then(data => {
+        const collaborations = data;
+        this.setState({ collaborations });
+        this.setState({
+          loadingCollaborations: false,
+          colabsNumber: collaborations.length
         });
-    
+      })
+      .catch(err => {
+        if (err && err.status) {
+          alert("Could get collaborations: " + err.message);
+        }
+      });
+
     this.setState({ loadingCollaborations: false });
     this.setState({ loadingProjects: false });
-    }
+  }
 
   createProject(formData) {
     this.setState({ loadingProjects: true });
-   
+
     const jwt = getJwt();
     createProject(jwt, formData)
       .then(res => {
@@ -157,7 +163,6 @@ class Profile extends Component {
         this.setState({ loadingProjects: false });
 
         this.forceUpdate();
-
       })
       .catch(err => {
         if (err && err.status) {
@@ -175,7 +180,7 @@ class Profile extends Component {
         collaborations.unshift(res.data);
         this.setState({ collaborations: collaborations });
         this.setState({ loadingCollaborations: false });
-         this.forceUpdate();
+        this.forceUpdate();
       })
       .catch(err => {
         if (err && err.status) {
@@ -186,8 +191,6 @@ class Profile extends Component {
   }
 
   render() {
-
-
     if (this.state.user === undefined) {
       return (
         <div>
@@ -201,25 +204,48 @@ class Profile extends Component {
           <Col>
             <div className="row">
               {this.state.user.avatar ? (
-                <Image className="profile" style={{margin: "2%"}} src={this.state.user.avatar} roundedCircle></Image>
+                <Image
+                  className="profile"
+                  style={{ margin: "2%" }}
+                  src={this.state.user.avatar}
+                  roundedCircle
+                ></Image>
               ) : (
-                <Image className="profile" style={{margin: "2%"}} src={require("../images/profile.png")} roundedCircle></Image>
+                <Image
+                  className="profile"
+                  style={{ margin: "2%" }}
+                  src={require("../images/profile.png")}
+                  roundedCircle
+                ></Image>
               )}
             </div>
-            <Can role={this.context.user.userType} perform="users:follow" 
+            <Can
+              role={this.context.user.userType}
+              perform="users:follow"
               data={{
-                    userId: this.context.user._id,
-                    profileOwnerId: this.props.match.params.id
-                  }}
+                userId: this.context.user._id,
+                profileOwnerId: this.props.match.params.id
+              }}
               yes={() => (
                 <div className="follow-button">
-                  {this.state.followButton ?  <button className="follow-btn" onClick={()=> this.toggleFollowUser()}
-                  >follow</button>:<button
-                    className="unfollow-btn" onClick={()=> this.toggleFollowUser()}
-                  >unfollow</button>}
-               </div> )}/>
-              
-            
+                  {this.state.followButton ? (
+                    <button
+                      className="follow-btn"
+                      onClick={() => this.toggleFollowUser()}
+                    >
+                      follow
+                    </button>
+                  ) : (
+                    <button
+                      className="unfollow-btn"
+                      onClick={() => this.toggleFollowUser()}
+                    >
+                      unfollow
+                    </button>
+                  )}
+                </div>
+              )}
+            />
           </Col>
           <Col>
             <div className="profile_info" style={{ float: "left" }}>
@@ -228,166 +254,135 @@ class Profile extends Component {
               </h4>
 
               <p>Email: {this.state.user.email}</p>
-        
+
               {this.state.user.biography ? (
                 <p>biography: {this.state.user.biography}</p>
               ) : null}
               {this.state.user.phone ? (
                 <p>Phone Number: {this.state.user.phone}</p>
               ) : null}
-              
+
               {this.state.user.workingField ? (
                 <p>working Field: {this.state.user.workingField}</p>
               ) : null}
-             
             </div>
           </Col>
         </Row>
-        <Can role={this.context.user.userType} perform="projects:create" 
-              data={{
-                    userId: this.context.user._id,
-                    profileOwnerId: this.props.match.params.id
-                  }}
+        <Can
+          role={this.context.user.userType}
+          perform="projects:create"
+          data={{
+            userId: this.context.user._id,
+            profileOwnerId: this.props.match.params.id
+          }}
           yes={() => (
             <Row style={{ width: "100%" }}>
-            <Col>
-              <button
-                style={{ float: "right", width: "180px" }}
-                className="profile-btn"
-                onClick={this.togglePopup.bind(this)}
-              >
-                Add project
-              </button>
-              {this.state.showPopup ? (
-                <ProjectPopup
-                  text='Click "Close Button" to hide popup'
-                  closePopup={this.togglePopup.bind(this)}
-                  createProject={this.createProject}
-                />
-              ) : null}
-            </Col>
-          </Row>
+              <Col>
+                <button
+                  style={{ float: "right", width: "180px" }}
+                  className="profile-btn"
+                  onClick={this.togglePopup.bind(this)}
+                >
+                  Add project
+                </button>
+                {this.state.showPopup ? (
+                  <ProjectPopup
+                    text='Click "Close Button" to hide popup'
+                    closePopup={this.togglePopup.bind(this)}
+                    createProject={this.createProject}
+                  />
+                ) : null}
+              </Col>
+            </Row>
           )}
-      />
-        
+        />
+
         <h4 style={{ fontStyle: "bold", margin: "10px" }}>Projects </h4>
 
-      
-        <Row
-          style={{
-            width: "100%",
-            height: "430px"
-          }}
-        >
-            <HorizontalScroll
-            className="horizontal_scroll"
-             style={{overflow: "hidden", overflowX: "auto",    
-            }}>
-       
-         
+        <div className="scrolling-wrapper">
           <br></br>
-          <div className="cardsRow">
-        {this.state.loadingProjects ? (
-            <div>
-              <h5>Loading Projects...</h5>
-            </div>
-          ) : this.state.projects ? (
-            // <div className="container">
-        
-            this.state.projects.map((project, i) => {
-              // Return the element. Also pass key
-              return (
-                <Col key={i}
-                style={{
-                  width: "100%",
-                  height: "460px"
-                }}>
-                  <ProjectLink key={i} project={project} />
-                </Col>
-              );
-            })
-            
-          ) : null}
-      </div>
-      </HorizontalScroll>
-        </Row>
-   
+    
+            {this.state.loadingProjects ? (
+              <div>
+                <h5>Loading Projects...</h5>
+              </div>
+            ) : this.state.projects ? (
+              // <div className="container">
 
-        <Can role={this.context.user.userType} perform="collaborations:create" 
-              data={{
-                    userId: this.context.user._id,
-                    profileOwnerId: this.props.match.params.id
-                  }}
-          yes={() => (
-          <Row style={{ width: "100%" , marginTop: "20px"}}>
-            <Col>
-              <button
-                style={{ float: "right", width: "180px" }}
-                className="profile-btn"
-                onClick={this.togglePopup2.bind(this)}
-              >
-                Add Co-Laboration
-              </button>
-              {this.state.showPopup2 ? (
-                <CollaborationPopup
-                  text='Click "Close Button" to hide popup'
-                  closePopup2={this.togglePopup2.bind(this)}
-                  createCollaboration={this.createCollaboration}
-                />
-              ) : null}
-            </Col>
-          </Row>)}/>
-
-        <h4 style={{ fontStyle: "bold", margin: "10px" }}>Collaborations </h4>
-        <Row
-      
-            style={{
-              width: "100%",
-              height: "430px",
-         
-            }}
-       
-        >
-       
-            <HorizontalScroll
-            className="horizontal_scroll"
-             style={{
-            
-            
-              overflow: "hidden",
-              overflowX: "auto",
-              
-            }}>
-          <br></br>
-          <div >
-          {this.state.loadingCollaborations ? (
-            <div>
-              <h5>Loading Collaborations...</h5>
-            </div>
-          ) : this.state.collaborations
-            ? this.state.collaborations.map((colab, i) => {
+              this.state.projects.map((project, i) => {
                 // Return the element. Also pass key
                 return (
-                  <Col key={i}
-                  style={{
-                    width: "100%",
-                    height: "460px"
-                  }}>
+                  <div className="col-card"
+                    key={i}
+                  
+                  >
+                    <ProjectLink key={i} project={project} />
+                  </div>
+                );
+              })
+            ) : null}
+   
+        </div>
+
+        <Can
+          role={this.context.user.userType}
+          perform="collaborations:create"
+          data={{
+            userId: this.context.user._id,
+            profileOwnerId: this.props.match.params.id
+          }}
+          yes={() => (
+            <Row style={{ width: "100%", marginTop: "20px" }}>
+              <Col>
+                <button
+                  style={{ float: "right", width: "180px" }}
+                  className="profile-btn"
+                  onClick={this.togglePopup2.bind(this)}
+                >
+                  Add Co-Laboration
+                </button>
+                {this.state.showPopup2 ? (
+                  <CollaborationPopup
+                    text='Click "Close Button" to hide popup'
+                    closePopup2={this.togglePopup2.bind(this)}
+                    createCollaboration={this.createCollaboration}
+                  />
+                ) : null}
+              </Col>
+            </Row>
+          )}
+        />
+
+        <h4 style={{ fontStyle: "bold", margin: "10px" }}>Collaborations </h4>
+        <div className="scrolling-wrapper">
+          <br></br>
+         
+            {this.state.loadingCollaborations ? (
+              <div>
+                <h5>Loading Collaborations...</h5>
+              </div>
+            ) : this.state.collaborations ? (
+              this.state.collaborations.map((colab, i) => {
+                // Return the element. Also pass key
+                return (
+                  <div className="col-card"
+                    key={i}
+                    style={{
+                      width: "100%",
+                      height: "460px"
+                    }}
+                  >
                     <ColabLink
                       key={i}
                       collaboration={colab}
                       showDetails={this.showColabDetails}
                     />
-                  </Col>
+                  </div>
                 );
               })
-            : null}
-            </div>
-              </HorizontalScroll>
-      
-        </Row>
-  
+            ) : null}
        
+        </div>
       </div>
     );
   }
