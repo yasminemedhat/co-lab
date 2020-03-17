@@ -168,11 +168,14 @@ class Navbar extends Component {
 
   _handleKeyDown = event =>{
     if (event.key === 'Enter') {
-      event.preventDefault();  
+     // event.preventDefault();  
       const path = "/SearchResults/"+ this.state.searchTerm;
       //console.log(this.state.searchTerm);
       this.props.history.push({
         pathname: path,
+        state :{
+         searchTerm: this.state.searchTerm,
+          }
       })
   
     
