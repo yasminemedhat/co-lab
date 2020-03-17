@@ -7,7 +7,7 @@ import "../css/header.css";
 import "bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
-import { getNotifications, openNotification } from "../utils/APICalls";
+import { getNotifications, openNotification, search } from "../utils/APICalls";
 import { withRouter } from "react-router-dom";
 import { AuthContext } from "../authContext";
 import Image from "react-bootstrap/Image";
@@ -32,10 +32,15 @@ class Navbar extends Component {
       searchTerm:""
     };
     this.logout = this.logout.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this._handleKeyDown = this._handleKeyDown.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
     this.goToProfile = this.goToProfile.bind(this);
     this.unseenNotificationCount = this.unseenNotificationCount.bind(this);
     this.getNotificationPath = this.getNotificationPath.bind(this);
+    this.onKeyPress= this._handleKeyDown.bind(this)
+   
+
   }
   logout() {
     this.context.logout();
@@ -163,8 +168,14 @@ class Navbar extends Component {
 
   _handleKeyDown = event =>{
     if (event.key === 'Enter') {
-      const path = "/SearchResults"
-      console.log(this.state.searchTerm);
+      event.preventDefault();  
+      const path = "/SearchResults/"+ this.state.searchTerm;
+      //console.log(this.state.searchTerm);
+      this.props.history.push({
+        pathname: path,
+      })
+  
+    
     }
   }
 

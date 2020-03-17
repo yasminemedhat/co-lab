@@ -129,6 +129,16 @@ export const openNotification = (jwt, notificationId) => {
         return res.data;
     })
 }
+export const search = ( text) =>{
+    console.log(text);
+    return axiosInstance.get('user/search/'+text)
+    .then((res) => {
+        console.log('form api getting searchResults ', res.data);
+        return res.data;
+    })
+
+ 
+}
 
 export const getProject = (jwt, projectId) => {
     return axiosInstance.get('project/'+projectId, {headers: { Authorization: jwt } }).then(res => {

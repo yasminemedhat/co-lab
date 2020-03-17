@@ -44,7 +44,7 @@ class ProjectLink extends Component {
                 <Card tag='a'
                 onClick={() => {this.showProjectDetails()}} 
                 className="projectCard"
-                style={{  cursor: "pointer",width: '15rem', height: '25rem', margin: "10px" ,float:"left"  }}>
+                style={{  cursor: "pointer",width: '15rem', height: '25rem', margin: "10px"   }}>
                     <Card.Img style={{ width: '15rem', height: '15rem'}} variant="top" src={this.state.image} />
                     <Card.Body>
                         <Card.Title>{this.props.project.name}</Card.Title>

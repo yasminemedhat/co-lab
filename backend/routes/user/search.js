@@ -4,8 +4,9 @@ const Project = require('../../models/Project');
 
 module.exports=async(req,res)=>{
     try {
-        const body = req.body.text;
-
+        const body = req.params.text;
+        if(body==null)return res.status(400).json('Search field empty');
+        console.log(body);
         const limit = 10;
         
         //get users 

@@ -344,8 +344,7 @@ class Profile extends Component {
             style={{
               width: "100%",
               height: "430px",
-              transform:"none",
-              willChange:"none"
+         
             }}
        
         >
@@ -360,7 +359,7 @@ class Profile extends Component {
               
             }}>
           <br></br>
-          <div className="cardsRow">
+          <div >
           {this.state.loadingCollaborations ? (
             <div>
               <h5>Loading Collaborations...</h5>
