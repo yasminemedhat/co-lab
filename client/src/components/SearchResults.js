@@ -16,6 +16,7 @@ import Can from "./Can";
 class SearchResults extends React.Component {
 
   state={
+    searchTerm:"",
     search_results:[{}],
     colabers:[],
     projects:[],
@@ -26,6 +27,7 @@ class SearchResults extends React.Component {
   constructor(props){
     super(props);
     this.state={
+      searchTerm:"",
       search_results:[{}],
       colabers:[], 
       projects:[],
@@ -33,6 +35,11 @@ class SearchResults extends React.Component {
     }}
 
     componentDidMount() {
+      this.setState({
+        searchTerm:this.props.match.params.searchTerm
+      })
+      console.log("sos")
+      console.log(this.state.searchTerm)
       search(this.props.match.params.searchTerm).then(data => {
       console.log("my data")
       console.log(data)
@@ -47,6 +54,7 @@ class SearchResults extends React.Component {
           collaborarions:this.state.search_results.colaborations
 
         })
+        
 
       });
         
