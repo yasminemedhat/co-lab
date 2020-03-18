@@ -3,7 +3,7 @@ const Project = require('../../models/Project');
 
 
 module.exports=async(req,res)=>{
-    try {
+  
         const body = req.params.text;
         if(body==null)return res.status(400).json('Search field empty');
         console.log(body);
@@ -41,7 +41,5 @@ module.exports=async(req,res)=>{
                 res.status(500).json({ message: 'Server Error' });
               });
         
-
-
-   
+  
 }
