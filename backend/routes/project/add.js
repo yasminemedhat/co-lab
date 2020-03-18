@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
     console.log('new Project attempt');
 
     //pull from request
-    const { name, description } = req.body;
+    const { name, description,field } = req.body;
     console.log(req.body);
     //pull images
     var files;
@@ -35,7 +35,8 @@ module.exports = async (req, res) => {
         project = new Project({
             name,
             description,
-            creator: req.user.id
+            creator: req.user.id,
+            field
         });
         console.log("User: " + req.user.id );
         

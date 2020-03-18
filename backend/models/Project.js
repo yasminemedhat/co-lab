@@ -6,6 +6,21 @@ const options = {
     discriminatorKey: 'projectType', //for inheritance purposes
     collection: 'projects',
 };
+
+//enums
+//Interest
+const Interests = Object.freeze({
+    PAINTING: "Painting",
+    COOKING: "Cooking",
+    LITERATURE: "Literature",
+    PHOTOGRAPHY: "Photography",
+    FASHION: "Fashion Design",
+    TUTORING:"Tutoring",
+    FILM:"Film Making",
+    TRANSLATING:"Translating",
+    CRAFTS:"Crafts"
+  });
+
 //schema
 const ProjectSchema = new Schema({
     name:           {  type: String, required: true, trim: true},
@@ -16,6 +31,7 @@ const ProjectSchema = new Schema({
     images:         [{ type: String}],
     link:           {  type: String},
     createdAt:      {  type: Date, default: Date.now},
+    field:          [{  type: String, enum: Object.values(Interests)}]
 }, options,
 );
 
@@ -37,7 +53,7 @@ ProjectSchema.post(['remove','findOneAndDelete'],async function (doc){
 });
 
 ProjectSchema
-.index( {"name":"text", "description":"text"}, 
-        {"weights": { name: 4, description:3}});
+.index( {"field":"text","name":"text", "description":"text"}, 
+        {"weights": { field:4,name: 3, description:2}});
 
 module.exports = mongoose.model('Project', ProjectSchema);
