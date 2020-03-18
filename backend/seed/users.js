@@ -1,5 +1,4 @@
 var Colaber = require('../models/Colaber');
-var interestsList = require('../models/InterestList');
 var mongoose = require('mongoose');
 var bcrypt = require('bcryptjs');
 var config = require('config');
@@ -12,17 +11,17 @@ function subset(arr) {
 }
 
 async function getInterestsList() {
-    var interestsArray = [];
-    list = await interestsList.find({}, {_id:1}, function (err, interests) {
-        if (interests) {
-            interests.forEach(document => {
-                interestsArray.push(document._id);
-            });
-        }else if(err){
-            console.log(err);
-        }
+    var interestsArray = ["Painting","Cooking","Literature","Photography","Fashion Design","Tutoring","Film Making","Translating","Crafts"];
+    // list = await interestsList.find({}, {_id:1}, function (err, interests) {
+    //     if (interests) {
+    //         interests.forEach(document => {
+    //             interestsArray.push(document._id);
+    //         });
+    //     }else if(err){
+    //         console.log(err);
+    //     }
 
-    });
+    // });
   return interestsArray
 }
 async function getUsers() {
