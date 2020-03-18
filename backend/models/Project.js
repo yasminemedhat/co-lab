@@ -31,7 +31,7 @@ const ProjectSchema = new Schema({
     images:         [{ type: String}],
     link:           {  type: String},
     createdAt:      {  type: Date, default: Date.now},
-    field:          [{  type: String, enum: Object.values(Interests)}]
+    fields:          [{  type: String, enum: Object.values(Interests)}]
 }, options,
 );
 
