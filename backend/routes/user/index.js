@@ -143,6 +143,11 @@ user.get('/pullNotifications', auth, require('./pullNotifications'));
 //@access       does not require authentication 
 user.get('/search', require('./search'));
 
+//@route GET    user/search
+//@description  search
+//@access       does not require authentication 
+user.get('/discover',auth,require('./discover'));
+
 //@route POST   user/logout ->Post because browser pre-fetches for get requests
 //@description  blacklist jwt using redis
 //@access       requires authentication

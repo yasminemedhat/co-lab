@@ -53,7 +53,7 @@ ProjectSchema.post(['remove','findOneAndDelete'],async function (doc){
 });
 
 ProjectSchema
-.index( {"name":"text", "description":"text"}, 
-        {"weights": { name: 4, description:3}});
+.index( {"field":"text","name":"text", "description":"text"}, 
+        {"weights": { field:4,name: 3, description:2}});
 
 module.exports = mongoose.model('Project', ProjectSchema);

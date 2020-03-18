@@ -37,7 +37,7 @@ module.exports = async  (req, res) => {
         //get new member
         let newMember = await Colaber.findOne({email: newMember_Email}).select('-password');
         if(!newMember)
-            return res.send('User not found');
+            return res.status(404).send('User not found');
 
         //get collaboration
         let colab=await Collaboration.findOne({_id: collaboration_ID});

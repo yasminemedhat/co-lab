@@ -14,7 +14,7 @@ module.exports=async(req,res)=>{
         res.json(notifications);
             
     } catch (error) {
-        res.status(400).json({message:'Server Error'});
+        res.status(500).json({message:'Server Error'});
         console.log(error);
 
     }
