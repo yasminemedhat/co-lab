@@ -9,6 +9,7 @@ import EditCollaboration from './EditCollaboration'
 import EditProject from './editProject'
 import ForgotPassword from './forgotPassword';
 import Home from "./Home";
+import Discover from "./Discover";
 import About from "./About";
 import RegistrationForm from "./RegistrationForm";
 import Profile from "./Profile";
@@ -45,6 +46,7 @@ class Header extends React.Component {
               </Route>
               <Route path="/" exact strict  component ={Home} ></Route>
               <Route path="/home" exact strict  component ={Home} ></Route>
+              <Route path="/discover" exact strict  component ={Discover} ></Route>
               <Route path="/editUser" exact strict component ={editUser} />
               <Route path="/collaborations/:id/edit" exact strict component ={EditCollaboration} />
               <Route path="/projects/:id/edit" exact strict component ={EditProject} />

@@ -260,8 +260,8 @@ class Navbar extends Component {
               Home
             </NavLink>
 
-            <NavLink exact activeClassName="selectedLink" to="/about">
-              About
+            <NavLink exact activeClassName="selectedLink" to="/discover">
+              Discover
             </NavLink>
             <NavLink exact activeClassName="selectedLink" to="/editUser">
               Edit Profile
