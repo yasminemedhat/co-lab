@@ -1,6 +1,6 @@
 .gallery_container{
     width: 100%;
-   height: 100% !important;
+   /* height: 100% !important; */
     padding-top: 3%;
     background:#3d28468c;
     position: absolute;  left: 0;

@@ -186,6 +186,11 @@ export const getHomePage = (jwt) => {
         return res;
     })
 }
+export const discoverProjects = (jwt) => {
+    return axiosInstance.get('user/discover/projects',{headers: { Authorization: jwt } }).then(res => {
+        return res;
+    })
+}
 
 export const likeProject = (jwt, projectId) =>{
     console.log("from api: ", jwt, "id ", projectId);

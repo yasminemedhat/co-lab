@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Component } from "react";
+import React, { Component } from "react";
 import { updateProject, getProject } from "../utils/APICalls";
 import { getJwt } from "../helpers/jwt";
 import "../css/login.css";

@@ -32,7 +32,7 @@ module.exports = async (req, res) => {
             case 'projects': //gets both projects and collaborations
                 var projects= await Project.aggregate([
                     { $match: { field: { $in: interests.interests } } }, //find Colabers with workingField matching interests
-                    { $sample: { size: 10 } },                                  //sample randomizes results
+                    { $sample: { size: 20 } },                                  //sample randomizes results
                     {
                         $project: {
                             name: 1, desciption: 1, creator: 1,        //select fields and count
