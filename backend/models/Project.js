@@ -31,7 +31,8 @@ const ProjectSchema = new Schema({
     images:         [{ type: String}],
     link:           {  type: String},
     createdAt:      {  type: Date, default: Date.now},
-    fields:          [{  type: String, enum: Object.values(Interests)}]
+ //   fields:         [{  type: String, enum: Object.values(Interests)}],
+    field:          { type: String, enum: Object.values(Interests)}
 }, options,
 );
 
@@ -55,5 +56,7 @@ ProjectSchema.post(['remove','findOneAndDelete'],async function (doc){
 ProjectSchema
 .index( {"field":"text","name":"text", "description":"text"}, 
         {"weights": { field:4,name: 3, description:2}});
+
+ProjectSchema.index({"field":1});
 
 module.exports = mongoose.model('Project', ProjectSchema);

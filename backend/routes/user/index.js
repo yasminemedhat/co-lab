@@ -146,7 +146,7 @@ user.get('/search/:text', require('./search'));
 //@route GET    user/search
 //@description  search
 //@access       does not require authentication 
-user.get('/discover',auth,require('./discover'));
+user.get('/discover/:type',auth,require('./discover'));
 
 //@route POST   user/logout ->Post because browser pre-fetches for get requests
 //@description  blacklist jwt using redis

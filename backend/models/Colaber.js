@@ -82,6 +82,8 @@ ColaberSchema
 .index( {"firstName":"text", "lastname":"text", "biography":"text", "workingField":"text", "interests":"text"}, 
         {"weights": { firstName: 4, lastName:4, workingField: 4, biography:3, interests:1 }});
 
+ColaberSchema.index({"workingField":1});
+
 Object.assign(ColaberSchema.statics, {
     Interests
     });
