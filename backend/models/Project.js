@@ -27,6 +27,7 @@ const ProjectSchema = new Schema({
     description:    {  type: String},
     rating:         {  type: Number},
     likes:          [{ type: Schema.Types.ObjectId, ref: 'Colaber'}],
+    reviews:        [{ type: Schema.Types.ObjectId, ref: 'Review'}],
     creator:        {  type: Schema.Types.ObjectId, ref: 'Colaber'},
     images:         [{ type: String}],
     link:           {  type: String},

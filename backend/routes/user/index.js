@@ -98,6 +98,12 @@ user.post('/changePassword', [
 user.put('/follow/:user_id', auth, require('./follow'));
 
 
+//@route POST   user/review
+//@description  review other user
+//@access       auth needed
+user.post('/review/:user_id', auth, require('./review'));
+
+
 //@route PATCH  user/updateAccount
 //@description  update an account's data
 //@access       auth needed
