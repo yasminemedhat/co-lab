@@ -44,6 +44,13 @@ project.patch('/update/:proj_id',
 //@access       auth needed
 project.put('/like/:proj_id', auth, require('./like'));
 
+
+//@route POST   project/review
+//@description  review project
+//@access       auth needed
+project.post('/review/:proj_id', auth, require('./review'));
+
+
 //@route Delete  project/deleteImage
 //@description   delete image from project
 //@access        auth needed
