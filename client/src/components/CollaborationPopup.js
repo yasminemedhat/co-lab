@@ -19,14 +19,14 @@ class CollaborationPopup extends Component {
       description: "",
       collaborationLink: "",
       images: [],
-      chosenfields: [],
+      field: "",
       fieldsList: []};
     // this.uploadMultipleFiles = this.uploadMultipleFiles.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleCreateCollaboration = this.handleCreateCollaboration.bind(this);
     this.onChangeImages = this.onChangeImages.bind(this);
     this.closeModal = this.closeModal.bind(this);
-    this.handleChosenfields = this.handleChosenfields.bind(this)
+   
   }
 
 
@@ -34,15 +34,6 @@ class CollaborationPopup extends Component {
   handleChange = input => e => {
     this.setState({ [input]: e.target.value });
   };
-  handleChosenfields =selectedOption=>{
-       
-          
-    this.setState({
-   chosenfields:selectedOption
-    
-    
-});
-  }
 
   componentDidMount(){
     getInterestsList().then(data => {
@@ -69,17 +60,11 @@ class CollaborationPopup extends Component {
   handleCreateCollaboration() {
     
     const { images } = this.state;
-    console.log(this.state.chosenfields.length)
 
     const formData = new FormData();
     formData.append('name', this.state.collaborationName);
     formData.append('description', this.state.description);
-    if(this.state.chosenfields.length > 0){
-      for(let i=0; i<this.state.chosenfields.length ; i++)
-      {
-        formData.append('fields', this.state.chosenfields[i].value);
-      }
-    }
+    formData.append('field', this.state.field);
     if(this.state.collaborationLink.length > 0){
         formData.append('link', this.state.collaborationLink);
     }
@@ -158,9 +143,15 @@ class CollaborationPopup extends Component {
               />
               </div>
             </div>
-            <div className="row" style = {{    width: "100%" ,padding: "5%"}}>
-              <ReactMultiSelectCheckboxes options={this.state.fieldsList}   onChange={this.handleChosenfields} placeholderButtonLabel='Choose Project Field(s)' />
-              </div>
+            {this.state.fieldsList ? (<div className="row" style = {{    width: "100%" ,padding: "5%"}}>
+              <select defaultValue={this.state.field} onChange={this.handleChange("field")} >
+                {this.state.fieldsList.map(interest => (
+                  <option key={interest.value} value={interest.value}>
+                    {interest.display}
+                  </option>
+                ))}
+              </select>
+            </div>):null}
             <button
               className="btn btn-primary float-right"
               onClick={this.handleCreateCollaboration}
