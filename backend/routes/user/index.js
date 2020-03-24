@@ -104,6 +104,12 @@ user.put('/follow/:user_id', auth, require('./follow'));
 user.post('/review/:user_id', auth, require('./review'));
 
 
+//@route GET    user/pullReviews
+//@description  view reviews for certain user
+//@access       public
+user.get('/pullReviews/:user_id', require('./pullReviews'));
+
+
 //@route PATCH  user/updateAccount
 //@description  update an account's data
 //@access       auth needed
