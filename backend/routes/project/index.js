@@ -50,6 +50,11 @@ project.put('/like/:proj_id', auth, require('./like'));
 //@access       auth needed
 project.post('/review/:proj_id', auth, require('./review'));
 
+//@route GET    project/pullReviews
+//@description  pull all reviews
+//@access       public 
+project.get('/pullReviews/:proj_id', require('./pullReviews'));
+
 
 //@route Delete  project/deleteImage
 //@description   delete image from project
