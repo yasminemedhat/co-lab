@@ -20,21 +20,23 @@ class Auth extends Component{
         const expired = checkTokenExpiration();
         if(expired){
           console.log("auth construct msh tamam");
-          this.state =({
+          this.state ={
+
             authenticated: false,
             user: {
               role: "visitor"
             },
             accessToken: ""
-          });
+          };
           localStorage.clear();
         }
         else{
-            this.state =({
+            this.state = {
+
               authenticated: true,
               accessToken: jwt,
               user: user
-            });
+            };
          
         }
       }
