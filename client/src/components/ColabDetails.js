@@ -13,6 +13,7 @@ import AddMemberPopup from "./AddMemberPopUp";
 import { getJwt , getUserStored} from "../helpers/jwt";
 import { addColabMember, getCollaboration,likeProject } from "../utils/APICalls";
 import Gallery from "react-grid-gallery";
+import ProjectReview from "./ProjectReview"
 
 const ColabDetails = props => {
   const [colab, setColab] = useState({
@@ -270,10 +271,17 @@ const ColabDetails = props => {
                   <div>{table}</div>
                 </div>
               </Row>
-              
+              <div className="row">
+            <h2>Reviews</h2>
+          </div>
+          <div className ="row ReviewDiv">
+          
+            <ProjectReview project = {colab} user = {user}></ProjectReview>
+          </div>
             </div>
           );
         }}
+       
       </AuthConsumer>
     );
   }

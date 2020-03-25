@@ -124,6 +124,24 @@ export const getNotifications = (jwt) => {
     })
 }
 
+export const getColaberReviews = ( userId) => {
+  
+    return axiosInstance.get('user/pullReviews/'+userId ).then(res => {
+  
+        console.log('form api getting colaber Reviews ', res.data);
+        return res.data;
+    })
+}
+
+export const getProjectReviews = ( projectId) => {
+  
+    return axiosInstance.get('project/pullReviews/'+projectId ).then(res => {
+  
+        console.log('form api getting project Reviews ', res.data);
+        return res.data;
+    })
+}
+
 export const openNotification = (jwt, notificationId) => {
     return axiosInstance.get('user/openNotification/'+notificationId, {headers: { Authorization: jwt } }).then(res => {
         return res.data;
@@ -180,6 +198,31 @@ export const followUser = (jwt, userId) =>{
     });
 
 }
+
+export const postColaberReview = (jwt,formdata, userId) =>{
+ const headers =
+ {
+     Authorization: jwt
+ }
+    return axiosInstance.post('user/review/'+userId,formdata, {headers: headers}).then(res => {
+        //the followed/unfollowed user
+        return res.data;
+    });
+
+}
+
+export const postProjectReview = (jwt,formdata, projectId) =>{
+    const headers =
+ {
+     Authorization: jwt
+ }
+    return axiosInstance.post('project/review/'+projectId,formdata, {headers: headers}).then(res => {
+        //the followed/unfollowed user
+        return res.data;
+    });
+
+}
+
 
 export const getHomePage = (jwt) => {
     return axiosInstance.get('homepage',{headers: { Authorization: jwt } }).then(res => {

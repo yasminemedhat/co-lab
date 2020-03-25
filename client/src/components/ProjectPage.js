@@ -10,6 +10,7 @@ import Image from 'react-bootstrap/Image'
 import Gallery from "react-grid-gallery";
 import { AuthContext } from "../authContext";
 import Can from "./Can";
+import ProjectReview from "./ProjectReview"
 import Toast from 'light-toast';
 import { withRouter} from 'react-router-dom';
 
@@ -190,7 +191,12 @@ class ProjectPage extends Component {
           </div>
           <Gallery images={IMAGES} backdropClosesModal ={true}  enableLightbox={true}
                       enableImageSelection={false} />
-          
+          <div className="row">
+            <h2>Reviews</h2>
+          </div>
+          <div className ="row ReviewDiv">
+            <ProjectReview project = {this.state.project} user = {this.context.user}></ProjectReview>
+          </div>
           
         </div>
       );

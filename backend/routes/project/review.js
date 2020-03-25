@@ -31,8 +31,8 @@ module.exports=async(req,res)=>{
 
         //pull from request
         const { 
-            avatarURL, 
-            authorURL, 
+            avatarUrl, 
+            authorUrl, 
             fullName, 
             body, 
             createdAt} = req.body;
@@ -43,8 +43,8 @@ module.exports=async(req,res)=>{
 
         //create review 
         let review = new Review ({
-            avatarURL, 
-            authorURL, 
+            avatarUrl, 
+            authorUrl, 
             fullName, 
             body, 
             createdAt
