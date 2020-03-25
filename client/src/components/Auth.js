@@ -21,6 +21,7 @@ class Auth extends Component{
         if(expired){
           console.log("auth construct msh tamam");
           this.state ={
+
             authenticated: false,
             user: {
               role: "visitor"
@@ -31,6 +32,7 @@ class Auth extends Component{
         }
         else{
             this.state = {
+
               authenticated: true,
               accessToken: jwt,
               user: user

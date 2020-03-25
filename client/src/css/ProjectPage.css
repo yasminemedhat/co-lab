@@ -1,7 +1,6 @@
 .ProjectContainer{
     width: 100%;
     flex-grow : 1;
-    height: 100%;
     padding: 15px;
     background: #3d28468c;
     position: absolute;  left: 0;
@@ -54,3 +53,14 @@
     text-overflow: ellipsis;
 white-space: nowrap;
 }
+
+.ReviewDiv{
+    max-height: 300px;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+.css-oot9fd{
+    background: #3d2846 !important;
+}
+

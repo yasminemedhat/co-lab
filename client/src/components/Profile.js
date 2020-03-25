@@ -7,6 +7,7 @@ import Can from "./Can";
 import "../css/profile.css";
 import ProjectPopup from "./ProjectPopup";
 import CollaborationPopup from "./CollaborationPopup";
+import Review from "./Review.js";
 import ProjectLink from "./ProjectLink.js";
 import ColabLink from "./ColabLink.js";
 import { getJwt } from "../helpers/jwt";
@@ -382,6 +383,12 @@ class Profile extends Component {
               })
             ) : null}
        
+        </div>
+        <div className="row">
+          <h2>Reviews</h2>
+        </div>
+        <div className ="row ReviewDiv">
+          <Review user = {this.context.user} profileOwnerId= {this.props.match.params.id}></Review>
         </div>
       </div>
     );
