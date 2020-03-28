@@ -4,7 +4,34 @@ const { Actions }= require('../../models/Notification');
 const { createNotificationObject }= require('../../models/Notification');
 const server=require('../../server');
 const Review = require('../../models/Review');
+const natural = require('natural'); //NLP package
+const aposToLexForm = require('apos-to-lex-form');
+const SpellCorrector = require('spelling-corrector');
+const spellCorrector = new SpellCorrector();
+spellCorrector.loadDictionary();
+const SW = require('stopword');
 
+async function sentimentAnalysis(review){
+    //convert contractions I'm --> I am
+    const lexedReview = aposToLexForm(review);
+    const casedReview = lexedReview.toLowerCase();
+    //Remove special and numerical characters
+    const alphaOnlyReview = casedReview.replace(/[^a-zA-Z\s]+/g, '');
+    const { WordTokenizer } = natural
+    const tokenizer = new WordTokenizer();
+    const tokenizedReview = tokenizer.tokenize(alphaOnlyReview);
+    // correct review spelling
+    tokenizedReview.forEach((word, index) => {
+        tokenizedReview[index] = spellCorrector.correct(word);
+    })
+    //Remove stop words like but, a, or,etc
+    const filteredReview = SW.removeStopwords(tokenizedReview);
+    const { SentimentAnalyzer, PorterStemmer } = natural;
+    // stemmer to: happiness --> happy
+    const analyzer = new SentimentAnalyzer('English', PorterStemmer, 'afinn');
+    const analysis = analyzer.getSentiment(filteredReview);
+    console.log(analysis);
+}
 
 module.exports=async(req,res)=>{
     const userToReview_id = req.params.user_id;
@@ -39,13 +66,14 @@ module.exports=async(req,res)=>{
             createdAt
         });
 
+        sentimentAnalysis(body);
         console.log(createdAt);
         console.log(review);
         
         //add review to userToReview reviews array
         userToReview.reviews.unshift(review.id);
 
-        //create notification object
+        // create notification object
         notification = createNotificationObject(
             (Object)(reviewer.id), fullName, userToReview, undefined, 
             ObjectsToBeOpened.SENDER, Actions.REVIEW_USER
