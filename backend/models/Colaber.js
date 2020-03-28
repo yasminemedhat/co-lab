@@ -1,6 +1,7 @@
 const mongoose=require('mongoose');
 const Account=require('./Account');
 const drive=require('../services/drive');
+const {HireFields} = require('./QuickHire');
 
 //enums
 //Interest
@@ -30,6 +31,7 @@ const ColaberSchema=new mongoose.Schema({
     notifications:      [{type: mongoose.Schema.Types.ObjectId, ref: 'Notification' }],
     workingField:       { type: String, enum: Object.values(Interests)},
     interests:  [{ type: String, enum: Object.values(Interests)}],
+    hireFields: [{ type: String, enum: Object.values(HireFields)}],
     reviews:    [{type: mongoose.Schema.Types.ObjectId, ref: 'Review' }],
     biography:  { type: String},
     isSponsor:  { type: Boolean},

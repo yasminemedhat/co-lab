@@ -9,6 +9,7 @@ const upload = multer();
 //database 
 const Colaber = require('../../models/Colaber');
 const {Interests} = require('../../models/Colaber');
+const {HireFields} = require('../../models/QuickHire');
 
 //jwt authentication
 const auth = require("../../middleware/auth");
@@ -44,6 +45,17 @@ user.post('/register', [
 //@access        public-> no token needed 
 user.get('/interestsList',(req,res)=>{
     res.json(Object.values(Interests));
+})
+
+//@route GET    user/fieldsList
+//@description  get list of quick hire fields for user to choose theirs 
+//              the chosen fields are the ones that would be used to choose
+//              which co-labers shoudl receive a specific quick hire offer
+//@access       public-> no token needed 
+user.get('/fieldsList',(req,res)=>{
+    console.log("Here")
+    console.log(Object.values(HireFields))
+    res.json(Object.values(HireFields));
 })
 
 //@route POST   user/login
