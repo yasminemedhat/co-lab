@@ -23,9 +23,14 @@ module.exports = async (req, res) => {
     console.log('new User attempt');
 
     //pull from request
-    const { email, password,
-        firstname, lastname, phone, isSponsor, interests, biography, workingField } = req.body;
+    const { 
+        email, password,
+        firstname, lastname,
+        phone, isSponsor, 
+        hireFields, interests, 
+        biography, workingField } = req.body;
         Email=email;
+
     //pull image
         var avatar;
     try {
@@ -63,6 +68,7 @@ module.exports = async (req, res) => {
             isSponsor,
             isPremium: false,
             interests: interests,
+            hireFields,
             biography,
             workingField:workingField,
             avatar: url
@@ -115,13 +121,3 @@ module.exports = async (req, res) => {
         res.status(500).json({ message: 'Server Error' });
     }
 };
-
-
-
-
-
-
-
-
-
-
