@@ -5,7 +5,10 @@ const { validationResult } = require('express-validator');
 
 module.exports = async (req, res) => {
 
+    console.log("entered");
     const errors = validationResult(req);
+    console.log("Errors here");
+    console.log(errors)
 
     //if there are missing fields
     if (!errors.isEmpty()) {
@@ -14,6 +17,7 @@ module.exports = async (req, res) => {
     }
 
     console.log('New Quick Hire attempt.');
+
 
     //pull from request
     const {

@@ -149,7 +149,7 @@
     background: #fff;
     border-radius: 3px;
     overflow: hidden;
-    height: 550px;
+    height: 700px;
   }
   
   .wrap-edit100{
@@ -540,4 +540,8 @@
       padding-left: 15px;
       padding-right: 15px;
     }
+  }
+
+  .ReactMultiSelectCheckboxes{
+    position: absolute !important ;
   }
