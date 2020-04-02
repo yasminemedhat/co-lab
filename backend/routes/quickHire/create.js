@@ -2,6 +2,12 @@ const Colaber = require('../../models/Colaber');
 const QuickHire = require('../../models/QuickHire');
 const { validationResult } = require('express-validator');
 
+//notifications
+const { ObjectsToBeOpened }= require('../../models/Notification');
+const { Actions }= require('../../models/Notification');
+const { createNotificationObject }= require('../../models/Notification');
+const server=require('../../server');
+
 
 module.exports = async (req, res) => {
 
@@ -37,10 +43,43 @@ module.exports = async (req, res) => {
             field, money, 
             date
         });
+
+        var employees = [];
+        //get potential employees
+        //for each employee create notification object 
+        //todo limit and send every certain amount of time
+        await (
+            await Colaber.find({ hireFields: field, _id: {$ne: employer.id}}).select('-password')).
+            forEach(
+                function (doc)
+                {
+                    try {
+                        potential_employee = doc;
+                        
+                        //create notification object
+                        notification = createNotificationObject(
+                            (Object)(employer.id), employer.fullName, potential_employee, undefined ,quickHire.id, 
+                            ObjectsToBeOpened.QUICK_HIRE, Actions.POST_QUICK_HIRE
+                        );
+                        
+                        //add to receiver notifications
+                        potential_employee.notifications.unshift(notification.id);
+                        notification.save();
+                        potential_employee.save();
+                        server.io.to(potential_employee._id).emit('notification');
+                              
+                        //add to list
+                        employees.push(potential_employee);
+                    }catch (error) {
+                        console.log(error.message);
+                        //res.status(500).json({ message: 'Server Error' });
+                    }
+                    
+                });
         
         //save to db
         await quickHire.save();
-        res.json(quickHire);
+        res.json(employees);
 
     } catch (error) {
         console.log(error.message);

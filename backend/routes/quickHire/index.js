@@ -22,6 +22,11 @@ quickHire.post('/create', [
     auth
 ], require('./create'));
 
+//@route PUT    quickHire/follow
+//@description  accept quick hire
+//@access       auth needed
+quickHire.put('/accept/:quickHire_id', auth, require('./accept'));
+
 //@route POST   quickHire/delete
 //@description  delete quickHire
 //@access       auth needed 
