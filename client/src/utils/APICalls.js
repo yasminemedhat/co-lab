@@ -75,6 +75,16 @@ export const createCollaboration = (jwt, formData)=> {
             return res;
       });
 }
+export const createHire = (jwt, hire)=> {
+   
+    
+    return axiosInstance.post('quickHire/create', hire,{headers: { Authorization: jwt } })
+        .then((res) => {
+            console.log('form api getting quick hire ', res.data);
+            return res;
+            
+      });
+}
 
 export const updateUser = (jwt, formData) => {
     const headers = {
@@ -102,8 +112,7 @@ export const updateProject = (jwt, formData,projectId) => {
         'Content-Type': "multipart/form-data",
         'Authorization': jwt
       }
-      console.log("formData")
-      console.log(formData)
+    
       return axiosInstance.patch('project/update/'+projectId, formData,{headers:headers }).then((res) => {
             return res;
       });
@@ -188,6 +197,14 @@ export const addColabMember = (jwt,colabId, email) => {
 export const getInterestsList=() => {
     return axiosInstance.get('user/interestsList')
         .then(res => {
+            return res.data;
+        });	
+}
+
+export const getHireFields=() => {
+    return axiosInstance.get('user/fieldsList')
+        .then(res => {
+            console.log('form api getting hire Fields ', res.data);
             return res.data;
         });	
 }

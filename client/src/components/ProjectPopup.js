@@ -83,8 +83,7 @@ class ProjectPopup extends Component {
         formData.append("photos", images[i]);
      }
     }
-    
-
+  
     this.props.createProject(formData);
     this.closeModal();
   }

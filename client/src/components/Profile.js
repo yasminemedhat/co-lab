@@ -6,6 +6,7 @@ import Can from "./Can";
 
 import "../css/profile.css";
 import ProjectPopup from "./ProjectPopup";
+import HirePopup from "./HirePopup";
 import CollaborationPopup from "./CollaborationPopup";
 import Review from "./Review.js";
 import ProjectLink from "./ProjectLink.js";
@@ -18,12 +19,13 @@ import {
   getCollaborations,
   getCollaboration,
   getUser,
+  createHire,
   followUser
 } from "../utils/APICalls";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col} from "react-bootstrap";
 import { withRouter } from "react-router-dom";
 import { AuthContext } from "../authContext";
-import HorizontalScroll from "react-scroll-horizontal";
+import Toast from 'light-toast';
 
 class Profile extends Component {
   static contextType = AuthContext;
@@ -39,6 +41,7 @@ class Profile extends Component {
     this.state = {
       showPopup: false,
       showPopup2: false,
+      showPopup3: false,
       loadingProjects: true,
       loadingCollaborations: true,
       user: "",
@@ -62,7 +65,11 @@ class Profile extends Component {
       showPopup2: !this.state.showPopup2
     });
   }
-
+  togglePopup3() {
+    this.setState({
+      showPopup3: !this.state.showPopup3
+    });
+  }
   showColabDetails = colab => {
     const path = "/collaborations/" + colab._id;
     getCollaboration(this.context.accessToken, colab._id).then(data => {
@@ -171,6 +178,24 @@ class Profile extends Component {
         }
       });
   }
+  createHire(hire) {
+
+
+    const jwt = getJwt();
+    createHire(jwt, hire)
+      .then(res => {
+        
+
+        Toast.success("Quick-Hire created successfully",2000);
+       
+      })
+      .catch(err => {
+        if (err && err.status) {
+          
+          Toast.fail("could not create quick Hire",2000);
+        }
+      });
+  }
   createCollaboration(formData) {
     this.setState({ loadingCollaborations: true });
     const jwt = getJwt();
@@ -249,6 +274,34 @@ class Profile extends Component {
             />
           </Col>
           <Col>
+          <Can
+          role={this.context.user.userType}
+          perform="projects:create"
+          data={{
+            userId: this.context.user._id,
+            profileOwnerId: this.props.match.params.id
+          }}
+          yes={() => (
+            <Row style={{ width: "100%" }}>
+              <Col>
+                <button
+                  style={{ float: "right", width: "180px" }}
+                  className="profile-btn"
+                  onClick={this.togglePopup3.bind(this)}
+                >
+                  Create Quick-Hire
+                </button>
+                {this.state.showPopup3 ? (
+                  <HirePopup
+                    text='Click "Close Button" to hide popup'
+                    closePopup={this.togglePopup3.bind(this)}
+                    createHire={this.createHire}
+                  />
+                ) : null}
+              </Col>
+            </Row>
+          )}
+        />
             <div className="profile_info" style={{ float: "left" }}>
               <h4>
                 {this.state.user.firstName} {this.state.user.lastName}

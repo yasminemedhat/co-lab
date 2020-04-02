@@ -19,6 +19,7 @@
     "react": "^16.11.0",
     "react-awesome-modal": "^2.0.5",
     "react-bootstrap": "^1.0.0-beta.16",
+    "react-date-picker": "^7.10.0",
     "react-dom": "^16.11.0",
     "react-dropdown": "^1.6.4",
     "react-grid-gallery": "^0.5.5",

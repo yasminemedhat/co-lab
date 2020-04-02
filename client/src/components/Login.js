@@ -7,7 +7,7 @@ import "../fonts/Linearicons-Free-v1.0.0/icon-font.min.css"
 import LoginForm from './LoginForm.js';
 import { Link }  from "react-router-dom";
 import { withRouter } from "react-router-dom";
-
+import Toast from 'light-toast';
 import { login } from '../utils/APICalls';
 import {AuthContext} from '../authContext';
 
@@ -58,9 +58,10 @@ class Login extends React.Component {
                   errMsg = "Incorrect username/password, please try again."
               }
               else {
-                  errMsg = "Something went wrong, please try again later."
+                  
+                  Toast.fail("Something went wrong, please try again later.",2000);
               }
-              alert(errMsg);
+              
              
           })
         }

@@ -8,19 +8,37 @@ import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
 
 class UserAdditionalInformation extends Component {
 
+    constructor() {
+
+        super();
+        this.quickhire = this.quickhire.bind(this);
+
+        this.state = {
+
+            showquickHire: false,
+        };
+
+    }
+
     continue = e => {
         e.preventDefault();
         
           this.props.sumbit();
         }
-
+  
+    quickhire =e=>{
+       
+    this.setState({
+        showquickHire: e.target.checked,
+    });
+    }
  
               
     render() {
         const { values } = this.props;
         return (
             <div className="main_container">
-            <div className="wrap-login100 p-l-50 p-r-50 p-t-77 p-b-30">
+            <div className="wrap-registration100 p-l-50 p-r-50 p-t-77 p-b-30">
                 <form className="login100-form validate-form">
                 <span className="login100-form-title p-b-55">Additional Information</span>
 
@@ -61,10 +79,26 @@ class UserAdditionalInformation extends Component {
 
              
                 <ReactMultiSelectCheckboxes options={values.interestsList} onChange={this.props.handleChosenInterests} placeholderButtonLabel='Choose your Interests'/>
+               <div className="row">
+               <div
+                    className="wrap-input100 validate-input m-b-16"
+                >
+                <label> 
+                    <input
+                    type="checkbox"
+                    required
+                    name="QuickHire"
+                    placeholder=""
+                    onChange={this.quickhire}
+                    
+                    /> Interested in Quick-Hires?</label>
+                    
+                </div>
+               </div>
+               {this.state.showquickHire? <div className="row">
+                <ReactMultiSelectCheckboxes  className="ReactMultiSelectCheckboxes" options={values.hireFields} onChange={this.props.handleChosenHireFields} placeholderButtonLabel='Choose your hiring fields'/>
 
-                
-
-
+                </div>: null}
 
                 <div className="container-login100-form-btn p-t-25">
                     <input type="submit" className="login100-form-btn" value="Create Account" onClick={this.continue}/>
