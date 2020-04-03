@@ -6,7 +6,8 @@ const Schema = mongoose.Schema;
 const ObjectsToBeOpened = Object.freeze({
     SENDER: "sender",
     PROJECT: "project",
-    COLLABORATION: "co-laboration"
+    COLLABORATION: "Co-Laboration",
+    QUICK_HIRE: "Quick-Hire"
   });
 
 //action done 
@@ -16,7 +17,9 @@ const Actions = Object.freeze({
     FOLLOW_COLLABORATION: "followed your ",
     REVIEW_USER: "You have a new review by ",
     REVIEW_PROJECT: "reviewed your ",
-    INVITATION: "invited you to join a "
+    INVITATION: "invited you to join a ",
+    POST_QUICK_HIRE: "posted a ",
+    ACCEPT_QUICK_HIRE: "accepted your "
 });
 
 //notification title
@@ -24,7 +27,8 @@ const Titles = Object.freeze({
     LIKE: "Like",
     FOLLOW: "Follow",
     REVIEW: "Review",
-    INVITATION: "Invitation"
+    INVITATION: "Invitation",
+    QUICK_HIRE: "Quick-Hire"
 });
 
 //schema
@@ -34,6 +38,7 @@ const NotificationSchema = new Schema({
     sender:             {   type: Schema.Types.ObjectId, ref: 'Colaber'},
     receiver:           {   type: Schema.Types.ObjectId, ref: 'Colaber'},
     project:            {   type: Schema.Types.ObjectId, ref: 'Project'},
+    quickHire:          {   type: Schema.Types.ObjectId, ref: 'QuickHire'},
     objectToBeOpened:   {   type: String, enum: Object.values(ObjectsToBeOpened)},
     action:             {   type: String, enum: Object.values(Actions)},
     isOpened:           {   type: Boolean, default: false},
@@ -43,7 +48,7 @@ const NotificationSchema = new Schema({
   
 //functions
 function createNotificationObject(sender, senderFullName,
-    receiver, project, 
+    receiver, project, quickHire, 
     objectToBeOpened, action)
 {
    // generate Notification body and title
@@ -82,6 +87,16 @@ function createNotificationObject(sender, senderFullName,
             title = Titles.INVITATION;
             body += objectToBeOpened;
             break;
+        case Actions.POST_QUICK_HIRE:
+            title = Titles.QUICK_HIRE;
+            body += objectToBeOpened;
+            break;
+        case Actions.ACCEPT_QUICK_HIRE:
+            title = Titles.QUICK_HIRE;
+            body += objectToBeOpened;
+            break;
+        default:
+            break;
    }
    body += ".";
 
@@ -93,6 +108,7 @@ function createNotificationObject(sender, senderFullName,
        sender,
        receiver,
        project,
+       quickHire,
        objectToBeOpened, 
        action
    });

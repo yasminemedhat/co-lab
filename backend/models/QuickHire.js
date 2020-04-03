@@ -21,6 +21,7 @@ const QuickHireSchema = new Schema({
     description:    {   type: String},
     field:          {   type: String, enum: Object.values(HireFields)},
     employer:       {   type: Schema.Types.ObjectId, ref: 'Colaber'},
+    employee:       {   type: Schema.Types.ObjectId, ref: 'Colaber'},
     money:          {   type: Number},
     date:           {   type: Date, required: true},
     availability:   {   type: Boolean, default: true},
