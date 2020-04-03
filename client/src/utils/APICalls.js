@@ -85,6 +85,29 @@ export const createHire = (jwt, hire)=> {
             
       });
 }
+export const viewHire = (hire_id)=> {
+   console.log(hire_id)
+    return axiosInstance.get('quickHire/'+ hire_id)
+        .then((res) => {
+            console.log('form api viewing quick hire ', res.data);
+            return res;
+            
+      });
+}
+
+export const acceptHire = (jwt, hire_id)=> {
+    const headers = {
+      
+        'Authorization': jwt
+      }
+      console.log(jwt)
+     return axiosInstance.put('quickHire/accept/'+ hire_id , hire_id, {headers:headers })
+         .then((res) => {
+             console.log('form api accepting quick hire ', res.data);
+             return res;
+             
+       });
+ }
 
 export const updateUser = (jwt, formData) => {
     const headers = {

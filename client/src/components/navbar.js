@@ -1,20 +1,28 @@
-import React, { Component } from "react";
-import { NavLink, Switch } from "react-router-dom";
-import "../bootstrap/css/bootstrap.min.css";
-import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
-import "../fonts/Linearicons-Free-v1.0.0/icon-font.min.css";
-import "../css/header.css";
-import "bootstrap";
-import "bootstrap/dist/css/bootstrap.css";
-import "bootstrap/dist/js/bootstrap.js";
-import { getNotifications, openNotification, search } from "../utils/APICalls";
-import { withRouter } from "react-router-dom";
-import { AuthContext } from "../authContext";
-import Image from "react-bootstrap/Image";
-import { Row, Col } from "react-bootstrap";
-import "react-dropdown/style.css";
+import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
+import '../bootstrap/css/bootstrap.min.css';
+import '../fonts/font-awesome-4.7.0/css/font-awesome.min.css';
+import '../fonts/Linearicons-Free-v1.0.0/icon-font.min.css';
+import '../css/header.css';
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/js/bootstrap.js';
+import {
+  getNotifications,
+  openNotification,
+  viewHire,
+  acceptHire,
+  getUser
+} from '../utils/APICalls';
+import { withRouter } from 'react-router-dom';
+import { AuthContext } from '../authContext';
+import Image from 'react-bootstrap/Image';
+import { Row, Col } from 'react-bootstrap';
+import 'react-dropdown/style.css';
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
-import socket from "../../src/utils/notifications";
+import socket from '../../src/utils/notifications';
 
 class Navbar extends Component {
   static contextType = AuthContext;
@@ -22,14 +30,16 @@ class Navbar extends Component {
   state = {
     notifications: [],
     notificationCount: 0,
-    searchTerm:""
+    searchTerm: ''
   };
   constuctor(props) {
     this.super(props);
     this.state = {
       notifications: [],
       notificationCount: 0,
-      searchTerm:""
+      searchTerm: '',
+      quickHire: [{}],
+      user: ''
     };
     this.logout = this.logout.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -38,9 +48,7 @@ class Navbar extends Component {
     this.goToProfile = this.goToProfile.bind(this);
     this.unseenNotificationCount = this.unseenNotificationCount.bind(this);
     this.getNotificationPath = this.getNotificationPath.bind(this);
-    this.onKeyPress= this._handleKeyDown.bind(this)
-   
-
+    this.onKeyPress = this._handleKeyDown.bind(this);
   }
   logout() {
     this.context.logout();
@@ -56,11 +64,11 @@ class Navbar extends Component {
         })
         .catch(err => {
           if (err && err.status) {
-            alert("something went wrong: " + err.message);
+            alert('something went wrong: ' + err.message);
           }
         });
 
-      socket.on("notification", () => {
+      socket.on('notification', () => {
         console.log(`+1`);
 
         // this.setState({
@@ -76,7 +84,7 @@ class Navbar extends Component {
           })
           .catch(err => {
             if (err && err.status) {
-              alert("something went wrong: " + err.message);
+              alert('something went wrong: ' + err.message);
             }
           });
 
@@ -88,7 +96,7 @@ class Navbar extends Component {
   }
 
   goToProfile() {
-    let path = "/users/" + this.context.user._id;
+    let path = '/users/' + this.context.user._id;
     this.props.history.push({
       pathname: path
     });
@@ -109,20 +117,24 @@ class Navbar extends Component {
 
   getNotificationPath(notification) {
     const ObjectsToBeOpened = Object.freeze({
-      SENDER: "sender",
-      PROJECT: "project",
-      COLLABORATION: "co-laboration"
+      SENDER: 'sender',
+      PROJECT: 'project',
+      COLLABORATION: 'co-laboration',
+      QUICKHIRE: 'Quick-Hire'
     });
     let path;
     switch (notification.objectToBeOpened) {
       case ObjectsToBeOpened.SENDER:
-        path = "/users/" + notification.sender;
+        path = '/users/' + notification.sender;
         break;
       case ObjectsToBeOpened.PROJECT:
-        path = "/projects/" + notification.project;
+        path = '/projects/' + notification.project;
         break;
       case ObjectsToBeOpened.COLLABORATION:
-        path = "/collaborations/" + notification.project;
+        path = '/collaborations/' + notification.project;
+        break;
+      case ObjectsToBeOpened.QUICKHIRE:
+        path = notification.project;
         break;
     }
     return path;
@@ -131,9 +143,122 @@ class Navbar extends Component {
   openNotification(notification) {
     openNotification(this.context.accessToken, notification._id).catch(err => {
       if (err && err.status) {
-        alert("something went wrong: " + err.message);
+        alert('something went wrong: ' + err.message);
       }
     });
+    if (notification.title == 'Quick-Hire') {
+      viewHire(notification.quickHire).then(data => {
+        const quickHire = data.data.quickHire;
+
+        this.setState({
+          quickHire
+        });
+
+        let date = new Date(this.state.quickHire.date);
+
+        
+            let p;
+            if (!this.state.quickHire.availability) {
+              p = (
+                <p style={{ color: 'red' }}>
+                  Sorry Quick-Hire is not available anymore!!
+                </p>
+              );
+            }
+            if (notification.action == 'accepted your ') {
+              getUser(this.context.accessToken, this.state.quickHire.employee).then(
+                data => {
+                  const user = data.user;
+                  this.setState({
+                    user
+                  });
+              confirmAlert({
+                customUI: ({ onClose }) => {
+                  return (
+                    <div>
+                      <h1>{this.state.quickHire.title}</h1>
+                      <p>
+                        Job description : {this.state.quickHire.description}
+                      </p>
+                      <p>Job date : {date.toDateString()}</p>
+                      <p>Job money : {this.state.quickHire.money}</p>
+                      <p style={{ float: 'left' }}>Employee:</p>
+                      <a
+                        style={{ paddingLeft: '1%' }}
+                        href={'/users/' + this.state.user._id}
+                      >
+                        {' '}
+                        {this.state.user.firstName} {this.state.user.lastName}
+                      </a>
+                     
+
+                    
+                    </div>
+                  );
+                }
+              });
+            })
+            } else {
+              getUser(this.context.accessToken, this.state.quickHire.employer).then(
+                data => {
+                  const user = data.user;
+                  this.setState({
+                    user
+                  });
+              confirmAlert({
+                customUI: ({ onClose }) => {
+                  return (
+                    <div>
+                      <h1>{this.state.quickHire.title}</h1>
+                      <p>
+                        Job description : {this.state.quickHire.description}
+                      </p>
+                      <p>Job date : {date.toDateString()}</p>
+                      <p>Job money : {this.state.quickHire.money}</p>
+                      <p style={{ float: 'left' }}>Employer:</p>
+                      <a
+                        style={{ paddingLeft: '1%' }}
+                        href={'/users/' + this.state.user._id}
+                      >
+                        {' '}
+                        {this.state.user.firstName} {this.state.user.lastName}
+                      </a>
+                      <div className='row'>{p}</div>
+
+                      <div className='row'>
+                        <button
+                          disabled={!this.state.quickHire.availability}
+                          className='profile-btn'
+                          style={{ float: 'right', width: '100px' }}
+                          onClick={onClose}
+                        >
+                          Decline
+                        </button>
+                        <button
+                          disabled={!this.state.quickHire.availability}
+                          className='profile-btn'
+                          style={{ float: 'left', width: '100px' }}
+                          onClick={() => {
+                            acceptHire(
+                              this.context.accessToken,
+                              notification.quickHire
+                            );
+                            onClose();
+                          }}
+                        >
+                          Accept
+                        </button>
+                      </div>
+                    </div>
+                  );
+                }
+              });
+            })
+            }
+          }
+        );
+     
+    }
   }
 
   generateNotificationDropDown() {
@@ -141,13 +266,13 @@ class Navbar extends Component {
       let dropDown = this.state.notifications.map(notification => (
         <div
           key={notification._id}
-          style={{ background: notification.isOpened ? "white" : "#ddd" }}
+          style={{ background: notification.isOpened ? 'white' : '#ddd' }}
         >
           <a
             href={this.getNotificationPath(notification)}
             onClick={() => this.openNotification(notification)}
           >
-            <label className="notification-title">{notification.title}</label>
+            <label className='notification-title'>{notification.title}</label>
             <br />
             {notification.body}
           </a>
@@ -160,41 +285,37 @@ class Navbar extends Component {
     }
   }
 
-  handleChange= event => {
+  handleChange = event => {
     this.setState({
-      searchTerm:event.target.value
-    })
+      searchTerm: event.target.value
+    });
   };
 
-  _handleKeyDown = event =>{
+  _handleKeyDown = event => {
     if (event.key === 'Enter') {
-     // event.preventDefault();  
-      const path = "/SearchResults/"+ this.state.searchTerm;
+      // event.preventDefault();
+      const path = '/SearchResults/' + this.state.searchTerm;
       //console.log(this.state.searchTerm);
       this.props.history.push({
         pathname: path,
-        state :{
-         searchTerm: this.state.searchTerm,
-          }
-      })
-  
-    
+        state: {
+          searchTerm: this.state.searchTerm
+        }
+      });
     }
-  }
+  };
 
   render() {
- 
-    
     let image;
     let source =
       this.context.user && this.context.user.avatar
         ? this.context.user.avatar
-        : "../images/profile.png";
+        : '../images/profile.png';
     if (source == null) {
       image = (
         <Image
-          className="navbarAvatar"
-          src={require("../images/profile.png")}
+          className='navbarAvatar'
+          src={require('../images/profile.png')}
           style={{ width: 45, height: 45 }}
           roundedCircle
         ></Image>
@@ -202,44 +323,44 @@ class Navbar extends Component {
     } else {
       image = (
         <Image
-          className="navbarAvatar"
+          className='navbarAvatar'
           src={
             this.context.user && this.context.user.avatar
               ? this.context.user.avatar
-              : require("../images/profile.png")
+              : require('../images/profile.png')
           }
-          style={{ width: 45, height: 45, margin: "5px" }}
+          style={{ width: 45, height: 45, margin: '5px' }}
           roundedCircle
         ></Image>
       );
     }
     if (this.context.authenticated) {
-      socket.emit("identify", this.context.user._id);
+      socket.emit('identify', this.context.user._id);
       return (
-        <div className="topnav ">
+        <div className='topnav '>
           <link
-            href="https://fonts.googleapis.com/icon?family=Material+Icons"
-            rel="stylesheet"
+            href='https://fonts.googleapis.com/icon?family=Material+Icons'
+            rel='stylesheet'
           ></link>
-          <div className="logo_avatar_div">
+          <div className='logo_avatar_div'>
             <Row>
               <Col
-                tag="a"
+                tag='a'
                 onClick={() => {
                   this.goToProfile();
                 }}
               >
                 {this.context.user.avatar ? (
                   <Image
-                    className="navbarAvatar"
+                    className='navbarAvatar'
                     src={this.context.user.avatar}
-                    style={{ width: 45, height: 45, margin: "5px" }}
+                    style={{ width: 45, height: 45, margin: '5px' }}
                     roundedCircle
                   ></Image>
                 ) : (
                   <Image
-                    className="navbarAvatar"
-                    src={require("../images/profile.png")}
+                    className='navbarAvatar'
+                    src={require('../images/profile.png')}
                     style={{ width: 45, height: 45 }}
                     roundedCircle
                   ></Image>
@@ -247,38 +368,44 @@ class Navbar extends Component {
               </Col>
             </Row>
           </div>
-          <div className="logo_div">
-            <h2 className="logo">Co-Lab</h2>
+          <div className='logo_div'>
+            <h2 className='logo'>Co-Lab</h2>
           </div>
-          <div className="search-container">
-            <form id="search-form">
-              <input type="search" placeholder="Search" value={this.state.searchTerm}  onChange={this.handleChange} onKeyDown={this._handleKeyDown}/>
+          <div className='search-container'>
+            <form id='search-form'>
+              <input
+                type='search'
+                placeholder='Search'
+                value={this.state.searchTerm}
+                onChange={this.handleChange}
+                onKeyDown={this._handleKeyDown}
+              />
             </form>
           </div>
-          <div className="navigation ">
-            <NavLink exact activeClassName="selectedLink" to="/home">
+          <div className='navigation '>
+            <NavLink exact activeClassName='selectedLink' to='/home'>
               Home
             </NavLink>
 
-            <NavLink exact activeClassName="selectedLink" to="/discover">
+            <NavLink exact activeClassName='selectedLink' to='/discover'>
               Discover
             </NavLink>
-            <NavLink exact activeClassName="selectedLink" to="/editUser">
+            <NavLink exact activeClassName='selectedLink' to='/editUser'>
               Edit Profile
             </NavLink>
-          
-            <div className="dropdown">
-              <button className="notification ">
+
+            <div className='dropdown'>
+              <button className='notification '>
                 <span>
-                  <i className="material-icons">notifications_active</i>
+                  <i className='material-icons'>notifications_active</i>
                 </span>
-                <span className="badge">{this.state.notificationCount}</span>
+                <span className='badge'>{this.state.notificationCount}</span>
               </button>
-              <div className="dropdown-content">
+              <div className='dropdown-content'>
                 {this.generateNotificationDropDown()}
               </div>
             </div>
-            <button className="logout-NavLink" onClick={() => this.logout()}>
+            <button className='logout-NavLink' onClick={() => this.logout()}>
               Logout
             </button>
           </div>
@@ -288,19 +415,19 @@ class Navbar extends Component {
       );
     } else {
       return (
-        <div className="topnav">
-          <div className="logo_div">
-            <h2 className="logo">Co-Lab</h2>
+        <div className='topnav'>
+          <div className='logo_div'>
+            <h2 className='logo'>Co-Lab</h2>
           </div>
-          <div className="navigation">
+          <div className='navigation'>
             <ul>
               {/* <NavLink exact activeClassName="selectedLink" to="/">
                 Home
               </NavLink> */}
-              <NavLink exact activeClassName="selectedLink" to="/about">
+              <NavLink exact activeClassName='selectedLink' to='/about'>
                 About
               </NavLink>
-              <NavLink exact activeClassName="selectedLink" to="/login">
+              <NavLink exact activeClassName='selectedLink' to='/login'>
                 Login
               </NavLink>
             </ul>
