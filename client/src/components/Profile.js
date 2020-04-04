@@ -126,6 +126,8 @@ class Profile extends Component {
     // });
     getProjects(this.context.accessToken, this.props.match.params.id)
       .then(data => {
+        console.log("projects")
+        console.log(data)
         const projects = data;
         this.setState({ projects });
         this.setState({
@@ -179,19 +181,14 @@ class Profile extends Component {
       });
   }
   createHire(hire) {
-
-
     const jwt = getJwt();
     createHire(jwt, hire)
       .then(res => {
-        
-
         Toast.success("Quick-Hire created successfully",2000);
        
       })
       .catch(err => {
         if (err && err.status) {
-          
           Toast.fail("could not create quick Hire",2000);
         }
       });
