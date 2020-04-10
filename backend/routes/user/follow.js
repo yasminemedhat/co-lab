@@ -31,7 +31,7 @@ module.exports=async(req,res)=>{
 
             //create notification object
             notification = createNotificationObject(
-                (Object)(follower.id), follower.fullName, userToFollow, undefined, 
+                (Object)(follower.id), follower.fullName, userToFollow, undefined, undefined,
                 ObjectsToBeOpened.SENDER, Actions.FOLLOW_USER
                 );
             

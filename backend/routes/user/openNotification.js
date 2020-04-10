@@ -1,5 +1,6 @@
 const Colaber = require('../../models/Colaber');
 const Project = require('../../models/Project');
+const QuickHire = require('../../models/QuickHire');
 const Notification = require('../../models/Notification');
 const { ObjectsToBeOpened } = require('../../models/Notification');
 
@@ -29,6 +30,9 @@ module.exports=async(req,res)=>{
             case ObjectsToBeOpened.COLLABORATION:
                 returnProject(notification.project);
                 break;
+            case ObjectsToBeOpened.QUICK_HIRE:
+                returnQuickHire(notification.quickHire);
+                break;
             default:
                 break;
         }
@@ -39,6 +43,7 @@ module.exports=async(req,res)=>{
 
     }
 }
+
 
 async function returnProject(id) {
     let project = await Project.findOne({_id: notification.project});
@@ -55,5 +60,17 @@ async function returnSender(id) {
         return res.status(404).json({message:'User not found'});
     }else {
         res.json(sender)
+    }
+
+}
+
+async function returnQuickHire(id) {
+    let quickHire = await QuickHire.findOne({_id: id})
+                                    .populate('employee', 'firstName lastName id')
+                                    .populate('employer', 'firstName lastName id');
+    if (!quickHire){
+        return res.status(404).json({message:'Quick-Hire not found'});
+    }else {
+        res.json(quickHire)
     }
 }

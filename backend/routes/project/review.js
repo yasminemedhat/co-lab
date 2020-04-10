@@ -55,7 +55,7 @@ module.exports=async(req,res)=>{
 
         //create notification object
         notification = createNotificationObject(
-            (Object)(reviewer.id), fullName, projectToReview, undefined, 
+            (Object)(reviewer.id), fullName, projectToReview, undefined, undefined,
             ObjectsToBeOpened.PROJECT, Actions.REVIEW_PROJECT
             );
         
