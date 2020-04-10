@@ -43,7 +43,7 @@ module.exports=async(req,res)=>{
             console.log("CREATING NOTIFICATION")
             //create notification object 
             notification = createNotificationObject(
-                (Object)(user.id), user.fullName, project.user,project.id, 
+                (Object)(user.id), user.fullName, project.user,project.id, undefined,
                 ObjectsToBeOpened.PROJECT, Actions.LIKE
                 );
 

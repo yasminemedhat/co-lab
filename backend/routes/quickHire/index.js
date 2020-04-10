@@ -8,10 +8,17 @@ const { check } = require('express-validator');
 const auth = require("../../middleware/auth");
 const jwt = require('jsonwebtoken');
 
-//@route GET    quickHire/view
+
+//@route GET    quickHire/feed
+//@description  get all quickhires related to user hire interests
+//@access       auth needed 
+quickHire.get('/feed', auth, require('./feed'));
+
+//@route GET    quickHire/hire_id
 //@description  view quickHire page
 //@access       public 
 quickHire.get('/:hire_id', require('./view'));
+
 
 //@route POST   quickHire/add
 //@description  add quickHire to user 

@@ -41,7 +41,7 @@ module.exports=async(req,res)=>{
 
             //create notification object
             notification = createNotificationObject(
-                (Object)(follower_id), follower.fullName, projectOwner, projectToFollow_id, 
+                (Object)(follower_id), follower.fullName, projectOwner, projectToFollow_id, undefined,
                 ObjectsToBeOpened.COLLABORATION, Actions.FOLLOW_COLLABORATION
                 );
             
