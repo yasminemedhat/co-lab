@@ -65,7 +65,7 @@ module.exports = async  (req, res) => {
 
         //create notification object
         notification = createNotificationObject(
-            (Object)(user.id), user.fullName, newMember.id, collaboration_ID, 
+            (Object)(user.id), user.fullName, newMember.id, collaboration_ID,undefined, 
             ObjectsToBeOpened.COLLABORATION, Actions.INVITATION
             );
         
