@@ -66,7 +66,7 @@ module.exports=async(req,res)=>{
             createdAt
         });
 
-        sentimentAnalysis(body);
+        // sentimentAnalysis(body);
         console.log(createdAt);
         console.log(review);
         

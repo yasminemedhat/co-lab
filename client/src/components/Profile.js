@@ -3,7 +3,7 @@ import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
 import Image from "react-bootstrap/Image";
 import Can from "./Can";
-
+import socket from '../utils/socket';
 import "../css/profile.css";
 import ProjectPopup from "./ProjectPopup";
 import HirePopup from "./HirePopup";
@@ -204,6 +204,7 @@ class Profile extends Component {
         this.setState({ collaborations: collaborations });
         this.setState({ loadingCollaborations: false });
         this.forceUpdate();
+        socket.emit('join_colabs',this.state.user._id);
       })
       .catch(err => {
         if (err && err.status) {

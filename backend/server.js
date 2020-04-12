@@ -4,7 +4,8 @@ const path = require('path');
 const drive=require('./services/drive');
 const socket=require('socket.io');
 const http=require('http');
-
+const join_colabs = require('./chat/join_colabs');
+const send_message = require('./chat/send_message');
 //const initInterests=require('./middleware/initInterests');
 
 //init app
@@ -75,6 +76,13 @@ io.on('connection',function(socket){
         //because we cannot change socket.id :)
         socket.join(data);    
     })
+    
+    // join collaborations rooms
+    socket.on('join_colabs', join_colabs.bind(null,socket));
+
+    // send to colab chat room
+    socket.on('chatRoom_MSG', send_message.bind(null,socket,io));
+        
 });
 
 exports.io=io;

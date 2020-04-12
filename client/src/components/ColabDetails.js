@@ -14,6 +14,7 @@ import { getJwt , getUserStored} from "../helpers/jwt";
 import { addColabMember, getCollaboration,likeProject } from "../utils/APICalls";
 import Gallery from "react-grid-gallery";
 import ProjectReview from "./ProjectReview"
+import socket from '../utils/socket';
 
 const ColabDetails = props => {
   const [colab, setColab] = useState({
@@ -30,6 +31,7 @@ const ColabDetails = props => {
   let IMAGES = [{}];
 
   useEffect(() => {
+    
     const jwt = getJwt();
     const user = getUserStored();
     getCollaboration(jwt, props.match.params.id)
@@ -42,10 +44,16 @@ const ColabDetails = props => {
         else{
           setLikes({likeButton:true,likesCount: collaboration.likes.length});
         }
+        socket.on('new_message', function(data){
+          // addMessage(data);
+          console.log("new message", data);
+     
+        });
       })
       .catch(err => {
         alert("could not find colab");
       });
+
   }, [update]);
 
   const gotToMemberProfile = memberId => {
@@ -85,6 +93,18 @@ const ColabDetails = props => {
    })
  }
 
+ const sendMessage = (user) => {
+    // ev.preventDefault();
+    let sender_username = user.firstName + " " + user.lastName;
+    socket.emit('chatRoom_MSG', {
+        sender: user._id,
+        body: 'hello world',
+        collaboration: colab._id,
+        sender_username,
+        sender_avatar: user.avatar
+    });
+    // this.setState({message: ''});
+ }
   const togglePopup = () => {
     setPopUp({ showPopUp: !popUp.showPopUp });
   };
@@ -244,6 +264,27 @@ const ColabDetails = props => {
                   <span className="like__number">{likes.likesCount}</span>
                   </button>}
               </Row>
+              <Can
+                role={user.userType}
+                perform="collaborations:addMember"
+                data={{
+                  userId: user._id,
+                  members: colab.members
+                }}
+                yes={() => (
+                  <Row style={{width: "100%" }}>
+                 
+                      <button
+                        style={{ float: "right", width: "180px" }}
+                        className="profile-btn"
+                        onClick={sendMessage.bind(null,user)}
+                      >
+                        send to members
+                      </button>
+             
+                  </Row>
+                )}
+              />
                 </div>
               
               </Row>

@@ -77,4 +77,14 @@ collaboration.patch('/update/:id',
                   auth],
                  require('./update'));
 
+//@route post    collaboration/:id/message
+//@description   send new collaboration group chat message
+//@access        auth needed + only members
+collaboration.post('/:id/message', auth, require('./sendMessage'));
+
+//@route post    collaboration/:id/messages
+//@description  get collaboration's group chat messages 
+//@access       auth needed + only members
+collaboration.get('/:id/messages', auth, require('./getMessages'));
+
 module.exports = collaboration;
