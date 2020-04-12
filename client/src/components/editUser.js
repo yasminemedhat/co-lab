@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { getUser, updateUser } from "../utils/APICalls";
+import {  updateUser } from "../utils/APICalls";
 import { getJwt } from "../helpers/jwt";
 import "../css/login.css";
 import "../bootstrap/css/bootstrap.min.css";

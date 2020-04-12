@@ -1,12 +1,10 @@
-import React, { useState, useEffect, Component } from "react";
+import React, { Component } from "react";
 import { updateProject } from "../utils/APICalls";
 import { getJwt } from "../helpers/jwt";
 import "../css/login.css";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
 import Img from "react-image";
-import { getInterestsList } from "../utils/APICalls";
-import ReactMultiSelectCheckboxes from "react-multiselect-checkboxes";
 import { AuthContext } from "../authContext";
 import { getCollaboration } from "../utils/APICalls";
 import Toast from 'light-toast';
@@ -105,7 +103,7 @@ class EditCollaboration extends Component {
     const { name, description,link , images} = this.state.collaboration;
       
     let editimages = []
-    if(images !=undefined){
+    if(images !==undefined){
         editimages = images.map((image , i)=>{
             return(
                 <Img key = {i} style={{ float: 'right' , width: '40px' , height: '40px'}} src={image}></Img>

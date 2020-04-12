@@ -13,19 +13,18 @@ import Discover from "./Discover";
 import About from "./About";
 import RegistrationForm from "./RegistrationForm";
 import Profile from "./Profile";
+import QuickhireFeed from "./QuickhireFeed";
 import Auth from "./Auth";
 import ProjectPage from "./ProjectPage";
 import ColabDetails from "./ColabDetails";
 import AuthenticatedComponent from "./AuthenticatedComponent";
 import NavBar from './navbar';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 
 class Header extends React.Component {
  
   render() {
-    toast.configure()
+ 
     return (
       <Auth>
         
@@ -47,6 +46,7 @@ class Header extends React.Component {
               <Route path="/" exact strict  component ={Home} ></Route>
               <Route path="/home" exact strict  component ={Home} ></Route>
               <Route path="/discover" exact strict  component ={Discover} ></Route>
+              <Route path="/quickhire" exact strict  component ={QuickhireFeed} ></Route>
               <Route path="/editUser" exact strict component ={editUser} />
               <Route path="/collaborations/:id/edit" exact strict component ={EditCollaboration} />
               <Route path="/projects/:id/edit" exact strict component ={EditProject} />

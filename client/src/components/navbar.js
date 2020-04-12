@@ -11,8 +11,6 @@ import {
   getNotifications,
   openNotification,
   viewHire,
-  acceptHire,
-  getUser
 } from '../utils/APICalls';
 import { withRouter } from 'react-router-dom';
 import { AuthContext } from '../authContext';
@@ -21,8 +19,8 @@ import { Row, Col } from 'react-bootstrap';
 import 'react-dropdown/style.css';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css';
-
 import socket from '../../src/utils/notifications';
+import ConfirmAlert from './confirmAlert.js';
 
 class Navbar extends Component {
   static contextType = AuthContext;
@@ -106,7 +104,7 @@ class Navbar extends Component {
   unseenNotificationCount() {
     let count = 0;
     this.state.notifications.forEach(element => {
-      if (element.isOpened == false) count++;
+      if (element.isOpened === false) count++;
     });
     this.setState({
       notificationCount: count
@@ -146,7 +144,7 @@ class Navbar extends Component {
         alert('something went wrong: ' + err.message);
       }
     });
-    if (notification.title == 'Quick-Hire') {
+    if (notification.title === 'Quick-Hire') {
       viewHire(notification.quickHire).then(data => {
         const quickHire = data.data.quickHire;
 
@@ -154,110 +152,41 @@ class Navbar extends Component {
           quickHire
         });
 
-        let date = new Date(this.state.quickHire.date);
-
         
-            let p;
-            if (!this.state.quickHire.availability) {
-              p = (
-                <p style={{ color: 'red' }}>
-                  Sorry Quick-Hire is not available anymore!!
-                </p>
+        if (notification.action === 'accepted your ') {
+          this.setState({
+            user: this.state.quickHire.employee
+          });
+          confirmAlert({
+            customUI: ({ onClose }) => {
+              return (
+                <ConfirmAlert
+                  quickHire={this.state.quickHire}
+                  onClose={onClose}
+                  user={this.state.user}
+                  userType='Employee'
+                ></ConfirmAlert>
               );
             }
-            if (notification.action == 'accepted your ') {
-              getUser(this.context.accessToken, this.state.quickHire.employee).then(
-                data => {
-                  const user = data.user;
-                  this.setState({
-                    user
-                  });
-              confirmAlert({
-                customUI: ({ onClose }) => {
-                  return (
-                    <div>
-                      <h1>{this.state.quickHire.title}</h1>
-                      <p>
-                        Job description : {this.state.quickHire.description}
-                      </p>
-                      <p>Job date : {date.toDateString()}</p>
-                      <p>Job money : {this.state.quickHire.money}</p>
-                      <p style={{ float: 'left' }}>Employee:</p>
-                      <a
-                        style={{ paddingLeft: '1%' }}
-                        href={'/users/' + this.state.user._id}
-                      >
-                        {' '}
-                        {this.state.user.firstName} {this.state.user.lastName}
-                      </a>
-                     
-
-                    
-                    </div>
-                  );
-                }
-              });
-            })
-            } else {
-              getUser(this.context.accessToken, this.state.quickHire.employer).then(
-                data => {
-                  const user = data.user;
-                  this.setState({
-                    user
-                  });
-              confirmAlert({
-                customUI: ({ onClose }) => {
-                  return (
-                    <div>
-                      <h1>{this.state.quickHire.title}</h1>
-                      <p>
-                        Job description : {this.state.quickHire.description}
-                      </p>
-                      <p>Job date : {date.toDateString()}</p>
-                      <p>Job money : {this.state.quickHire.money}</p>
-                      <p style={{ float: 'left' }}>Employer:</p>
-                      <a
-                        style={{ paddingLeft: '1%' }}
-                        href={'/users/' + this.state.user._id}
-                      >
-                        {' '}
-                        {this.state.user.firstName} {this.state.user.lastName}
-                      </a>
-                      <div className='row'>{p}</div>
-
-                      <div className='row'>
-                        <button
-                          disabled={!this.state.quickHire.availability}
-                          className='profile-btn'
-                          style={{ float: 'right', width: '100px' }}
-                          onClick={onClose}
-                        >
-                          Decline
-                        </button>
-                        <button
-                          disabled={!this.state.quickHire.availability}
-                          className='profile-btn'
-                          style={{ float: 'left', width: '100px' }}
-                          onClick={() => {
-                            acceptHire(
-                              this.context.accessToken,
-                              notification.quickHire
-                            );
-                            onClose();
-                          }}
-                        >
-                          Accept
-                        </button>
-                      </div>
-                    </div>
-                  );
-                }
-              });
-            })
+          });
+        } else {
+          this.setState({
+            user: this.state.quickHire.employer
+          });
+          confirmAlert({
+            customUI: ({ onClose }) => {
+              return (
+                <ConfirmAlert
+                  quickHire={this.state.quickHire}
+                  onClose={onClose}
+                  user={this.state.user}
+                  userType='Employer'
+                ></ConfirmAlert>
+              );
             }
-          }
-        );
-     
+          });
+        }
+      });
     }
   }
 
@@ -311,7 +240,7 @@ class Navbar extends Component {
       this.context.user && this.context.user.avatar
         ? this.context.user.avatar
         : '../images/profile.png';
-    if (source == null) {
+    if (source === null) {
       image = (
         <Image
           className='navbarAvatar'
@@ -386,6 +315,9 @@ class Navbar extends Component {
             <NavLink exact activeClassName='selectedLink' to='/home'>
               Home
             </NavLink>
+            <NavLink exact activeClassName='selectedLink' to='/quickhire'>
+             Quick-Hire Feed
+            </NavLink>
 
             <NavLink exact activeClassName='selectedLink' to='/discover'>
               Discover
@@ -393,6 +325,7 @@ class Navbar extends Component {
             <NavLink exact activeClassName='selectedLink' to='/editUser'>
               Edit Profile
             </NavLink>
+          
 
             <div className='dropdown'>
               <button className='notification '>
