@@ -1,6 +1,5 @@
 import React, {Component} from "react";
-import { withRouter, Redirect } from "react-router-dom";
-import Navbar from "./navbar";
+import { withRouter} from "react-router-dom";
 import {AuthContext} from '../authContext';
 
 class AuthenticateComponent extends Component{

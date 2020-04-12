@@ -7,10 +7,9 @@ import { search } from "../utils/APICalls";
 import HorizontalScroll from 'react-scroll-horizontal'
 import { Row, Col } from "react-bootstrap";
 import ProjectLink from "./ProjectLink.js";
-import ColabLink from "./ColabLink.js";
 import ProfileLink from "./ProfileLink.js";
 import "../css/profile.css";
-import Can from "./Can";
+
 
 
 class SearchResults extends React.Component {

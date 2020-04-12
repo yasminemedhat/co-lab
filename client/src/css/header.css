@@ -19,7 +19,7 @@
 
   .navigation{
       float: right;
-      width: 32%
+      width: 45%
   }
   
   /* Change the color of links on hover */
@@ -63,8 +63,7 @@
   .logout-NavLink{
     color: white!important;
     float: right;
-    padding-top: 4%;
-    padding-bottom: 5%;
+    padding-top: 2%;
     margin-right: 8px;
   }
 
@@ -161,7 +160,7 @@
 .topnav .search-container {
   float: left;
   padding-top: 1%;
-  width: 45%;
+  width: 30%;
 }
 
 #search-form{
