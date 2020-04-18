@@ -8,10 +8,19 @@ import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
 import {
+  Navbar,
+  Nav,
+  NavItem,
+  NavDropdown,
+  MenuItem,
+  Form,
+} from 'react-bootstrap';
+import {
   getNotifications,
   openNotification,
   viewHire,
 } from '../utils/APICalls';
+import { FaBell } from 'react-icons/fa';
 import { withRouter } from 'react-router-dom';
 import { AuthContext } from '../authContext';
 import Image from 'react-bootstrap/Image';
@@ -22,13 +31,13 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import socket from '../../src/utils/notifications';
 import ConfirmAlert from './confirmAlert.js';
 
-class Navbar extends Component {
+class CustomNavbar extends Component {
   static contextType = AuthContext;
 
   state = {
     notifications: [],
     notificationCount: 0,
-    searchTerm: ''
+    searchTerm: '',
   };
   constuctor(props) {
     this.super(props);
@@ -37,7 +46,7 @@ class Navbar extends Component {
       notificationCount: 0,
       searchTerm: '',
       quickHire: [{}],
-      user: ''
+      user: '',
     };
     this.logout = this.logout.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -54,13 +63,13 @@ class Navbar extends Component {
   componentDidMount() {
     if (this.context.authenticated) {
       getNotifications(this.context.accessToken)
-        .then(data => {
+        .then((data) => {
           this.setState({
-            notifications: data
+            notifications: data,
           });
           this.unseenNotificationCount();
         })
-        .catch(err => {
+        .catch((err) => {
           if (err && err.status) {
             alert('something went wrong: ' + err.message);
           }
@@ -74,13 +83,13 @@ class Navbar extends Component {
         // })
 
         getNotifications(this.context.accessToken)
-          .then(data => {
+          .then((data) => {
             this.setState({
-              notifications: data
+              notifications: data,
             });
             this.unseenNotificationCount();
           })
-          .catch(err => {
+          .catch((err) => {
             if (err && err.status) {
               alert('something went wrong: ' + err.message);
             }
@@ -96,18 +105,18 @@ class Navbar extends Component {
   goToProfile() {
     let path = '/users/' + this.context.user._id;
     this.props.history.push({
-      pathname: path
+      pathname: path,
     });
     window.location.reload();
   }
 
   unseenNotificationCount() {
     let count = 0;
-    this.state.notifications.forEach(element => {
+    this.state.notifications.forEach((element) => {
       if (element.isOpened === false) count++;
     });
     this.setState({
-      notificationCount: count
+      notificationCount: count,
     });
 
     return count;
@@ -118,7 +127,7 @@ class Navbar extends Component {
       SENDER: 'sender',
       PROJECT: 'project',
       COLLABORATION: 'co-laboration',
-      QUICKHIRE: 'Quick-Hire'
+      QUICKHIRE: 'Quick-Hire',
     });
     let path;
     switch (notification.objectToBeOpened) {
@@ -139,23 +148,24 @@ class Navbar extends Component {
   }
 
   openNotification(notification) {
-    openNotification(this.context.accessToken, notification._id).catch(err => {
-      if (err && err.status) {
-        alert('something went wrong: ' + err.message);
+    openNotification(this.context.accessToken, notification._id).catch(
+      (err) => {
+        if (err && err.status) {
+          alert('something went wrong: ' + err.message);
+        }
       }
-    });
+    );
     if (notification.title === 'Quick-Hire') {
-      viewHire(notification.quickHire).then(data => {
+      viewHire(notification.quickHire).then((data) => {
         const quickHire = data.data.quickHire;
 
         this.setState({
-          quickHire
+          quickHire,
         });
 
-        
         if (notification.action === 'accepted your ') {
           this.setState({
-            user: this.state.quickHire.employee
+            user: this.state.quickHire.employee,
           });
           confirmAlert({
             customUI: ({ onClose }) => {
@@ -167,11 +177,11 @@ class Navbar extends Component {
                   userType='Employee'
                 ></ConfirmAlert>
               );
-            }
+            },
           });
         } else {
           this.setState({
-            user: this.state.quickHire.employer
+            user: this.state.quickHire.employer,
           });
           confirmAlert({
             customUI: ({ onClose }) => {
@@ -183,7 +193,7 @@ class Navbar extends Component {
                   userType='Employer'
                 ></ConfirmAlert>
               );
-            }
+            },
           });
         }
       });
@@ -192,20 +202,27 @@ class Navbar extends Component {
 
   generateNotificationDropDown() {
     try {
-      let dropDown = this.state.notifications.map(notification => (
+      let dropDown = this.state.notifications.map((notification) => (
         <div
-          key={notification._id}
-          style={{ background: notification.isOpened ? 'white' : '#ddd' }}
+          style={{
+            background: notification.isOpened ? 'white' : '#ddd',
+            color: 'black',
+          }}
         >
-          <a
+          <NavDropdown.Item
+            key={notification._id}
+            style={{
+              color: 'black',
+              fontSize: '12px',
+              lineHeight: '0.6',
+              textAlign: 'left',
+            }}
             href={this.getNotificationPath(notification)}
             onClick={() => this.openNotification(notification)}
           >
-            <label className='notification-title'>{notification.title}</label>
-            <br />
             {notification.body}
-          </a>
-          <hr></hr>
+          </NavDropdown.Item>
+          <NavDropdown.Divider />
         </div>
       ));
       return dropDown;
@@ -214,13 +231,13 @@ class Navbar extends Component {
     }
   }
 
-  handleChange = event => {
+  handleChange = (event) => {
     this.setState({
-      searchTerm: event.target.value
+      searchTerm: event.target.value,
     });
   };
 
-  _handleKeyDown = event => {
+  _handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       // event.preventDefault();
       const path = '/SearchResults/' + this.state.searchTerm;
@@ -228,13 +245,22 @@ class Navbar extends Component {
       this.props.history.push({
         pathname: path,
         state: {
-          searchTerm: this.state.searchTerm
-        }
+          searchTerm: this.state.searchTerm,
+        },
       });
     }
   };
 
   render() {
+    let title = (
+      <div>
+        <span style={{ color: 'white' }}>
+          {' '}
+          <FaBell />
+          {this.state.notificationCount}
+        </span>
+      </div>
+    );
     let image;
     let source =
       this.context.user && this.context.user.avatar
@@ -266,109 +292,123 @@ class Navbar extends Component {
     if (this.context.authenticated) {
       socket.emit('identify', this.context.user._id);
       return (
-        <div className='topnav '>
-          <link
-            href='https://fonts.googleapis.com/icon?family=Material+Icons'
-            rel='stylesheet'
-          ></link>
-          <div className='logo_avatar_div'>
-            <Row>
-              <Col
-                tag='a'
-                onClick={() => {
-                  this.goToProfile();
-                }}
-              >
-                {this.context.user.avatar ? (
-                  <Image
-                    className='navbarAvatar'
-                    src={this.context.user.avatar}
-                    style={{ width: 45, height: 45, margin: '5px' }}
-                    roundedCircle
-                  ></Image>
-                ) : (
-                  <Image
-                    className='navbarAvatar'
-                    src={require('../images/profile.png')}
-                    style={{ width: 45, height: 45 }}
-                    roundedCircle
-                  ></Image>
-                )}
-              </Col>
-            </Row>
-          </div>
-          <div className='logo_div'>
-            <h2 className='logo'>Co-Lab</h2>
-          </div>
-          <div className='search-container'>
-            <form id='search-form'>
-              <input
-                type='search'
-                placeholder='Search'
-                value={this.state.searchTerm}
-                onChange={this.handleChange}
-                onKeyDown={this._handleKeyDown}
-              />
-            </form>
-          </div>
-          <div className='navigation '>
-            <NavLink exact activeClassName='selectedLink' to='/home'>
-              Home
-            </NavLink>
-            <NavLink exact activeClassName='selectedLink' to='/quickhire'>
-             Quick-Hire Feed
-            </NavLink>
+        <Navbar className='topnav' expand='lg'>
+          <Nav.Link className='logo_avatar_div'>
+            <Col
+              tag='a'
+              onClick={() => {
+                this.goToProfile();
+              }}
+            >
+              {this.context.user.avatar ? (
+                <Image
+                  className='navbarAvatar'
+                  src={this.context.user.avatar}
+                  style={{ width: 45, height: 45, margin: '5px' }}
+                  roundedCircle
+                ></Image>
+              ) : (
+                <Image
+                  className='navbarAvatar'
+                  src={require('../images/profile.png')}
+                  style={{ width: 45, height: 45 }}
+                  roundedCircle
+                ></Image>
+              )}
+            </Col>
+          </Nav.Link>
+          <Navbar.Brand
+            style={{ fontSize: 'x-Large', color: 'white', fontWeight: 'bold' }}
+          >
+            Co-Lab
+          </Navbar.Brand>
+          <Form
+            style={{ float: 'right' }}
+            className='search-container'
+            id='search-form'
+          >
+            <input
+              type='search'
+              placeholder='Search'
+              value={this.state.searchTerm}
+              onChange={this.handleChange}
+              onKeyDown={this._handleKeyDown}
+            />
+          </Form>
+          <Navbar.Toggle aria-controls='basic-navbar-nav' />
+          <Navbar.Collapse
+            id='basic-navbar-nav'
+            style={{ background: '#3d2846', zIndex: '2' }}
+          >
+            <Nav
+              className='mr-auto'
+              style={{ marginRight: '0px !important', marginLeft: '25% ' }}
+            >
+              <Nav.Link>
+                <NavLink exact activeClassName='selectedLink' to='/home'>
+                  Home
+                </NavLink>
+              </Nav.Link>
+              <Nav.Link>
+                <NavLink exact activeClassName='selectedLink' to='/quickhire'>
+                  Quick-Hire Feed
+                </NavLink>
+              </Nav.Link>
+              <Nav.Link>
+                <NavLink exact activeClassName='selectedLink' to='/discover'>
+                  Discover
+                </NavLink>
+              </Nav.Link>
+              <Nav.Link>
+                <NavLink exact activeClassName='selectedLink' to='/editUser'>
+                  Edit Profile
+                </NavLink>
+              </Nav.Link>
 
-            <NavLink exact activeClassName='selectedLink' to='/discover'>
-              Discover
-            </NavLink>
-            <NavLink exact activeClassName='selectedLink' to='/editUser'>
-              Edit Profile
-            </NavLink>
-          
-
-            <div className='dropdown'>
-              <button className='notification '>
-                <span>
-                  <i className='material-icons'>notifications_active</i>
-                </span>
-                <span className='badge'>{this.state.notificationCount}</span>
-              </button>
-              <div className='dropdown-content'>
+              <NavDropdown inline title={title} className='dropdown'>
                 {this.generateNotificationDropDown()}
-              </div>
-            </div>
-            <button className='logout-NavLink' onClick={() => this.logout()}>
-              Logout
-            </button>
-          </div>
+              </NavDropdown>
+              <Nav.Link
+                className='logout-NavLink'
+                onClick={() => this.logout()}
+              >
+                Logout
+              </Nav.Link>
 
-          <div>{this.props.children}</div>
-        </div>
+              <div>{this.props.children}</div>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
       );
     } else {
       return (
-        <div className='topnav'>
-          <div className='logo_div'>
-            <h2 className='logo'>Co-Lab</h2>
-          </div>
-          <div className='navigation'>
-            <ul>
-              {/* <NavLink exact activeClassName="selectedLink" to="/">
+        <Navbar className='topnav'>
+          <Navbar.Brand
+            style={{ fontSize: 'x-Large', color: 'white', fontWeight: 'bold' }}
+            className='logo'
+          >
+            Co-Lab
+          </Navbar.Brand>
+
+          <Nav className='navigation'>
+            {/* <NavLink exact activeClassName="selectedLink" to="/">
                 Home
               </NavLink> */}
-              <NavLink exact activeClassName='selectedLink' to='/about'>
+            <Nav.Link>
+              <NavLink exact activeClassName='selectedLink' exact to='/about'>
                 About
               </NavLink>
+            </Nav.Link>
+            <Nav.Link>
               <NavLink exact activeClassName='selectedLink' to='/login'>
                 Login
               </NavLink>
-            </ul>
-          </div>
-        </div>
+            </Nav.Link>
+          </Nav>
+        </Navbar>
       );
     }
   }
 }
 
-export default withRouter(Navbar);
+export default withRouter(CustomNavbar);
