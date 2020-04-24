@@ -29,7 +29,7 @@ import { Row, Col } from 'react-bootstrap';
 import 'react-dropdown/style.css';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import socket from '../../src/utils/notifications';
+import socket from '../../src/utils/socket';
 import ConfirmAlert from './confirmAlert.js';
 
 class CustomNavbar extends Component {

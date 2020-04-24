@@ -15,6 +15,7 @@ import { addColabMember, getCollaboration,likeProject } from "../utils/APICalls"
 import Gallery from "react-grid-gallery";
 import ProjectReview from "./ProjectReview"
 import socket from '../utils/socket';
+import ChatRoom from "./ChatRoom";
 
 const ColabDetails = props => {
   const [colab, setColab] = useState({
@@ -200,6 +201,7 @@ const ColabDetails = props => {
         {({ user }) => {
           return (
             <div className="ColabContainer">
+              <ChatRoom colabId={colab._id}></ChatRoom>
               <Row>
                 <div style={{ width: "80%", padding:"1%"}}>
                   <h1>{colab.name}</h1>

@@ -31,7 +31,7 @@
 }
 .ColabContainer{
     width: 100%;  
-
+    position: relative;
     min-height: 100% !important;
     flex-wrap: wrap;
     justify-content: center;
