@@ -302,6 +302,7 @@ class CustomNavbar extends Component {
     const expired = checkTokenExpiration();
     if (expired === false) {
       socket.emit('identify', this.context.user._id);
+      socket.emit('join_colabs', this.context.user._id);
       return (
         <Navbar className='topnav' expand='lg'>
           <Nav.Link className='logo_avatar_div'>

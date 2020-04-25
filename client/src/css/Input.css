@@ -1,13 +1,14 @@
-.form {
+.chatForm {
     display: flex;
     border-top: 2px solid #D3D3D3;
+    width: 100%;
   }
   
   .input {
     border: none;
     border-radius: 0;
-    padding: 5%;
-    width: 75%;
+    padding: 2%;
+    width: 73%;
     font-size: 1.2em;
   }
   
@@ -19,9 +20,8 @@
     color: #fff !important;
     text-transform: uppercase;
     text-decoration: none;
-    background: #2979FF;
+    background: rgb(61, 40, 70);
     padding: 10px;
-    margin-right: 10px;
     display: inline-block;
     border: none;
     width: 25%;

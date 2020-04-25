@@ -64,3 +64,10 @@ white-space: nowrap;
     background: #3d2846 !important;
 }
 
+.chatButton{
+    bottom: 0;
+    margin-left: 90%;
+    margin-bottom: 20px;
+    position: fixed;
+    border-radius: 50%;
+}

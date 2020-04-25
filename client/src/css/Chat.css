@@ -1,17 +1,18 @@
 .outerContainer {
-    /* display: flex; */
+    display: flex;
     justify-content: center;
     height: 500px;
-    width: 300px;
+    width: 400px;
     float: right;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     background: #FFFFFF;
     border-radius: 8px;
-    position: absolute;
+    /* position: absolute; */
     bottom: 0;
-    margin-left: 70%;
+    margin-left: 60%;
+    position: fixed;
     /* height: 60%;
     width: 35%; */
   }

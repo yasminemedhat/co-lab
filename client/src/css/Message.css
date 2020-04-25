@@ -13,6 +13,7 @@
     float: left;
     font-size: 1.1em;
     word-wrap: break-word;
+    margin-bottom: 2px;
   }
   
   .messageText img {
@@ -32,6 +33,7 @@
     font-family: Helvetica;
     color: #828282;
     letter-spacing: 0.3px;
+    margin-left: 45px;
   }
   
   .pl-10 {
@@ -59,7 +61,7 @@
   }
   
   .backgroundBlue {
-    background: #2979FF;
+    background: #5735668c;
   }
   
   .backgroundLight {

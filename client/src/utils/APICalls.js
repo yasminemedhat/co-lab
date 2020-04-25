@@ -300,3 +300,8 @@ export const getChatHistory = (jwt, colabId) => {
         return res.data;
     })
 }
+export const sendChatMessage = (jwt, colabId, message) => {
+    return axiosInstance.post('collaboration/'+ colabId + '/message' , message, {headers: { Authorization: jwt } }).then(res=> {
+        return res.data;
+    })
+}

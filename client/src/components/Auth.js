@@ -107,7 +107,7 @@ class Auth extends Component{
             user
           });
           // socket.emit('identify', user._id);
-          socket.emit('join_colabs', user._id);
+          // socket.emit('join_colabs', user._id);
       }
 
     // logout(){

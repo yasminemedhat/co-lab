@@ -16,6 +16,7 @@ import Gallery from "react-grid-gallery";
 import ProjectReview from "./ProjectReview"
 import socket from '../utils/socket';
 import ChatRoom from "./ChatRoom";
+import { FaChat } from 'react-icons/fa';
 
 const ColabDetails = props => {
   const [colab, setColab] = useState({
@@ -26,6 +27,7 @@ const ColabDetails = props => {
   });
 
   const [popUp, setPopUp] = useState({ showPopUp: false });
+  const [chat, setChat] = useState({ showChat: false });
   const [newMemberEmail, setNewMemberEmail] = useState("");
   const [update, setUpdate] = useState(false);
   const [likes , setLikes] = useState({likeButton: true,likesCount: 0});
@@ -45,11 +47,7 @@ const ColabDetails = props => {
         else{
           setLikes({likeButton:true,likesCount: collaboration.likes.length});
         }
-        socket.on('new_message', function(data){
-          // addMessage(data);
-          console.log("new message", data);
-     
-        });
+        
       })
       .catch(err => {
         alert("could not find colab");
@@ -96,6 +94,7 @@ const ColabDetails = props => {
 
  const sendMessage = (user) => {
     // ev.preventDefault();
+    console.log('sendigngg: ');
     let sender_username = user.firstName + " " + user.lastName;
     socket.emit('chatRoom_MSG', {
         sender: user._id,
@@ -109,6 +108,11 @@ const ColabDetails = props => {
   const togglePopup = () => {
     setPopUp({ showPopUp: !popUp.showPopUp });
   };
+  const toggleChat = () => {
+    setChat({ showChat: !chat.showChat });
+    console.log('chat toggled, ', chat.showChat);
+  };
+
   const addMember = () => {
     const jwt = getJwt();
     const emailObj = { email: newMemberEmail };
@@ -201,7 +205,6 @@ const ColabDetails = props => {
         {({ user }) => {
           return (
             <div className="ColabContainer">
-              <ChatRoom colabId={colab._id}></ChatRoom>
               <Row>
                 <div style={{ width: "80%", padding:"1%"}}>
                   <h1>{colab.name}</h1>
@@ -314,6 +317,10 @@ const ColabDetails = props => {
                   <div>{table}</div>
                 </div>
               </Row>
+              {chat.showChat ? <ChatRoom colabId={colab._id} colab_name={colab.name} toggleChat={toggleChat.bind(null)}></ChatRoom>
+              : <button className="chatButton" onClick={toggleChat.bind(null)}><i className='fa fa-comments fa-4x'></i></button>}
+              
+             
               <div className="row">
             <h2>Reviews</h2>
           </div>

@@ -4,13 +4,7 @@ const GroupMessage = require('../../models/GroupMessage');
 const { validationResult } = require('express-validator');
 
 module.exports = async  (req, res) => {
-    //if there are missing fields
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-        console.log('errors');
-        return res.status(400).json({ message: errors.errors[0].msg });
-    }
+    
 
     //get parameters from request
     const sender = req.user.id;

@@ -34,7 +34,7 @@ module.exports = async  (req, res) => {
         }
 
         //create chat message
-        let messages=await GroupMessage.where({collaboration: collaboration}).sort('-createdAt').limit(20)
+        let messages=await GroupMessage.where({collaboration: collaboration}).sort('createdAt').limit(20)
 
         res.send(messages);
 

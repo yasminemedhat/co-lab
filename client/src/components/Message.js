@@ -1,10 +1,10 @@
 import React from 'react';
-
+import Image from 'react-bootstrap/Image';
 import '../css/Message.css';
 
 import ReactEmoji from 'react-emoji';
 
-const Message = ({ message, user_id}) => {
+const Message = ({message, user_id}) => {
   let isSentByCurrentUser = false;
 
 
@@ -16,18 +16,31 @@ const Message = ({ message, user_id}) => {
     isSentByCurrentUser
       ? (
         <div className="messageContainer justifyEnd">
-          <p className="sentText pr-10">{message.username}</p>
+         
+          <div className="sentText pr-10"></div>
           <div className="messageBox backgroundBlue">
             <p className="messageText colorWhite">{ReactEmoji.emojify(message.body)}</p>
           </div>
         </div>
         )
-        : (
-          <div className="messageContainer justifyStart">
+        : ( <div>
+          <div className="sentText pl-10 ">{message.sender_username}</div> 
+       
+             <div className="messageContainer justifyStart">
+            <Image
+              className='navbarAvatar'
+              src={
+                message.sender_avatar
+                  ? message.sender_avatar
+                  : require('../images/profile.png')
+              }
+              style={{ width: 30, height: 30, margin: '1px' }}
+              roundedCircle
+            ></Image>
             <div className="messageBox backgroundLight">
               <p className="messageText colorDark">{ReactEmoji.emojify(message.body)}</p>
             </div>
-            <p className="sentText pl-10 ">{message.username}</p>
+            </div>
           </div>
         )
   );
