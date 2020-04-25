@@ -21,6 +21,7 @@ import {
   viewHire,
 } from '../utils/APICalls';
 import { FaBell } from 'react-icons/fa';
+import {checkTokenExpiration} from "../helpers/jwt";
 import { withRouter } from 'react-router-dom';
 import { AuthContext } from '../authContext';
 import Image from 'react-bootstrap/Image';
@@ -28,7 +29,7 @@ import { Row, Col } from 'react-bootstrap';
 import 'react-dropdown/style.css';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import socket from '../../src/utils/notifications';
+import socket from '../../src/utils/socket';
 import ConfirmAlert from './confirmAlert.js';
 
 class CustomNavbar extends Component {
@@ -47,6 +48,7 @@ class CustomNavbar extends Component {
       searchTerm: '',
       quickHire: [{}],
       user: '',
+      chatRoom: new Set()
     };
     this.logout = this.logout.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -94,12 +96,20 @@ class CustomNavbar extends Component {
               alert('something went wrong: ' + err.message);
             }
           });
-
+        });
+        
         //TODO: update state
         //note: putting this anywhere else creates multiple listeners instead of one
         //which ruins the count
-      });
+      
     }
+    socket.on('ChatRoom',(data) =>{
+      console.log("chatroom ",this.state);
+      this.setState(({ chatRoom }) => ({
+        chatRoom: new Set(chatRoom).add(data)
+      }));
+      console.log(this.state.chatRoom.size);
+    });
   }
 
   goToProfile() {
@@ -289,8 +299,10 @@ class CustomNavbar extends Component {
         ></Image>
       );
     }
-    if (this.context.authenticated) {
+    const expired = checkTokenExpiration();
+    if (expired === false) {
       socket.emit('identify', this.context.user._id);
+      socket.emit('join_colabs', this.context.user._id);
       return (
         <Navbar className='topnav' expand='lg'>
           <Nav.Link className='logo_avatar_div'>

@@ -31,7 +31,7 @@
 }
 .ColabContainer{
     width: 100%;  
-
+    position: relative;
     min-height: 100% !important;
     flex-wrap: wrap;
     justify-content: center;
@@ -64,3 +64,10 @@ white-space: nowrap;
     background: #3d2846 !important;
 }
 
+.chatButton{
+    bottom: 0;
+    margin-left: 90%;
+    margin-bottom: 20px;
+    position: fixed;
+    border-radius: 50%;
+}

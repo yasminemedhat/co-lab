@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {getJwt, getUserStored, checkTokenExpiration} from "../helpers/jwt";
 import { logout, getUser } from '../utils/APICalls';
 import {AuthProvider} from "../authContext";
+import socket from '../utils/socket';
 
 class Auth extends Component{
     
@@ -105,6 +106,8 @@ class Auth extends Component{
             accessToken: data.token,
             user
           });
+          // socket.emit('identify', user._id);
+          // socket.emit('join_colabs', user._id);
       }
 
     // logout(){

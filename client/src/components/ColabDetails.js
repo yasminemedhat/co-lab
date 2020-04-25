@@ -14,6 +14,9 @@ import { getJwt , getUserStored} from "../helpers/jwt";
 import { addColabMember, getCollaboration,likeProject } from "../utils/APICalls";
 import Gallery from "react-grid-gallery";
 import ProjectReview from "./ProjectReview"
+import socket from '../utils/socket';
+import ChatRoom from "./ChatRoom";
+import { FaChat } from 'react-icons/fa';
 
 const ColabDetails = props => {
   const [colab, setColab] = useState({
@@ -24,12 +27,14 @@ const ColabDetails = props => {
   });
 
   const [popUp, setPopUp] = useState({ showPopUp: false });
+  const [chat, setChat] = useState({ showChat: false });
   const [newMemberEmail, setNewMemberEmail] = useState("");
   const [update, setUpdate] = useState(false);
   const [likes , setLikes] = useState({likeButton: true,likesCount: 0});
   let IMAGES = [{}];
 
   useEffect(() => {
+    
     const jwt = getJwt();
     const user = getUserStored();
     getCollaboration(jwt, props.match.params.id)
@@ -42,10 +47,12 @@ const ColabDetails = props => {
         else{
           setLikes({likeButton:true,likesCount: collaboration.likes.length});
         }
+        
       })
       .catch(err => {
         alert("could not find colab");
       });
+
   }, [update]);
 
   const gotToMemberProfile = memberId => {
@@ -85,9 +92,27 @@ const ColabDetails = props => {
    })
  }
 
+ const sendMessage = (user) => {
+    // ev.preventDefault();
+    console.log('sendigngg: ');
+    let sender_username = user.firstName + " " + user.lastName;
+    socket.emit('chatRoom_MSG', {
+        sender: user._id,
+        body: 'hello world',
+        collaboration: colab._id,
+        sender_username,
+        sender_avatar: user.avatar
+    });
+    // this.setState({message: ''});
+ }
   const togglePopup = () => {
     setPopUp({ showPopUp: !popUp.showPopUp });
   };
+  const toggleChat = () => {
+    setChat({ showChat: !chat.showChat });
+    console.log('chat toggled, ', chat.showChat);
+  };
+
   const addMember = () => {
     const jwt = getJwt();
     const emailObj = { email: newMemberEmail };
@@ -244,6 +269,27 @@ const ColabDetails = props => {
                   <span className="like__number">{likes.likesCount}</span>
                   </button>}
               </Row>
+              <Can
+                role={user.userType}
+                perform="collaborations:addMember"
+                data={{
+                  userId: user._id,
+                  members: colab.members
+                }}
+                yes={() => (
+                  <Row style={{width: "100%" }}>
+                 
+                      <button
+                        style={{ float: "right", width: "180px" }}
+                        className="profile-btn"
+                        onClick={sendMessage.bind(null,user)}
+                      >
+                        send to members
+                      </button>
+             
+                  </Row>
+                )}
+              />
                 </div>
               
               </Row>
@@ -271,6 +317,10 @@ const ColabDetails = props => {
                   <div>{table}</div>
                 </div>
               </Row>
+              {chat.showChat ? <ChatRoom colabId={colab._id} colab_name={colab.name} toggleChat={toggleChat.bind(null)}></ChatRoom>
+              : <button className="chatButton" onClick={toggleChat.bind(null)}><i className='fa fa-comments fa-4x'></i></button>}
+              
+             
               <div className="row">
             <h2>Reviews</h2>
           </div>
