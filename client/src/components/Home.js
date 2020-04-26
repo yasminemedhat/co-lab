@@ -120,9 +120,6 @@ showProjectDetails (){
       
       return(
         <div className="gallery_container">
- 
-       
-      
          <div className="gallery_div">
           <Gallery images={IMAGES} enableLightbox={true}
                     enableImageSelection={false}

@@ -8,35 +8,18 @@
  
   }
   
-  /* Style the links inside the navigation bar */
-  .topnav a ,
-  .logout-link{
-
-    color: #f2f2f2;
-    text-align: center;
-    text-decoration: none;
-    
+  .selectedLink{
+    color: white !important;
   }
 
-  
-  
-  /* Change the color of links on hover */
-  .topnav a:hover,
-  .logout-link:hover,
-  .logout-NavLink:hover {
-    font-weight:500;
-    color:#948999;
-    text-decoration: none;
+  .selectedLink:hover{
+    font-weight: bold !important;
   }
 
-  
-
-
-.NavLink{
-
-  color:white !important;
-  text-decoration: none;
-}
+  .selectedLink:active{
+ 
+    font-weight: bold !important;
+  }
 
 
  .dropdown-menu{
@@ -57,10 +40,7 @@
  color: white;
 }
 
-  .selectedLink {
-    color:#948999 !important ;
-    font-weight: bold;
-  }
+
 
   .logout-NavLink{
     color: white!important;
