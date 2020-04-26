@@ -212,12 +212,13 @@ class CustomNavbar extends Component {
 
   generateNotificationDropDown() {
     try {
-      let dropDown = this.state.notifications.map((notification) => (
+      let dropDown = this.state.notifications.map((notification ,i) => (
         <div
           style={{
             background: notification.isOpened ? 'white' : '#ddd',
             color: 'black',
           }}
+          key ={i}
         >
           <NavDropdown.Item
             key={notification._id}
@@ -353,35 +354,33 @@ class CustomNavbar extends Component {
             style={{ background: '#3d2846', zIndex: '2' }}
           >
             <Nav
-              className='mr-auto'
-              style={{ marginRight: '0px !important', marginLeft: '25% ' }}
+            
+      
+              className='mr-auto right-aligned'
+              style={{ marginRight: '0px !important', marginLeft: '25% '  }}
             >
-              <Nav.Link>
-                <NavLink exact activeClassName='selectedLink' to='/home'>
+              <Nav.Link className='selectedLink' href='/home'>
                   Home
-                </NavLink>
               </Nav.Link>
-              <Nav.Link>
-                <NavLink exact activeClassName='selectedLink' to='/quickhire'>
+              <Nav.Link className='selectedLink' href='/quickhire'>
                   Quick-Hire Feed
-                </NavLink>
               </Nav.Link>
-              <Nav.Link>
-                <NavLink exact activeClassName='selectedLink' to='/discover'>
+     
+                <Nav.Link className='selectedLink' href='/discover'>
                   Discover
-                </NavLink>
-              </Nav.Link>
-              <Nav.Link>
-                <NavLink exact activeClassName='selectedLink' to='/editUser'>
+                </Nav.Link>
+         
+             
+                <Nav.Link  className='selectedLink' href='/editUser'>
                   Edit Profile
-                </NavLink>
-              </Nav.Link>
+                </Nav.Link>
+          
 
-              <NavDropdown inline title={title} className='dropdown'>
+              <NavDropdown title={title} className='dropdown selectedLink'>
                 {this.generateNotificationDropDown()}
               </NavDropdown>
               <Nav.Link
-                className='logout-NavLink'
+                className='logout-NavLink selectedLink'
                 onClick={() => this.logout()}
               >
                 Logout
@@ -406,16 +405,16 @@ class CustomNavbar extends Component {
             {/* <NavLink exact activeClassName="selectedLink" to="/">
                 Home
               </NavLink> */}
-            <Nav.Link>
-              <NavLink exact activeClassName='selectedLink' exact to='/about'>
+
+              <Nav.Link  className='selectedLink' exact href='/about'>
                 About
-              </NavLink>
-            </Nav.Link>
-            <Nav.Link>
-              <NavLink exact activeClassName='selectedLink' to='/login'>
+              </Nav.Link>
+           
+          
+              <Nav.Link  className='selectedLink' href='/login'>
                 Login
-              </NavLink>
-            </Nav.Link>
+              </Nav.Link>
+           
           </Nav>
         </Navbar>
       );

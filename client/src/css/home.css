@@ -1,8 +1,14 @@
+body{
+    height: 100% !important;
+    overflow: hidden;
+    overflow-y: scroll;
+    background:#3d28468c !important;
+ 
+}
 .gallery_container{
+
     width: 100%;
-   /* height: 100% !important; */
     padding-top: 3%;
-    background:#3d28468c;
     position: absolute;  left: 0;
     
 }
