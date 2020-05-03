@@ -269,27 +269,7 @@ const ColabDetails = props => {
                   <span className="like__number">{likes.likesCount}</span>
                   </button>}
               </Row>
-              <Can
-                role={user.userType}
-                perform="collaborations:addMember"
-                data={{
-                  userId: user._id,
-                  members: colab.members
-                }}
-                yes={() => (
-                  <Row style={{width: "100%" }}>
-                 
-                      <button
-                        style={{ float: "right", width: "180px" }}
-                        className="profile-btn"
-                        onClick={sendMessage.bind(null,user)}
-                      >
-                        send to members
-                      </button>
-             
-                  </Row>
-                )}
-              />
+
                 </div>
               
               </Row>
