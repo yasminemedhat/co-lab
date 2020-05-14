@@ -29,9 +29,11 @@
     "gravatar": "^1.8.0",
     "is-empty": "^1.2.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.8.9",
+    "mongodb": "^3.5.7",
+    "mongoose": "^5.9.12",
     "multer": "^1.4.2",
     "natural": "^0.6.3",
+    "needle": "^2.4.1",
     "nodemailer": "^6.3.1",
     "redis": "^2.8.0",
     "request": "^2.88.0",
@@ -43,7 +45,7 @@
     "validator": "^12.1.0"
   },
   "devDependencies": {
-    "concurrently": "^5.0.0",
+    "concurrently": "^5.2.0",
     "nodemon": "^2.0.2"
   }
 }
