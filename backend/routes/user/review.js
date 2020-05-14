@@ -10,6 +10,9 @@ const SpellCorrector = require('spelling-corrector');
 const spellCorrector = new SpellCorrector();
 spellCorrector.loadDictionary();
 const SW = require('stopword');
+const needle = require('needle');
+const util = require('util');
+const post = util.promisify(needle.post);
 
 async function sentimentAnalysis(review){
     //convert contractions I'm --> I am
@@ -56,7 +59,11 @@ module.exports=async(req,res)=>{
         //check body
         if(body==null)
             return res.status(400).json('Review field empty');
-
+        //Get rating
+        var resp = await needle('post','https://ratings--api.herokuapp.com/', { review: body });
+        var rating = resp.body.rating;
+        console.log(rating);
+        //NARDINE lol
         //create review 
         let review = new Review ({
             avatarUrl, 
@@ -65,7 +72,6 @@ module.exports=async(req,res)=>{
             body, 
             createdAt
         });
-
         // sentimentAnalysis(body);
         console.log(createdAt);
         console.log(review);
