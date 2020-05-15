@@ -4,13 +4,15 @@ const { Actions }= require('../../models/Notification');
 const { createNotificationObject }= require('../../models/Notification');
 const server=require('../../server');
 const Review = require('../../models/Review');
+const needle = require('needle');
+
+/*
 const natural = require('natural'); //NLP package
 const aposToLexForm = require('apos-to-lex-form');
 const SpellCorrector = require('spelling-corrector');
 const spellCorrector = new SpellCorrector();
 spellCorrector.loadDictionary();
 const SW = require('stopword');
-const needle = require('needle');
 const util = require('util');
 const post = util.promisify(needle.post);
 
@@ -34,7 +36,7 @@ async function sentimentAnalysis(review){
     const analyzer = new SentimentAnalyzer('English', PorterStemmer, 'afinn');
     const analysis = analyzer.getSentiment(filteredReview);
     console.log(analysis);
-}
+}*/
 
 module.exports=async(req,res)=>{
     const userToReview_id = req.params.user_id;
@@ -59,11 +61,7 @@ module.exports=async(req,res)=>{
         //check body
         if(body==null)
             return res.status(400).json('Review field empty');
-        //Get rating
-        var resp = await needle('post','https://ratings--api.herokuapp.com/', { review: body });
-        var rating = resp.body.rating;
-        console.log(rating);
-        //NARDINE lol
+      
         //create review 
         let review = new Review ({
             avatarUrl, 
@@ -73,8 +71,6 @@ module.exports=async(req,res)=>{
             createdAt
         });
         // sentimentAnalysis(body);
-        console.log(createdAt);
-        console.log(review);
         
         //add review to userToReview reviews array
         userToReview.reviews.unshift(review.id);
@@ -92,9 +88,9 @@ module.exports=async(req,res)=>{
 
         server.io.to(userToReview.id).emit('notification');
 
-        //save review and receiver to db
-        await review.save();
-        await userToReview.save();
+        //Get rating and save
+        GetRating(body, review);
+
         res.json(userToReview);       
 
     } catch (error) {
@@ -102,4 +98,13 @@ module.exports=async(req,res)=>{
         console.log(error);
     }
 
+}
+
+async function GetRating(body, review)
+{
+    var resp = await needle('post','https://ratings--api.herokuapp.com/', { review: body });
+    var rating = resp.body.rating;
+    
+    review.rating = rating;
+    await review.save();
 }
