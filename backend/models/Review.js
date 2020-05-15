@@ -7,6 +7,7 @@ const ReviewSchema = new Schema({
     authorUrl:  { type: String},
     fullName:   { type: String},
     body:       { type: String, required: true},
+    rating:     { type: Number, default: 0},
     createdAt:  { type: Date, default: Date.now}
 });
 
