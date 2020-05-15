@@ -44,7 +44,7 @@ module.exports=async(req,res)=>{
     try {
                 
         //get user being reviewed and reviewer
-        let userToReview = await Colaber.findOne({_id: userToReview_id}).select('-password'); 
+        let userToReview = await Colaber.findOne({_id: userToReview_id}).select('id reviews notifications'); 
         let reviewer = await Colaber.findOne({_id: reviewer_id}).select('id'); 
         if(!userToReview | !reviewer){
             return res.status(404).json({message:'User not found'});
@@ -89,7 +89,7 @@ module.exports=async(req,res)=>{
         server.io.to(userToReview.id).emit('notification');
 
         //Get rating and save
-        GetRating(body, review);
+        GetRating(body, review, userToReview);
 
         res.json(userToReview);       
 
@@ -99,12 +99,44 @@ module.exports=async(req,res)=>{
     }
 
 }
-
-async function GetRating(body, review)
+/**
+ * calculates review rating
+ * calculates user rating 
+ * @param {*string} body 
+ * @param {*Review} review 
+ * @param {*Colaber} user user being reviewed
+ */
+async function GetRating(body, review, user)
 {
     var resp = await needle('post','https://ratings--api.herokuapp.com/', { review: body });
     var rating = resp.body.rating;
     
     review.rating = rating;
     await review.save();
+    CalculateUserRating(user);
+}
+
+/**
+ * calculates 
+ * @param {*Colaber} user user being reviewed
+ */
+async function CalculateUserRating(user)
+{
+    await Review.populate(user, { path:'reviews' });
+    reviews = user.reviews;
+    length = reviews.length;
+
+    var sum = 0;
+
+    reviews.forEach(review => {
+        sum += review.rating;
+    });
+    avg = Math.round(sum / length); 
+
+    user.rating = avg;
+    if( !(avg >= 1 && avg <= 5))
+        user.rating = 0;
+
+    console.log(user.rating);
+    user.save();
 }
