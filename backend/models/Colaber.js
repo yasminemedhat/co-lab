@@ -32,6 +32,7 @@ const ColaberSchema=new mongoose.Schema({
     workingField:       { type: String, enum: Object.values(Interests)},
     interests:  [{ type: String, enum: Object.values(Interests)}],
     hireFields: [{ type: String, enum: Object.values(HireFields)}],
+    rating:     { type: Number, default: 0},
     reviews:    [{type: mongoose.Schema.Types.ObjectId, ref: 'Review' }],
     biography:  { type: String},
     isSponsor:  { type: Boolean},
@@ -78,7 +79,12 @@ ColaberSchema.post('findOneAndDelete', async function (doc) {
 //get full name
 ColaberSchema.virtual('fullName').get(function() {
     return this.firstName + ' ' + this.lastName
-  })
+})
+
+//get number of reviews
+ColaberSchema.virtual('reviewsCount').get(function() {
+    return this.reviews.length;
+})
 
 //index for search engine
 ColaberSchema
