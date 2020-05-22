@@ -35,7 +35,7 @@ module.exports = async (req, res) => {
                     { $sample: { size: 20 } },                                  //sample randomizes results
                     {
                         $project: {
-                            name: 1, desciption: 1, creator: 1,        //select fields and count
+                            name: 1, description: 1, creator: 1,        //select fields and count
                             images: 1, projectType: 1,
                             likes: { $cond: { if: { $isArray: "$likes" }, then: { $size: "$likes" }, else: 0 } },
                         }
