@@ -1,0 +1,22 @@
+.search_container {
+    width: 100%;  
+    min-height: 100vh;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+  
+    padding: 15px;
+ 
+    background: #3d28468c;
+   
+    position: relative;
+    z-index: 1;
+  }
+
+  .row{
+      width: 100%;
+      padding:2%
+  }

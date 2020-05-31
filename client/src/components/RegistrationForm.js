@@ -5,8 +5,7 @@ import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
 import "../fonts/Linearicons-Free-v1.0.0/icon-font.min.css";
 import UserBasicForm from "./UserBasicForm.js";
 import UserAdditionalInformation from "./UserAdditionalInfo.js";
-import PropTypes from 'prop-types';
-import { getInterestsList, signup } from '../utils/APICalls';
+import { getInterestsList, signup,getHireFields } from '../utils/APICalls';
 import { AuthContext } from "../authContext";
 
 
@@ -24,12 +23,11 @@ class RegistrationForm extends Component {
         interestsList:[],
         workingField:'',
         isSponsor: false,
+        hireFields:[],
+        choosenhireFields:[]
      }
      static contextType = AuthContext;
 
-     static contextTypes = {
-        router: PropTypes.object
-      }
      //proceed to next step of registration
      nextStep = () => {
          const {step} = this.state;
@@ -50,7 +48,6 @@ class RegistrationForm extends Component {
     handleChange = input => e => {
        
         this.setState({ [input]: e.target.value});
-        console.log(e.target.value);
     }
 
     //handle isSponsor field change
@@ -69,18 +66,34 @@ class RegistrationForm extends Component {
    
       
      }
+        
+    handleChosenHireFields =selectedOption=>{
+       
+          
+        this.setState({
+        choosenhireFields:selectedOption
+        
+        
+    });
+   
+      
+     }
 
     createUser = () =>{
        
 
-        const { email, username, firstname, lastname,phone, password, biography, isSponsor, workingField, interests } = this.state;
+        const { email, username, firstname, lastname,phone, password, biography, isSponsor, workingField, interests,choosenhireFields} = this.state;
         let i = 0;
-        let myInterests = {};
+        let myInterests = [];
         for (i =0 ;i<interests.length;i++){
-            myInterests = interests[i].value
+            myInterests[i] = interests[i].value
         };
-       
-        const user = { email, username, firstname, lastname, password, phone,biography, isSponsor, workingField, myInterests };
+        i = 0;
+        let myHireFields = [];
+        for (i =0 ;i<choosenhireFields.length;i++){
+            myHireFields[i] = choosenhireFields[i].value
+        };
+        const user = { email, username, firstname, lastname, password, phone,biography, isSponsor, workingField, interests:myInterests , hireFields:myHireFields };
         signup(user).then((data) => {
             this.context.initiateLogin(data);
             const path = '/users/'+data.user._id;
@@ -109,12 +122,21 @@ class RegistrationForm extends Component {
                 alert("Could not find interests: ",err.data.message);
               }
         })	
+        getHireFields().then(data => {
+	        let  hireFields = data.map(hireField => { return {value: hireField, display: hireField, label: hireField} })
+            this.setState({ hireFields: hireFields});
+          }).catch(err => {
+              if(err && err.data){
+                alert("Could not find hire Fields: ",err.data.message);
+              }
+        })	
+      
     }
 
     render() { 
         const { step } = this.state;
-        const { email, username, firstname, lastname,phone, password, biography,interests,isSponsor, workingField,interestsList } = this.state;
-        const values = { email, username, firstname, lastname, password, phone,biography,interests, isSponsor, workingField, interestsList };
+        const { email, username, firstname, lastname,phone, password, biography,interests,isSponsor, workingField,interestsList ,hireFields} = this.state;
+        const values = { email, username, firstname, lastname, password, phone,biography,interests, isSponsor, workingField, interestsList ,hireFields};
        
         switch(step){
             case 1:
@@ -139,6 +161,7 @@ class RegistrationForm extends Component {
                         sumbit = {this.createUser}
                         values = {values}
                         handleChosenInterests = {this.handleChosenInterests}
+                        handleChosenHireFields = {this.handleChosenHireFields}
                     />
                     </div>
                     

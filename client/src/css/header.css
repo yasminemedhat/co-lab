@@ -1,68 +1,136 @@
 .topnav {
     background-color:#3d2846;
-    overflow: hidden;
-    height: 53px;
+
+
+  }
+  .dropdown-toggle::after {
+    display: none !important;
+ 
   }
   
-  /* Style the links inside the navigation bar */
-  .topnav a ,
-  .logout-link{
-    float: left;
-    color: #f2f2f2;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-    font-size: 17px;
+  .selectedLink{
+    color: white !important;
   }
 
-  .navigation{
-      float: right;
+  .selectedLink:hover{
+    font-weight: bold !important;
   }
+
+  .selectedLink:active{
+ 
+    font-weight: bold !important;
+  }
+
+
+ .dropdown-menu{
+   height: 200px !important;
+   overflow: hidden !important;
+   overflow-y: scroll !important;
+   width: 330px;
+
+
+ }
   
-  /* Change the color of links on hover */
-  .topnav a:hover,
-  .logout-link:hover,
-  .logout-NavLink:hover {
-    background-color:#948999;
-    color:white;
-  }
-  
-  /* Add a color to the active/current link */
-  .topnav a.active {
-    background-color:#948999;
-    color: white;
-  }
 
-  .link.active{
-    color: #000;
-    text-decoration: underline;
-}
-  .logo{
-      color: white;
-      margin: 0%;
-      padding-top: 2%;
-      padding-left: 3%;
-  }
-
-  .logo_div{
-      float: left; 
-      width: 20%;
-  }
   .logo_avatar_div{
     float: left; 
     margin-left: 1%;
 }
+.logo_avatar_div:hover{
+ color: white;
+}
 
-  .selectedLink {
-    background:#948999;
-  }
+
 
   .logout-NavLink{
-    color:  white!important;
-    padding-top: 4%;
-    padding-bottom: 5%;
-    padding-left: 1%;
-  
+    color: white!important;
+    float: right;
+    padding-top: 2%;
     margin-right: 8px;
   }
 
+ 
+
+.customNav{
+ margin-right: 0px !important;
+}
+ 
+ 
+/*search*/
+
+#search-form{
+  float: right;
+}
+
+
+
+/*search-form*/
+#search-form input[type=search] {
+	width: 15px;
+	padding-left: 10px;
+	color: transparent;
+	cursor: pointer;
+}
+#search-form input[type=search]:hover {
+	background-color: #fff;
+}
+#search-form input[type=search]:focus {
+	width: 130px;
+	padding-left: 32px;
+	color: #000;
+	background-color: #fff;
+	cursor: auto;
+}
+#search-form input:-moz-placeholder {
+	color: transparent;
+}
+#search-form input::-webkit-input-placeholder {
+	color: transparent;
+}
+input {
+	outline: none;
+}
+input[type=search] {
+	-webkit-appearance: textfield;
+	-webkit-box-sizing: content-box;
+	font-family: inherit;
+	font-size: 100%;
+}
+input::-webkit-search-decoration,
+input::-webkit-search-cancel-button {
+	display: none; 
+}
+
+
+input[type=search] {
+	background: #ededed url(https://static.tumblr.com/ftv85bp/MIXmud4tx/search-icon.png) no-repeat 9px center;
+	border: solid 1px #ccc;
+  padding-left: 3px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-right: 10px;
+	width: 40px;
+	
+	-webkit-border-radius: 7em;
+	-moz-border-radius: 7em;
+	border-radius: 7em;
+	
+	-webkit-transition: all .5s;
+	-moz-transition: all .5s;
+	transition: all .5s;
+}
+input[type=search]:focus {
+	width: 130px;
+	background-color: #fff;
+	border-color: #66CC75;
+	
+
+}
+
+
+input:-moz-placeholder {
+	color: #999;
+}
+input::-webkit-input-placeholder {
+	color: #999;
+}

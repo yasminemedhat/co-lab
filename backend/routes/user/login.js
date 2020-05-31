@@ -21,7 +21,7 @@ module.exports=async (req,res)=>{
     //we do not specify which one of them is wrong
     //to not reveal an existing user's email 
     try{
-        let user=await Account.findOne({email}).select('-collaborations -projects').lean();
+        let user=await Account.findOne({email}).select('-collaborations -projects').populate('workingField').lean();
 
         if(!user){
             return res.status(400).json({message:'Invalid Credentials'});
@@ -41,7 +41,6 @@ module.exports=async (req,res)=>{
         
         //remove password before returning a response
         delete user.password;
-        console.log(user);
     
         //create auth token
         jwt.sign(
@@ -49,7 +48,6 @@ module.exports=async (req,res)=>{
             {expiresIn:config.get('jwtExpiration')},
            (err,token) =>{
                if(err)throw err;
-               console.log("JWT auth from login: ", token);
                res.json({token,user});
            }
         );

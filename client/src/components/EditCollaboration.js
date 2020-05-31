@@ -1,14 +1,13 @@
-import React, { useState, useEffect, Component } from "react";
-import { updateCollaboration } from "../utils/APICalls";
+import React, { Component } from "react";
+import { updateProject } from "../utils/APICalls";
 import { getJwt } from "../helpers/jwt";
 import "../css/login.css";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
 import Img from "react-image";
-import { getInterestsList } from "../utils/APICalls";
-import ReactMultiSelectCheckboxes from "react-multiselect-checkboxes";
 import { AuthContext } from "../authContext";
 import { getCollaboration } from "../utils/APICalls";
+import Toast from 'light-toast';
 
 class EditCollaboration extends Component {
   static contextType = AuthContext;
@@ -23,12 +22,32 @@ class EditCollaboration extends Component {
     this.componentDidMount = this.componentDidMount.bind(this);
   }
 
+  onChangeImages = e => {
+    this.setState({ 
+     images:  e.target.files
+    
+    })
+    console.log("concatenated images")
+    console.log(this.state.images)
+
+  };
+
 
   updateCollaboration = e => {
     e.preventDefault();
     let path = "/collaborations/"+this.state.collaboration._id
     const jwt = getJwt();
     const formData = new FormData();
+
+    if (this.state.images) {
+     console.log("in images")
+     console.log(this.state.images)
+      
+      for (let i = 0 ; i < this.state.images.length ; i++) {
+          formData.append("photos", this.state.images[i]);
+       }
+     
+    }
   
     if (this.state.name) {
       formData.append("name", this.state.name);
@@ -42,14 +61,16 @@ class EditCollaboration extends Component {
       formData.append("link", this.state.link);
     }
   
-    updateCollaboration(jwt, formData,this.state.collaboration._id)
+    updateProject(jwt, formData,this.state.collaboration._id)
       .then(data => {
-        alert("Your collaboration was updated succeffully");
-        this.props.history.push(path);
+        Toast.success('Your Project was updated', 2000, () => {
+          // do something after the toast disappears
+          this.props.history.push(path);
+        });
       })
       .catch(error => {
         console.log("not updatedddd");
-        alert("something went wrong!", error.message);
+        Toast.fail("Could not update project", 2000);
       });
   };
 
@@ -69,7 +90,8 @@ class EditCollaboration extends Component {
         console.log(this.state.collaboration);
       })
       .catch(err => {
-        alert("could not find colab");
+       // alert("could not find colab");
+       Toast.fail("Could not find colab", 2000);
       });
   }
 
@@ -81,7 +103,7 @@ class EditCollaboration extends Component {
     const { name, description,link , images} = this.state.collaboration;
       
     let editimages = []
-    if(images !=undefined){
+    if(images !==undefined){
         editimages = images.map((image , i)=>{
             return(
                 <Img key = {i} style={{ float: 'right' , width: '40px' , height: '40px'}} src={image}></Img>
@@ -103,7 +125,7 @@ class EditCollaboration extends Component {
       <div>
         <div className="profile_container">
           <div
-            className="wrap-login100 p-l-50 p-r-50 p-t-77 p-b-30"
+            className="wrap-edit100 p-l-50 p-r-50 p-t-77 p-b-30"
             style={{ marginLeft: "30%" }}
           >
             <form className="login100-form validate-form">

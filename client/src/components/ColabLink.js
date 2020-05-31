@@ -1,7 +1,7 @@
 import React, { useState, useEffect} from "react";
 import "../bootstrap/css/bootstrap.min.css";
+import "../css/ProjectPage.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
-import Linkify from "react-linkify";
 import Card from "react-bootstrap/Card";
 // import Button from "react-bootstrap/Button";
 // import { withRouter} from 'react-router-dom';
@@ -29,12 +29,12 @@ const ColabLink = props => {
         content = (
         <Card tag='a'
             onClick={() => {props.showDetails(state.collaboration)}} 
-            style={{ cursor: "pointer", width: '15rem', height: '25rem', margin: "10px"  }}>
+            style={{ cursor: "pointer", width: '15rem', height: '100%', margin: "10px"  }}>
                     <Card.Img  style={{ width: '15rem', height: '15rem'}} variant="top" src={state.image} />
                     <Card.Body>
-                        <Card.Title>{state.name}</Card.Title>
-                        <Card.Text>{state.description}</Card.Text>
-                        {state.link? (<Linkify>{state.link}</Linkify>) : null}
+                        <Card.Title style={{whiteSpace:'normal'}}>{state.name}</Card.Title>
+                        <Card.Text className="cardDescription">{state.description}</Card.Text>
+                        {/* {state.link? (<Linkify>{state.link}</Linkify>) : null} */}
                     </Card.Body>
                 </Card>
         );

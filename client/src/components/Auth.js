@@ -1,7 +1,8 @@
 import React, {Component} from "react";
-import {getJwt, getUserStored} from "../helpers/jwt";
+import {getJwt, getUserStored, checkTokenExpiration} from "../helpers/jwt";
 import { logout, getUser } from '../utils/APICalls';
 import {AuthProvider} from "../authContext";
+import socket from '../utils/socket';
 
 class Auth extends Component{
     
@@ -17,21 +18,22 @@ class Auth extends Component{
         super(props);
         const jwt = getJwt();
         const user = getUserStored();
-        if(!jwt){
+        const expired = checkTokenExpiration();
+        if(expired){
           console.log("auth construct msh tamam");
-          this.state = {
+          this.state ={
+
             authenticated: false,
             user: {
               role: "visitor"
             },
             accessToken: ""
           };
-          localStorage.removeItem('token');
-          localStorage.removeItem('colab-user');
+          localStorage.clear();
         }
         else{
-          console.log("auth construct tamam");
-            this.state ={
+            this.state = {
+
               authenticated: true,
               accessToken: jwt,
               user: user
@@ -64,8 +66,7 @@ class Auth extends Component{
       logout = () => {
         console.log("logging outss");
         logout(this.state.accessToken,this.state.user).then(res => {
-            localStorage.removeItem('token');
-            localStorage.removeItem('colab-user');
+            localStorage.clear();
             this.setState({
                 authenticated: false,
                 user: {
@@ -98,12 +99,15 @@ class Auth extends Component{
       setSession(data) {
           localStorage.setItem('token',data.token);
           localStorage.setItem('colab-user',JSON.stringify(data.user));
+          localStorage.setItem('login_date', new Date().getTime())
           const user = data.user;
           this.setState({
             authenticated: true,
             accessToken: data.token,
             user
           });
+          // socket.emit('identify', user._id);
+          // socket.emit('join_colabs', user._id);
       }
 
     // logout(){

@@ -1,14 +1,10 @@
 const Colaber = require('../../models/Colaber');//DB model
-const interestsList = require('../../models/InterestList');
 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const _ = require('underscore');
 const drive = require('../../services/drive');//google drive
-
-
-
 
 const { validationResult } = require('express-validator');
 var id,Email;
@@ -27,10 +23,14 @@ module.exports = async (req, res) => {
     console.log('new User attempt');
 
     //pull from request
-    const { email, password,
-        firstname, lastname, phone, isSponsor, interests, biography, workingField } = req.body;
-        console.log(interests);
+    const { 
+        email, password,
+        firstname, lastname,
+        phone, isSponsor, 
+        hireFields, interests, 
+        biography, workingField } = req.body;
         Email=email;
+
     //pull image
         var avatar;
     try {
@@ -48,30 +48,17 @@ module.exports = async (req, res) => {
             return res.status(400).json({ message: 'Email already exists' });
         }
 
-        //references for interests
-        var list = [];
-        if(interests)
-            for (var i = 0; i < interests.length; i++) {
-                console.log(interests[i]);
-                interest = await interestsList.findOne({ interest: interests[i] });
-                list.push(interest._id);
-            }
-
-        console.log(list);
-
         var url;
-         //upload image
-         if (avatar) {
+        //upload image
+        if (avatar) {
              url=await drive.uploadAvatar(avatar,email);
             if (url == null)
             {
-            
-             return res.status(500).json({ message: 'Server Error' });
-
-            }
-            
+                return res.status(500).json({ message: 'Server Error' });
+            }   
         }
 
+        //create new colaber 
         colaber = new Colaber({
             email,
             password,
@@ -80,28 +67,17 @@ module.exports = async (req, res) => {
             phone,
             isSponsor,
             isPremium: false,
-            interests: list,
+            interests: interests,
+            hireFields,
             biography,
-            workingField,
+            workingField:workingField,
             avatar: url
         });
         
 
-        console.log(colaber.interests);
-
-
-
-
-
-
-
         //encrypt password:
         const salt = await bcrypt.genSalt(10);
         colaber.password = await bcrypt.hash(password, salt);
-
-
-
-
 
         //save in database:
         await colaber.save();
@@ -111,17 +87,15 @@ module.exports = async (req, res) => {
         //remove password
         colaber= colaber.toObject();
         delete colaber.password;
-
+        colaber.workingField=workingField;
 
         //jwt token:
         const payload = {
             user: {
-                id: colaber.id
+                id: colaber._id
             }
         };
         
-       
-
         //json web token 
         jwt.sign(
             payload, config.get('jwtSecret'),
@@ -134,8 +108,6 @@ module.exports = async (req, res) => {
                 res.json({ token, user: colaber});
             }
         );
-
-
     } catch (error) {
 
         console.log(error.message);
@@ -143,22 +115,9 @@ module.exports = async (req, res) => {
         Colaber.findOneAndDelete({_id: id});
         if(url)
         {
-            var id  = url.match('id=(.*?)&')[1];
+            var id  = url.match('id=(.*?)$')[1];
             await drive.deleteFileByID(id);
         }
         res.status(500).json({ message: 'Server Error' });
     }
-
-
-
 };
-
-
-
-
-
-
-
-
-
-

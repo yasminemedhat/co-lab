@@ -1,7 +1,6 @@
 .ProjectContainer{
     width: 100%;
     flex-grow : 1;
-    height: 100%;
     padding: 15px;
     background: #3d28468c;
     position: absolute;  left: 0;
@@ -31,9 +30,44 @@
     font-size: 0.8rem;
 }
 .ColabContainer{
-    width: 100%;
- 
+    width: 100%;  
+    position: relative;
+    min-height: 100% !important;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
     padding: 15px;
     background: #3d28468c;
-    position: absolute;  left: 0;
+    position: absolute;
+    min-height: fit-content;
+    z-index: 1;
+}
+
+.projectCard{
+    float: left !important;
+}
+
+.cardDescription{
+    word-break: break-all;
+    overflow: hidden;
+    text-overflow: ellipsis;
+white-space: nowrap;
+}
+
+.ReviewDiv{
+    max-height: 300px;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+.css-oot9fd{
+    background: #3d2846 !important;
+}
+
+.chatButton{
+    bottom: 0;
+    margin-left: 90%;
+    margin-bottom: 20px;
+    position: fixed;
+    border-radius: 50%;
 }

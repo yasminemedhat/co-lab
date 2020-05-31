@@ -69,4 +69,22 @@ collaboration.delete('/:id/removeColaber', auth, require('./removeColaber'));
 //@access           auth needed + only the creator can delete collaboration
 collaboration.delete('/:id',auth,require('./delete'));
 
+//@route PATCH     collaboration/update/:id
+//@description     update collaboration
+//@access          auth needed + both creator and colabers can edit projects
+collaboration.patch('/update/:id',
+                 [upload.array('photos'),//max number of pics->10
+                  auth],
+                 require('./update'));
+
+//@route post    collaboration/:id/message
+//@description   send new collaboration group chat message
+//@access        auth needed + only members
+collaboration.post('/:id/message', auth, require('./sendMessage'));
+
+//@route post    collaboration/:id/messages
+//@description  get collaboration's group chat messages 
+//@access       auth needed + only members
+collaboration.get('/:id/messages', auth, require('./getMessages'));
+
 module.exports = collaboration;

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../css/ProjectPage.css";
 import "../css/createProject.css";
+import "../css/main.css";
 import "../bootstrap/css/bootstrap.min.css";
 import "../fonts/font-awesome-4.7.0/css/font-awesome.min.css";
 import { Row, Table } from "react-bootstrap";
@@ -12,6 +13,10 @@ import AddMemberPopup from "./AddMemberPopUp";
 import { getJwt , getUserStored} from "../helpers/jwt";
 import { addColabMember, getCollaboration,likeProject } from "../utils/APICalls";
 import Gallery from "react-grid-gallery";
+import ProjectReview from "./ProjectReview"
+import socket from '../utils/socket';
+import ChatRoom from "./ChatRoom";
+import { FaChat } from 'react-icons/fa';
 
 const ColabDetails = props => {
   const [colab, setColab] = useState({
@@ -22,12 +27,14 @@ const ColabDetails = props => {
   });
 
   const [popUp, setPopUp] = useState({ showPopUp: false });
+  const [chat, setChat] = useState({ showChat: false });
   const [newMemberEmail, setNewMemberEmail] = useState("");
   const [update, setUpdate] = useState(false);
   const [likes , setLikes] = useState({likeButton: true,likesCount: 0});
-  const IMAGES = [{}];
+  let IMAGES = [{}];
 
   useEffect(() => {
+    
     const jwt = getJwt();
     const user = getUserStored();
     getCollaboration(jwt, props.match.params.id)
@@ -40,10 +47,12 @@ const ColabDetails = props => {
         else{
           setLikes({likeButton:true,likesCount: collaboration.likes.length});
         }
+        
       })
       .catch(err => {
         alert("could not find colab");
       });
+
   }, [update]);
 
   const gotToMemberProfile = memberId => {
@@ -53,8 +62,8 @@ const ColabDetails = props => {
     });
   };
 
-  const editColaboration = colab => {
-    let path = "/collaborations/" + colab._id + "/EditCollaboration";
+  const editColaboration = () => {
+    let path = "/collaborations/" + colab._id + "/edit";
     props.history.push({
       pathname: path,
       state: {
@@ -83,9 +92,27 @@ const ColabDetails = props => {
    })
  }
 
+ const sendMessage = (user) => {
+    // ev.preventDefault();
+    console.log('sendigngg: ');
+    let sender_username = user.firstName + " " + user.lastName;
+    socket.emit('chatRoom_MSG', {
+        sender: user._id,
+        body: 'hello world',
+        collaboration: colab._id,
+        sender_username,
+        sender_avatar: user.avatar
+    });
+    // this.setState({message: ''});
+ }
   const togglePopup = () => {
     setPopUp({ showPopUp: !popUp.showPopUp });
   };
+  const toggleChat = () => {
+    setChat({ showChat: !chat.showChat });
+    console.log('chat toggled, ', chat.showChat);
+  };
+
   const addMember = () => {
     const jwt = getJwt();
     const emailObj = { email: newMemberEmail };
@@ -118,10 +145,10 @@ const ColabDetails = props => {
       </div>
     );
   } else {
-    let len = 0;
+  
 
     for (let i = 0; i < colab.images.length; i = i + 1) {
-      len = IMAGES.push({
+      IMAGES.push({
         src: colab.images[i],
         thumbnail: colab.images[i],
 
@@ -129,6 +156,7 @@ const ColabDetails = props => {
         thumbnailHeight: 212
       });
     }
+    IMAGES = IMAGES.slice(1,IMAGES.length)
     // let members = [];
     // for(let i=0;i<colab.members.length; i++){
     // members[i] = <div key={i}><h3>{colab.members[i].firstName} {colab.members[i].lastName}</h3></div>
@@ -241,6 +269,7 @@ const ColabDetails = props => {
                   <span className="like__number">{likes.likesCount}</span>
                   </button>}
               </Row>
+
                 </div>
               
               </Row>
@@ -268,10 +297,21 @@ const ColabDetails = props => {
                   <div>{table}</div>
                 </div>
               </Row>
+              {chat.showChat ? <ChatRoom colabId={colab._id} colab_name={colab.name} toggleChat={toggleChat.bind(null)}></ChatRoom>
+              : <button className="chatButton" onClick={toggleChat.bind(null)}><i className='fa fa-comments fa-4x'></i></button>}
               
+             
+              <div className="row">
+            <h2>Reviews</h2>
+          </div>
+          <div className ="row ReviewDiv">
+          
+            <ProjectReview project = {colab} user = {user}></ProjectReview>
+          </div>
             </div>
           );
         }}
+       
       </AuthConsumer>
     );
   }

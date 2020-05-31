@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Component } from "react";
+import React, { Component } from "react";
 import { updateProject, getProject } from "../utils/APICalls";
 import { getJwt } from "../helpers/jwt";
 import "../css/login.css";
@@ -8,6 +8,7 @@ import Img from "react-image";
 import { getInterestsList } from "../utils/APICalls";
 import ReactMultiSelectCheckboxes from "react-multiselect-checkboxes";
 import { AuthContext } from "../authContext";
+import Toast from 'light-toast';
 
 
 
@@ -46,8 +47,7 @@ class EditProject extends Component {
     const { images } = this.state
     
     if (images) {
-       console.log("in if statement")
-       console.log(images)
+     
       
         for (let i = 0 ; i < images.length ; i++) {
             formData.append("photos", images[i]);
@@ -71,12 +71,17 @@ class EditProject extends Component {
   
     updateProject(jwt, formData,this.state.project._id)
       .then(data => {
-        alert("Your project was updated succeffully");
-        this.props.history.push(path);
+        //alert("Your project was updated succeffully");
+        Toast.success('Your Project was updated', 2000, () => {
+          // do something after the toast disappears
+          this.props.history.push(path);
+        });
+       
       })
       .catch(error => {
         console.log("not updatedddd");
-        alert("something went wrong!", error.message);
+       // alert("something went wrong!", error.message);
+       Toast.fail("Could not update project", 2000);
       });
   };
 
@@ -131,7 +136,7 @@ class EditProject extends Component {
       <div>
         <div className="profile_container">
           <div
-            className="wrap-login100 p-l-50 p-r-50 p-t-77 p-b-30"
+            className="wrap-edit100 p-l-50 p-r-50 p-t-77 p-b-30"
             style={{ marginLeft: "30%" }}
           >
             <form className="login100-form validate-form">

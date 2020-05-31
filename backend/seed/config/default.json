@@ -1,0 +1,4 @@
+{
+    "mongoURI" : "mongodb+srv://lougy:lougy123@co-lab-vfyef.gcp.mongodb.net/test?retryWrites=true&w=majority",
+    "awsS3" : "https://colab-project.s3.us-east-2.amazonaws.com/"
+}

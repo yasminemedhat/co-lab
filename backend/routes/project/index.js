@@ -44,13 +44,25 @@ project.patch('/update/:proj_id',
 //@access       auth needed
 project.put('/like/:proj_id', auth, require('./like'));
 
+
+//@route POST   project/review
+//@description  review project
+//@access       auth needed
+project.post('/review/:proj_id', auth, require('./review'));
+
+//@route GET    project/pullReviews
+//@description  pull all reviews
+//@access       public 
+project.get('/pullReviews/:proj_id', require('./pullReviews'));
+
+
 //@route Delete  project/deleteImage
 //@description   delete image from project
 //@access        auth needed
 project.delete('/deleteImage',auth,async(req,res)=>{
     const url=req.body.url;
     try {
-        var imageID = url.match('id=(.*?)&')[1];//get image id for deletion
+        var imageID = url.match('id=(.*?)$')[1];//get image id for deletion
         await drive.deleteFileByID(imageID);
         let project=await Project.findOneAndUpdate({images: url},
              { $pull: { images: url} },

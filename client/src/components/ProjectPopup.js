@@ -15,8 +15,8 @@ class ProjectPopup extends Component {
     description: "",
     projectLink: "",
     images: [],
-    chosenfields: [],
-    fieldsList: []
+    interestsList: [],
+    field: ''
   };
   // fileObj = [];
   // fileArray = [];
@@ -26,7 +26,7 @@ class ProjectPopup extends Component {
       visible: true};
     // this.uploadMultipleFiles = this.uploadMultipleFiles.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.handleChosenfields = this.handleChosenfields.bind(this)
+   
     this.handleCreateProject = this.handleCreateProject.bind(this);
     this.onChangeImages = this.onChangeImages.bind(this);
     this.closeModal = this.closeModal.bind(this);
@@ -47,16 +47,6 @@ class ProjectPopup extends Component {
     this.setState({ [input]: e.target.value });
   };
 
-  handleChosenfields =selectedOption=>{
-       
-          
-    this.setState({
-   chosenfields:selectedOption
-    
-    
-});
-  }
-
   closeModal() {
     this.setState({
       visible: false
@@ -70,7 +60,7 @@ class ProjectPopup extends Component {
   componentDidMount(){
     getInterestsList().then(data => {
       let  interestsList = data.map(Interests => { return {value: Interests, display: Interests, label: Interests} })
-        this.setState({ fieldsList:(interestsList) });
+            this.setState({ interestsList: [{value: '', display: '(Select the project field)'}].concat(interestsList) });
       }).catch(err => {
           if(err && err.data){
             alert("Could not find project fields: ",err.data.message);
@@ -86,14 +76,14 @@ class ProjectPopup extends Component {
     formData.append('name', this.state.projectName);
     formData.append('description', this.state.description);
     formData.append('projectlink', this.state.projectLink);
-    formData.append('fields', this.state.chosenfields);
+    formData.append('field', this.state.field);
+   
     if(images){
       for (let i = 0 ; i < images.length ; i++) {
         formData.append("photos", images[i]);
      }
     }
-    
-
+  
     this.props.createProject(formData);
     this.closeModal();
   }
@@ -157,9 +147,19 @@ class ProjectPopup extends Component {
                   placeholder="* Project Description"
                 />
               </div>
-              <div className="row" style = {{    width: "100%" ,padding: "5%"}}>
+              {/* <div className="row" style = {{    width: "100%" ,padding: "5%"}}>
               <ReactMultiSelectCheckboxes options={this.state.fieldsList}   onChange={this.handleChosenfields} placeholderButtonLabel='Choose Project Field(s)' />
-              </div>
+              </div> */}
+              {this.state.interestsList ? (<div className="row" style = {{    width: "100%" ,padding: "5%"}}>
+              <select defaultValue={this.state.field} onChange={this.handleChange("field")} >
+                {this.state.interestsList.map(interest => (
+                  <option key={interest.value} value={interest.value}>
+                    {interest.display}
+                  </option>
+                ))}
+              </select>
+            </div>):null}
+              
               <div className="col">
               <input
                 onChange={this.onChangeImages}

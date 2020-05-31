@@ -144,14 +144,21 @@
     background-position: center;
   }
   
-  .wrap-login100 {
+  .wrap-registration100 {
     width: 450px;
     background: #fff;
     border-radius: 3px;
     overflow: hidden;
-    height: 850px;
+    height: 700px;
   }
   
+  .wrap-edit100{
+    width: 450px;
+    background: #fff;
+    border-radius: 3px;
+    overflow: hidden;
+    height: 900px;
+  }
 
 
   .dropdown-check-list {
@@ -248,11 +255,11 @@
     font-family: Raleway-SemiBold;
     font-size: 18px;
     line-height: 1.2;
-    color: #686868;
+   
   
     display: block;
     width: 100%;
-    background: #e6e6e6;
+  
     height: 50px;
     border-radius: 3px;
     padding: 0 30px 0 65px;
@@ -460,32 +467,7 @@
     transition: all 0.4s;
   }
   
-  
-  .btn-face {
-    color: #3b5998;
-  }
-  
-  .btn-face i {
-    font-size: 20px;
-    margin-right: 10px;
-    padding-bottom: 1px;
-  }
-  
-  .btn-google {
-    color: #555555;
-  }
-  
-  .btn-google img {
-    width: 19px;
-    margin-right: 10px;
-    padding-bottom: 1px;
-  }
-  
 
-  
-  /*------------------------------------------------------------------
-  [ Alert validate ]*/
-  
   .validate-input {
     position: relative;
   }
@@ -558,4 +540,8 @@
       padding-left: 15px;
       padding-right: 15px;
     }
+  }
+
+  .ReactMultiSelectCheckboxes{
+    position: absolute !important ;
   }

@@ -89,4 +89,25 @@
     background:#3d2846
   }
 
+  .relative{
+    position: relative;
+  }
+
+  .cardsRow{
+    transform: translate3d(0px, 0px, 0px)!important;
+    display: inline-flex;
+    height: 100%;
+    position: absolute;
+  
+  }
+
+  .scrolling-wrapper{
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+  }
+
+  .col-card{
+    display: inline-block;
+  }
   

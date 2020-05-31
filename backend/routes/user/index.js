@@ -7,16 +7,15 @@ const multer = require('multer');//image
 const upload = multer(); 
 
 //database 
-const interestList = require('../../models/InterestList');
 const Colaber = require('../../models/Colaber');
-const Account = require('../../models/Account');
+const {Interests} = require('../../models/Colaber');
+const {HireFields} = require('../../models/QuickHire');
 
 //jwt authentication
 const auth = require("../../middleware/auth");
 const jwt = require('jsonwebtoken');
 
 const drive=require("../../services/drive");
-
 
 
 //routes 
@@ -44,7 +43,20 @@ user.post('/register', [
 //              the chosen interests are the ones that would be shown in the discover feed
 //              (customized discover)
 //@access        public-> no token needed 
-user.get('/interestsList', require('./interestsList'));
+user.get('/interestsList',(req,res)=>{
+    res.json(Object.values(Interests));
+})
+
+//@route GET    user/fieldsList
+//@description  get list of quick hire fields for user to choose theirs 
+//              the chosen fields are the ones that would be used to choose
+//              which co-labers shoudl receive a specific quick hire offer
+//@access       public-> no token needed 
+user.get('/fieldsList',(req,res)=>{
+    console.log("Here")
+    console.log(Object.values(HireFields))
+    res.json(Object.values(HireFields));
+})
 
 //@route POST   user/login
 //@description  user login using email and password 
@@ -98,6 +110,18 @@ user.post('/changePassword', [
 user.put('/follow/:user_id', auth, require('./follow'));
 
 
+//@route POST   user/review
+//@description  review other user
+//@access       auth needed
+user.post('/review/:user_id', auth, require('./review'));
+
+
+//@route GET    user/pullReviews
+//@description  view reviews for certain user
+//@access       public
+user.get('/pullReviews/:user_id', require('./pullReviews'));
+
+
 //@route PATCH  user/updateAccount
 //@description  update an account's data
 //@access       auth needed
@@ -127,6 +151,26 @@ user.get('/viewProjects/:id', auth, require('./viewProjects'));
 //@description  view collaborations for certain user
 //@access       requires authentication 
 user.get('/getCollaborations/:id', auth, require('./getCollaborations'));
+
+//@route Get    user/openNotification
+//@description  get clicked notification
+//@access       requires authentication
+user.get('/openNotification/:id', auth, require('./openNotification'));
+
+//@route GET    user/pullNotifications
+//@description  view notifications for certain user
+//@access       requires authentication 
+user.get('/pullNotifications', auth, require('./pullNotifications'));
+
+//@route GET    user/search
+//@description  search
+//@access       does not require authentication 
+user.get('/search/:text', require('./search'));
+
+//@route GET    user/search
+//@description  search
+//@access       does not require authentication 
+user.get('/discover/:type',auth,require('./discover'));
 
 //@route POST   user/logout ->Post because browser pre-fetches for get requests
 //@description  blacklist jwt using redis

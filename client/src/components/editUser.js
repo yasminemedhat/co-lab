@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { getUser, updateUser } from "../utils/APICalls";
+import {  updateUser } from "../utils/APICalls";
 import { getJwt } from "../helpers/jwt";
 import "../css/login.css";
 import "../bootstrap/css/bootstrap.min.css";
@@ -8,11 +8,12 @@ import Img from "react-image";
 import { getInterestsList} from '../utils/APICalls';
 import ReactMultiSelectCheckboxes from 'react-multiselect-checkboxes';
 import { AuthContext } from "../authContext";
+import Toast from 'light-toast';
 
 
 class editUser extends Component {
   static contextType = AuthContext;
-
+  
   state = {
     user: undefined,
     profilePicture: undefined,
@@ -43,7 +44,6 @@ class editUser extends Component {
 
   handleChosenInterests =selectedOption=>{
        
-          
     this.setState({
     interests:selectedOption
     
@@ -71,23 +71,36 @@ class editUser extends Component {
       formData.append("lastname", this.state.lastname);
     }
     if (this.state.phone) {
-      console.log("phoneee ;)");
       formData.append("phone", this.state.phone);
     }
     if (this.state.biography) {
       formData.append("biography", this.state.biography);
     }
-    if(this.state.Interests){
-      formData.append("interests", this.state.interests);
+    if(this.state.interests){
+      let i = 0;
+      let myInterests = [];
+      for (i =0 ;i<this.state.interests.length;i++){
+          myInterests[i] = this.state.interests[i].value
+          formData.append("interests", myInterests[i]);
+      };
+      
     }
+
     updateUser(jwt, formData)
       .then(data => {
-        alert("Your account was updated succeffully");
-        this.props.history.push(path);
+        //alert("Your account was updated succeffully");
+        Toast.success('Your account was updated', 2000, () => {
+          // do something after the toast disappears
+          this.props.history.push(path);
+        });
+      
+        
+       
+        
+        
       })
       .catch(error => {
-        console.log("not updatedddd");
-        alert("something went wrong!", error.message);
+        alert("project not created"+error.message);
       });
   };
 
@@ -107,6 +120,7 @@ class editUser extends Component {
 
 
   render() {
+
     const user = this.state.user;
     if (user === undefined) {
       return (
@@ -127,7 +141,7 @@ class editUser extends Component {
     return (
       <div className ="profile_container" >
        
-      <div className="wrap-login100 p-l-50 p-r-50 p-t-77 p-b-30"  style={{ marginLeft: "30%" }}>
+      <div className="wrap-edit100 p-l-50 p-r-50 p-t-77 p-b-30"  style={{ marginLeft: "30%" }}>
         <form className="login100-form validate-form">
           <span className="login100-form-title p-b-55">Edit Information</span>
 
@@ -231,7 +245,7 @@ class editUser extends Component {
               Sponsor
             </label>
           </div>
-        
+       
       
           {/* <div className="wrap-input100  m-b-16">
                   <select multiple={true} value={user.interests}  onChange={this.props.handleChosenInterests} >

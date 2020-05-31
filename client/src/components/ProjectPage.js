@@ -10,7 +10,9 @@ import Image from 'react-bootstrap/Image'
 import Gallery from "react-grid-gallery";
 import { AuthContext } from "../authContext";
 import Can from "./Can";
+import ProjectReview from "./ProjectReview"
 import Toast from 'light-toast';
+import { withRouter} from 'react-router-dom';
 
 //import 'font-awesome/css/font-awesome.min.css';
 
@@ -24,7 +26,8 @@ class ProjectPage extends Component {
     this.state={
       loadingProject: true,
       likeButton: true,
-      likesCount: 0
+      likesCount: 0,
+      project: {}
     }
     this.componentDidMount = this.componentDidMount.bind(this);
     this.editProject = this.editProject.bind(this);
@@ -38,13 +41,13 @@ class ProjectPage extends Component {
         });
   }
 
-  editProject = project =>{
+  editProject = () =>{
 
-    let path = "/Projects/" + project._id + "/EditProject" ;
+    var path = "/projects/" + this.state.project._id + "/edit";
     this.props.history.push({
       pathname: path,
       state: {
-        project: project
+        project: this.state.project
       }
      
     });
@@ -61,7 +64,8 @@ class ProjectPage extends Component {
   })
   .catch(err => {
     if(err && err.status){
-      alert("something went wrong: " + err.message);
+      Toast.fail("something went wrong",2000);
+     // alert("something went wrong: " + err.message);
     }
   })
 }
@@ -87,12 +91,14 @@ class ProjectPage extends Component {
         })
         .catch(err => {
           if (err && err.status) {
-            alert("Creator not found: " + err.message);
+            Toast.fail("Creator not found",2000);
+           // alert("Creator not found: " + err.message);
           }
         })
     }).catch(err =>
       {
-        alert("could not get project: ", err);
+        //alert("could not get project: ", err);
+        Toast.fail("Could not get project",2000);
       });
 }
  
@@ -116,15 +122,15 @@ class ProjectPage extends Component {
    {
      Toast.hide()
      let images = project.images ? project.images : []
-      let len = 0;
       let IMAGES = [{}]
 
       for (let i = 0; i <images.length; i ++) {
-      len = IMAGES.push({src:images[i], thumbnail:images[i],
+       IMAGES.push({src:images[i], thumbnail:images[i],
         
         thumbnailWidth: 250,
         thumbnailHeight: 212,})
       }
+      IMAGES = IMAGES.slice(1,IMAGES.length)
       
       
     return(
@@ -185,7 +191,12 @@ class ProjectPage extends Component {
           </div>
           <Gallery images={IMAGES} backdropClosesModal ={true}  enableLightbox={true}
                       enableImageSelection={false} />
-          
+          <div className="row">
+            <h2>Reviews</h2>
+          </div>
+          <div className ="row ReviewDiv">
+            <ProjectReview project = {this.state.project} user = {this.context.user}></ProjectReview>
+          </div>
           
         </div>
       );
@@ -193,4 +204,4 @@ class ProjectPage extends Component {
     
   }
 }
-export default ProjectPage;
+export default withRouter(ProjectPage);

@@ -1,5 +1,4 @@
 const Colaber = require('../../models/Colaber');
-const Project = require('../../models/Project')
 
 module.exports=async(req,res)=>{
     const id=req.params.id;
@@ -12,7 +11,7 @@ module.exports=async(req,res)=>{
         res.json(projects)
             
     } catch (error) {
-        res.status(400).json({message:'Server Error'});
+        res.status(500).json({message:'Server Error'});
         console.log(error);
 
     }
