@@ -12,6 +12,7 @@ import Review from "./Review.js";
 import ProjectLink from "./ProjectLink.js";
 import ColabLink from "./ColabLink.js";
 import { getJwt } from "../helpers/jwt";
+import ReactStars from 'react-rating-stars-component'
 import {
   createProject,
   getProjects,
@@ -47,7 +48,8 @@ class Profile extends Component {
       user: "",
       projects: [],
       collaborations: [],
-      followButton: true
+      followButton: true,
+      reviewslen:0
     };
     this.createProject = this.createProject.bind(this);
     this.createCollaboration = this.createCollaboration.bind(this);
@@ -106,7 +108,8 @@ class Profile extends Component {
     getUser(this.context.accessToken, this.props.match.params.id)
       .then(data => {
         this.setState({
-          user: data.user
+          user: data.user,
+          reviewlen:data.user.reviews.length
         });
       })
       .catch(err => {
@@ -215,12 +218,34 @@ class Profile extends Component {
   }
 
   render() {
+  
     if (this.state.user === undefined) {
       return (
         <div>
           <h1>loading...</h1>
         </div>
       );
+    }
+    let reviewed
+    if(this.state.reviewlen === 0)
+    {
+      reviewed =<small> No Ratings yet</small>
+
+    }
+    else
+    {
+      reviewed =   <div style={{width:"50%"}}>
+      <Row>
+      <Col>
+      <ReactStars count={5} size={25} color2={'#ffd700'} edit ={false} value ={this.state.user.rating}/>
+      </Col>
+      <Col style = {{marginTop:"4%" , padding:"0%"}}>
+      <small>
+     { this.state.reviewlen + " Ratings"}
+      </small>
+      </Col>
+      </Row>
+      </div>
     }
     return (
       <div className="profile_container">
@@ -243,6 +268,7 @@ class Profile extends Component {
                 ></Image>
               )}
             </div>
+          {reviewed}
             <Can
               role={this.context.user.userType}
               perform="users:follow"
