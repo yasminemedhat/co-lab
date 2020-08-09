@@ -325,9 +325,9 @@ export const likeProject = (jwt, projectId) => {
 		});
 };
 
-export const getChatHistory = (jwt, colabId) => {
+export const getChatHistory = (jwt, colabId, page) => {
 	return axiosInstance
-		.get("collaboration/" + colabId + "/messages", {
+		.get("collaboration/" + colabId + "/messages/" + page, {
 			headers: { Authorization: jwt },
 		})
 		.then((res) => {
