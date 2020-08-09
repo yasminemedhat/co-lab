@@ -20,6 +20,7 @@ class ChatRoom extends React.Component {
 			chatHistory: [],
 			message: "",
 			username: "",
+			page: 1,
 		};
 		this.boxRef = React.createRef();
 
@@ -32,12 +33,18 @@ class ChatRoom extends React.Component {
 		this.setState({
 			username: this.context.user.firstName + " " + this.context.user.lastName,
 		});
-		getChatHistory(this.context.accessToken, this.props.colabId)
+		getChatHistory(
+			this.context.accessToken,
+			this.props.colabId,
+			this.state.page
+		)
 			.then((data) => {
+				var chatArr = data;
+				chatArr.reverse();
 				this.setState({
-					chatHistory: data,
+					chatHistory: chatArr,
 				});
-				console.log(this.state.chatHistory);
+				this.scrollToBottom();
 			})
 			.catch((err) => {
 				if (err && err.status) {
@@ -45,11 +52,56 @@ class ChatRoom extends React.Component {
 				}
 			});
 		socket.on("new_message", this.updateChatHistory);
+		document
+			.getElementById("chatBox")
+			.addEventListener("scroll", this.trackScrolling);
 		this.scrollToBottom();
+	}
+
+	componentWillUnmount() {
+		document
+			.getElementById("chatBox")
+			.removeEventListener("scroll", this.trackScrolling);
+	}
+
+	isTop() {
+		return this.boxRef.current.scrollTop == 0;
+	}
+
+	incrementPage() {
+		console.log("page incremented");
+		this.setState({ page: this.state.page + 1 });
+	}
+
+	trackScrolling = () => {
+		if (this.isTop()) {
+			this.incrementPage();
+			getChatHistory(
+				this.context.accessToken,
+				this.props.colabId,
+				this.state.page
+			).then((data) => {
+				console.log(data);
+				this.concatOldMessages(data);
+			});
+			document
+				.getElementById("chatBox")
+				.removeEventListener("scroll", this.trackScrolling);
+		}
+	};
+
+	concatOldMessages(messages) {
+		if (messages.length > 0) {
+			var chatArr = messages;
+			chatArr.reverse();
+			chatArr = chatArr.concat(this.state.chatHistory);
+			this.setState({ chatHistory: chatArr });
+		}
 	}
 
 	updateChatHistory(data) {
 		this.setState({ chatHistory: this.state.chatHistory.concat(data) });
+		this.scrollToBottom();
 	}
 
 	sendMessage = (event) => {
@@ -82,13 +134,16 @@ class ChatRoom extends React.Component {
 	};
 
 	componentDidUpdate = () => {
-		this.scrollToBottom();
+		// this.scrollToBottom();
+		document
+			.getElementById("chatBox")
+			.addEventListener("scroll", this.trackScrolling);
 	};
 
 	render() {
 		return (
 			<div className="outerContainer">
-				<div className="containerr">
+				<div id="containerr">
 					<div className="infoBar">
 						<div className="leftInnerContainer">
 							<img className="onlineIcon" src={onlineIcon} alt="online icon" />
@@ -101,6 +156,7 @@ class ChatRoom extends React.Component {
 						</div>
 					</div>
 					<div
+						id="chatBox"
 						ref={this.boxRef}
 						style={{
 							overflowY: "scroll",
