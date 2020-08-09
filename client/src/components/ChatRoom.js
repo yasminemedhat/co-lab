@@ -101,6 +101,7 @@ class ChatRoom extends React.Component {
 
 	updateChatHistory(data) {
 		this.setState({ chatHistory: this.state.chatHistory.concat(data) });
+		this.scrollToBottom();
 	}
 
 	sendMessage = (event) => {
